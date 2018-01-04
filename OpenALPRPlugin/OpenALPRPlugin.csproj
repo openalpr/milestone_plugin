@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CF183AD2-9BDC-46FE-8569-F1CA289F76B7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenALPRPlugin</RootNamespace>
+    <AssemblyName>OpenALPRPlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\build\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>..\build\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>..\build\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>OpenALPRPlugin.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Solution build referenced files\log4net\1.2.15\log4net.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="VideoOS.Platform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc60fba4a7969f89, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="VideoOS.Platform.SDK, Version=4.0.0.0, Culture=neutral, PublicKeyToken=bc60fba4a7969f89, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.Platform.SDK.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Background\BookmarksFinder.cs" />
+    <Compile Include="Background\OpenALPRBackgroundPlugin.cs" />
+    <Compile Include="Client\OpenALPRCameraName.cs" />
+    <Compile Include="Client\OpenALPRViewItemManager.cs" />
+    <Compile Include="Client\OpenALPRViewItemPlugin.cs" />
+    <Compile Include="Client\WorkSpaceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Client\WorkSpaceControl.Designer.cs">
+      <DependentUpon>WorkSpaceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Client\WorkSpacePlugin.cs" />
+    <Compile Include="Forms\CameraMapping.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CameraMapping.Designer.cs">
+      <DependentUpon>CameraMapping.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CameraPairControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\CameraPairControl.Designer.cs">
+      <DependentUpon>CameraPairControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\EditBookmark.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditBookmark.Designer.cs">
+      <DependentUpon>EditBookmark.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\VideoReplayView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\VideoReplayView.designer.cs">
+      <DependentUpon>VideoReplayView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\VideoReplayViewItemUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\VideoReplayViewItemUserControl.designer.cs">
+      <DependentUpon>VideoReplayViewItemUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OpenALPRPluginDefinition.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings1.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Utility\Helper.cs" />
+    <Compile Include="Utility\Logger.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="OpenALPRPlugin.snk" />
+    <None Include="Properties\Settings1.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugin.def" />
+    <None Include="Resources\logo_bluegray.png" />
+    <None Include="Resources\logo_white_big.png" />
+    <None Include="Resources\logo_white_512x93.png" />
+    <Content Include="Resources\Server.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Client\WorkSpaceControl.resx">
+      <DependentUpon>WorkSpaceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CameraMapping.resx">
+      <DependentUpon>CameraMapping.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CameraPairControl.resx">
+      <DependentUpon>CameraPairControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\EditBookmark.resx">
+      <DependentUpon>EditBookmark.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\VideoReplayView.resx">
+      <DependentUpon>VideoReplayView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\VideoReplayViewItemUserControl.resx">
+      <DependentUpon>VideoReplayViewItemUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>if $(ConfigurationName) == Debug  call "$(TargetDir)BatchDebug.bat"
+if $(ConfigurationName) == Release call "$(TargetDir)BatchRelease.bat"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

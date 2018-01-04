@@ -1,0 +1,4 @@
+<plugin>
+   <file name="OpenALPRPlugin.dll"/>
+   <load env="SmartClient"/>
+</plugin>
