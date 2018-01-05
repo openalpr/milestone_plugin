@@ -49,7 +49,7 @@
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Solution build referenced files\log4net\1.2.15\log4net.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -68,7 +68,7 @@
     <Reference Include="VideoOS.Platform.SDK, Version=4.0.0.0, Culture=neutral, PublicKeyToken=bc60fba4a7969f89, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.Platform.SDK.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

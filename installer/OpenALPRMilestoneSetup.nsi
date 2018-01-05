@@ -3,6 +3,7 @@
 ;Include Modern UI
 
 	!include "MUI2.nsh"
+	!include "DotNetChecker.nsh"
 ;--------------------------------
 ;General
 
@@ -57,27 +58,41 @@ Section "Files (required)"
 
   SectionIn RO
   
+  ; https://github.com/ReVolly/NsisDotNetChecker
+  ;!insertmacro CheckNetFramework 452
+  !insertmacro CheckNetFramework 46
+  ;!insertmacro CheckNetFramework 461
+  ;!insertmacro CheckNetFramework 462
+  ;!insertmacro CheckNetFramework 47
+  ;!insertmacro CheckNetFramework 471
+  
+  
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
   
   ; Put file there
-  File "OpenALPRPlugin.dll"
-  File "OpenALPRQueueMilestone.exe"
-  File "OpenALPRPlugin.dll.config"
-  File "plugin.def"
-  File "OpenALPRQueueMilestone.exe.config"
-  File "Turbocharged.Beanstalk.dll"
-  File "Turbocharged.Beanstalk.dll.config"
-  File "VideoOS.Platform.SDK.dll"
-  File "VideoOS.Platform.dll"
-  File "Newtonsoft.Json.dll"
-  File "Newtonsoft.Json.xml"
-  File "VideoOS.Platform.Primitives.dll"
-  File "VideoOS.DatabaseUtility.Common.dll"
-  File "VideoOS.DatabaseUtility.MediaStorage.dll"
-  File "Turbocharged.Beanstalk.xml"
-  File "log4net.dll"
-  File "log4net.xml"
+  File "..\build\OpenALPRPlugin.dll"
+  File "..\build\OpenALPRQueueMilestone.exe"
+  File "..\build\OpenALPRPlugin.dll.config"
+  File "..\build\OpenALPRQueueMilestone.exe.config"
+  
+  File "..\OpenALPRPlugin\plugin.def"
+  
+  File "..\Solution build referenced files\Newtonsoft\Newtonsoft.Json.dll"
+  File "..\Solution build referenced files\Newtonsoft\Newtonsoft.Json.xml"
+  
+  File "..\Solution build referenced files\Beanstalk\Turbocharged.Beanstalk.dll"
+  File "..\Solution build referenced files\Beanstalk\Turbocharged.Beanstalk.dll.config"
+  File "..\Solution build referenced files\Beanstalk\Turbocharged.Beanstalk.xml"
+  
+  File "..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.Platform.SDK.dll"
+  File "..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.Platform.dll"
+  File "..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.Platform.Primitives.dll"
+  File "..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.DatabaseUtility.Common.dll"
+  File "..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.DatabaseUtility.MediaStorage.dll"
+  
+  File "..\Solution build referenced files\log4net\1.2.15\log4net.dll"
+  File "..\Solution build referenced files\log4net\1.2.15\log4net.xml"
   
   ; Install a service - ServiceType own process - StartType automatic - NoDependencies - Logon as System Account
   SimpleSC::InstallService "OpenALPRMilestone" "OpenALPR Milestone" "16" "2" "$PROGRAMFILES64\VideoOS\MIPPlugins\OpenALPR\OpenALPRQueueMilestone.exe" "" "" ""
