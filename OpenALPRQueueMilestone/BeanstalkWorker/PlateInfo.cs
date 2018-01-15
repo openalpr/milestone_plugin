@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenALPRQueueConsumer.Utility;
+using System;
 
 namespace OpenALPRQueueConsumer.Milestone
 {
@@ -15,5 +16,10 @@ namespace OpenALPRQueueConsumer.Milestone
         public string MakeModel;
         public string Color;
         public string CandidatesPlate;
+
+        public override string ToString()
+        {
+            return JsonHelper.FromClass(this);
+        }
     }
 }

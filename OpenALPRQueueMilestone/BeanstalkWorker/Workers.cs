@@ -10,11 +10,19 @@ using System.Threading.Tasks;
 using Turbocharged.Beanstalk;
 using VideoOS.Platform;
 using VideoOS.Platform.Data;
+using VideoOS.Platform.Messaging;
 
 namespace OpenALPRQueueConsumer.BeanstalkWorker
 {
     internal class Worker
     {
+        public static int EventExpireAfterDays = 7;
+        public static int EpochStartSecondsBefore = 3;
+        public static int EpochEndSecondsAfter = 3;
+        private IDictionary<string, string> dicBlack;
+        private DateTime lastUpdateTime;
+        private const string blackListPath = @"C:\ProgramData\OpenALPR\Mapping\BlackList.txt";
+
         //http://www.jsonutils.com/
         private IDisposable worker = null;
         private IDictionary<string, OpenALPRmilestoneCameraName> cameraDictionary;
@@ -22,6 +30,9 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         public Worker()
         {
             cameraDictionary = new Dictionary<string, OpenALPRmilestoneCameraName>();
+            dicBlack = new Dictionary<string, string>();
+            Helper.TryLoadBlackList(dicBlack, blackListPath);
+            lastUpdateTime = Helper.GetLastWriteTime(blackListPath);
         }
 
         public async Task DoWork()
@@ -74,7 +85,8 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     case "alpr_results":
                         try
                         {
-                            done = ProcessAlprGroupOrResults(palteInfo);
+                            if (!palteInfo.Is_parked)
+                                done = ProcessAlprGroupOrResults(palteInfo);
                         }
                         catch (Exception ex)
                         {
@@ -237,40 +249,73 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
         private bool AddNewBookmark(PlateInfo plateInfo)
         {
-            if (plateInfo != null)
+            FQID fqid = null;
+            Bookmark bookmark = null;
+
+            try
             {
+                var camera = cameraDictionary.FirstOrDefault(c => c.Key == plateInfo.CameraId.ToString());
+
+                fqid = camera.Key == null || camera.Value == null ?
+                        GetCameraFQIDFromMapping(plateInfo.CameraId.ToString()) :
+                        camera.Value.MilestoneId;
+
+                if (fqid == null)
+                {
+                    Program.Logger.Log.Info($"No mapping found for camera: {plateInfo.CameraId.ToString()}");
+                    return true; // As Matt suggest, this will remove this job from the queue
+                }
+
+
+                bookmark = BookmarkService.Instance.BookmarkCreate(
+                                    fqid,
+                                    plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore),  //subtracted 3 secondes from the start time to give more chances to capture the video
+                                    plateInfo.EpochStart,                                       //timeTrigged
+                                    plateInfo.EpochEnd.AddSeconds(EpochEndSecondsAfter),        //added 3 secondes to give more chances to capture the video
+                                    "openalpr",                                                 //so we can reterive openalpr bookmarks only in the plug-in
+                                    plateInfo.BestPlateNumber,
+                                    $"Make={plateInfo.Make};MakeModel:{plateInfo.MakeModel};BodyType={plateInfo.BodyType};Color={plateInfo.Color};BestRegion={plateInfo.BestRegion};Candidates={plateInfo.CandidatesPlate}");
+
+                if (bookmark == null)
+                {
+                    Program.Logger.Log.Info($"Failed to create a Bookmark for Plate number: {plateInfo.BestPlateNumber}");
+                    return false;
+                }
+
+                Program.Logger.Log.Info($"Created Bookmark for Plate number: {plateInfo.BestPlateNumber}");
+            }
+            catch (Exception ex)
+            {
+                Program.Logger.Log.Error(null, ex);
+            }
+
+            var temp = Helper.GetLastWriteTime(blackListPath);
+            if (temp != lastUpdateTime)
+            {
+                Helper.TryLoadBlackList(dicBlack, blackListPath);
+                lastUpdateTime = temp;
+                Console.WriteLine("========== Reload Black list");
+            }
+            else
+                Console.WriteLine("==========");
+
+            var plateFromBlackList = plateInfo.BestPlateNumber;
+
+            var existsInBlackList = dicBlack.ContainsKey(plateInfo.BestPlateNumber);
+            if (!existsInBlackList)
+            {
+                existsInBlackList = plateInfo.CandidatesPlate.Split(',').Any(p => dicBlack.ContainsKey(p));
+                if (existsInBlackList)
+                    plateFromBlackList = plateInfo.CandidatesPlate.Split(',').FirstOrDefault(p => dicBlack.ContainsKey(p));
+            }
+
+            if (existsInBlackList)
+            {
+                var descFromBlackList = dicBlack[plateFromBlackList];
+
                 try
                 {
-                    FQID fqid = null;
-                    var camera = cameraDictionary.FirstOrDefault(c => c.Key == plateInfo.CameraId.ToString());
-
-                    fqid = camera.Key == null || camera.Value == null ?
-                            GetCameraNameFromMapping(plateInfo.CameraId.ToString()):
-                            camera.Value.MilestoneId;
-
-                    if (fqid == null)
-                    {
-                        Program.Logger.Log.Info($"No mapping found for camera: {plateInfo.CameraId.ToString()}");
-                        return true; // As Matt suggest, this will remove this job from the queue
-                    }
-
-
-                    var bookmark = BookmarkService.Instance.BookmarkCreate(
-                                        fqid,
-                                        plateInfo.EpochStart.AddSeconds(-3),    //subtracted 3 secondes from the start time to give more chances to capture the video
-                                        plateInfo.EpochStart,                   //timeTrigged
-                                        plateInfo.EpochEnd.AddSeconds(3),       //added 3 secondes to give more chances to capture the video
-                                        "openalpr",                             //so we can reterive openalpr bookmarks only in the plug-in
-                                        plateInfo.BestPlateNumber,
-                                        $"Make={plateInfo.Make};MakeModel:{plateInfo.MakeModel};BodyType={plateInfo.BodyType};Color={plateInfo.Color};BestRegion={plateInfo.BestRegion};Candidates={plateInfo.CandidatesPlate}");
-
-                    if (bookmark == null)
-                    {
-                        Program.Logger.Log.Info($"Failed to create a Bookmark for Plate number: {plateInfo.BestPlateNumber}");
-                        return false;
-                    }
-
-                    Program.Logger.Log.Info($"Created Bookmark for Plate number: {plateInfo.BestPlateNumber}");
+                    SendAlarm(plateInfo, bookmark, fqid, plateFromBlackList, descFromBlackList);
                 }
                 catch (Exception ex)
                 {
@@ -281,7 +326,123 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             return true;
         }
 
-        private FQID GetCameraNameFromMapping(string alprCameraId)
+        private void SendAlarm(PlateInfo plateInfo, Bookmark bookmark, FQID fqid, string plateFromBlackList, string descFromBlackList)
+        {
+            var cameraName = MilestoneServer.GetCameraName(fqid.ObjectId);
+
+            var eventSource = new EventSource()
+            {
+                FQID = fqid,
+                Name = cameraName,
+                //Description = "",
+                //ExtensionData = 
+            };
+
+            var eventHeader = new EventHeader()
+            {
+                //The unique ID of the event.
+                ID = Guid.NewGuid(),
+
+                //The class of the event, e.g. "Analytics", "Generic", "User-defined".
+                Class = "Analytics",
+
+                //The type - a sub-classification - of the event, if applicable.
+                Type = null,
+
+                //The time of the event.
+                Timestamp = plateInfo.EpochStart,
+
+                //The event message. This is the field that will be matched with the AlarmDefinition message when sending this event to the Event Server. 
+                Message = "OpenALPR Alarm",
+
+                //The event name.
+                Name = plateInfo.BestPlateNumber,
+
+                //The source of the event. This can represent e.g. a camera, a microphone, a user-defined event, etc.
+                Source = eventSource,
+
+                //The priority of the event.
+                Priority = 2,
+
+                //The priority name of the event.
+                PriorityName = "Medium",
+
+                //optional
+                //The message id of the event. The message id coorsponds to the ID part returned in ItemManager.GetKnownEventTypes.
+                MessageId = Guid.Empty,
+
+                //A custom tag set by the user to filter the events.
+                CustomTag = plateFromBlackList,// the value we got from the config file
+
+                //The expire time of the event. The event will be deleted from the event database when the time is reached. When creating events a value of DateTime.MinValue (default value) indicates that the default event expire time should be used. 
+                ExpireTimestamp = DateTime.Now.AddDays(EventExpireAfterDays),
+
+                //ExtensionData = System.Runtime .Serialization.
+                //The version of this document schema.
+                Version = null
+            };
+
+            var alarm = new Alarm()
+            {
+                //The EventHeader, containing information common for all Milestone events.
+                EventHeader = eventHeader,
+
+                //The current state name. 
+                StateName = "In progress",
+
+                //The current state of the alarm. 0: Any 1: New 4: In progress 9: On hold 11: Closed. 
+                State = 4,
+
+                //The user to which the alarm is currently assigned. Can be seen in the Smart Client dropdown
+                AssignedTo = null,//Environment.UserName,
+
+                // Other fields could be filled out, e.g. objectList
+
+                //The current category of the alarm. This should be created first on the Client Management under Alarms then Alaem Data Settings
+                Category = 0,
+
+                //The current category name.
+                CategoryName = null,//"Critical",
+
+                //The count value, if the alarm is a counting alarm. Default: 0 (no count).
+                Count = 0,
+
+                //The description of the alarm.
+                Description = descFromBlackList,
+
+                //The end time of the alarm, if it takes plate over a period of time.
+                EndTime = plateInfo.EpochStart.AddSeconds(EpochEndSecondsAfter),
+
+                //  ExtensionData = 
+
+                //The location of the alarm (this will typically be the same as the camera's location). 
+                Location = null,
+
+                //The ObjectList, containing information about the detected object(s) in the scene. //new AnalyticsObjectList()
+                ObjectList = null,
+
+                // The ReferenceList, containing any number of references to other entities in the system, e.g. alarms or cameras, by FQID. 
+                ReferenceList = bookmark == null ? null : new ReferenceList { new Reference { FQID = bookmark.BookmarkFQID } },  // save bookmark id
+
+                //The RuleList, containing information contains information about the rule(s), which triggered the alarm. 
+                RuleList = null,//new RuleList(),
+
+                //The SnapshotList, containing any number of images related to the alarm. If the Source is a camera, it is not neccesary to attach a snapshot from that camera at the time of the alarm. 
+                SnapshotList = null,// new SnapshotList(),
+
+                //The start time of the alarm, if it takes plate over a period of time.
+                StartTime = plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore),
+
+                //The Vendor, containing information about the analytics vendor including any custom data.
+                Vendor = new Vendor { CustomData = plateInfo.ToString() } // save json data
+            };
+
+            // Send the Alarm directly to the EventServer, to store in the Alarm database. No rule is being activated.
+            EnvironmentManager.Instance.SendMessage(new Message(MessageId.Server.NewAlarmCommand) { Data = alarm });
+        }
+
+
+        private FQID GetCameraFQIDFromMapping(string alprCameraId)
         {
             try
             {

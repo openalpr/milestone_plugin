@@ -54,6 +54,7 @@ namespace OpenALPRPlugin.Client
             this.btnHelp = new System.Windows.Forms.Button();
             this.btnOpenLogLocation = new System.Windows.Forms.Button();
             this.picOpenALPR = new System.Windows.Forms.PictureBox();
+            this.btnBlackList = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).BeginInit();
             this.SuspendLayout();
             // 
@@ -230,7 +231,7 @@ namespace OpenALPRPlugin.Client
             // 
             // btnOpenLogLocation
             // 
-            this.btnOpenLogLocation.Location = new System.Drawing.Point(139, 801);
+            this.btnOpenLogLocation.Location = new System.Drawing.Point(287, 801);
             this.btnOpenLogLocation.Name = "btnOpenLogLocation";
             this.btnOpenLogLocation.Size = new System.Drawing.Size(110, 36);
             this.btnOpenLogLocation.TabIndex = 15;
@@ -249,12 +250,23 @@ namespace OpenALPRPlugin.Client
             this.picOpenALPR.TabIndex = 16;
             this.picOpenALPR.TabStop = false;
             // 
+            // btnBlackList
+            // 
+            this.btnBlackList.Location = new System.Drawing.Point(150, 801);
+            this.btnBlackList.Name = "btnBlackList";
+            this.btnBlackList.Size = new System.Drawing.Size(110, 36);
+            this.btnBlackList.TabIndex = 17;
+            this.btnBlackList.Text = "Black List";
+            this.btnBlackList.UseVisualStyleBackColor = true;
+            this.btnBlackList.Click += new System.EventHandler(this.BtnBlackList_Click);
+            // 
             // WorkSpaceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.btnBlackList);
             this.Controls.Add(this.picOpenALPR);
             this.Controls.Add(this.btnOpenLogLocation);
             this.Controls.Add(this.btnHelp);
@@ -306,5 +318,6 @@ namespace OpenALPRPlugin.Client
         private Button btnHelp;
         private Button btnOpenLogLocation;
         private PictureBox picOpenALPR;
+        private Button btnBlackList;
     }
 }

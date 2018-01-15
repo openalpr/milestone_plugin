@@ -4,11 +4,9 @@ using OpenALPRQueueConsumer.Utility;
 using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
-using IO = System.IO;
 using SDKEnvironment = VideoOS.Platform.SDK.Environment;
 
 namespace OpenALPRQueueConsumer
@@ -23,10 +21,12 @@ namespace OpenALPRQueueConsumer
         internal static volatile bool IsClosing;
         private readonly object connectLock = new object();
         private const string MilestoneServerNameString = "MilestoneServerName";
+        private const string EventExpireAfterDaysString = "EventExpireAfterDays";
+        private const string EpochStartSecondsBeforeString = "EpochStartSecondsBefore";
+        private const string EpochEndSecondsAfterString = "EpochEndSecondsAfter";
 
         public ServiceStarter()
         {
-            Thread.CurrentThread.Name = $"{Program.Abbreviation} - Main";
         }
 
         #region Start Service
@@ -47,6 +47,7 @@ namespace OpenALPRQueueConsumer
 
         private void LocalStartService()
         {
+            Thread.CurrentThread.Name = $"{Program.Abbreviation} - Main";
             Program.Logger.Log.Info("Start the service");
 
             AppDomain.CurrentDomain.SetPrincipalPolicy(PrincipalPolicy.WindowsPrincipal);
@@ -117,6 +118,15 @@ namespace OpenALPRQueueConsumer
                 if (temp != serverName)
                     Helper.AddUpdateAppSettings(MilestoneServerNameString, serverName);
 
+                temp = Helper.ReadConfigKey(EventExpireAfterDaysString);
+                int.TryParse(temp, out Worker.EventExpireAfterDays);
+
+                temp = Helper.ReadConfigKey(EpochStartSecondsBeforeString);
+                int.TryParse(temp, out Worker.EpochStartSecondsBefore);
+
+                temp = Helper.ReadConfigKey(EpochEndSecondsAfterString);
+                int.TryParse(temp, out Worker.EpochEndSecondsAfter);
+
                 if (worker == null)
                 {
                     worker = new Worker();
@@ -128,6 +138,11 @@ namespace OpenALPRQueueConsumer
                     //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group2.json");
                     //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group3.json");
                     //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group4.json");
+                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group1.json");
+                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group2.json");
+                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group3.json");
+                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group4.json");
+                    //Console.WriteLine("Done...");
                 }
             }
         }

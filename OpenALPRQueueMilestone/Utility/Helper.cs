@@ -1,19 +1,100 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using System.Threading;
 
 namespace OpenALPRQueueConsumer.Utility
 {
     internal static class Helper
     {
+
+        public static DateTime GetLastWriteTime(string blackFilePath)
+        {
+            try
+            {
+                if (File.Exists(blackFilePath))
+                    return File.GetLastWriteTime(blackFilePath);
+            }
+            catch (Exception ex)
+            {
+                Program.Logger.Log.Error(null, ex);
+                System.Threading.Thread.Sleep(5000);
+            }
+
+            return DateTime.MinValue;
+        }
+
+        public static void TryLoadBlackList(IDictionary<string, string> dicBlack, string blackFilePath)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                try
+                {
+                    LoadBlackList(dicBlack, blackFilePath);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Program.Logger.Log.Error(null, ex);
+                    Thread.Sleep(5000);
+                }
+            }
+        }
+
+        private static void LoadBlackList(IDictionary<string, string> dicBlack, string blackFilePath)
+        {
+            if (dicBlack == null)
+                throw new ArgumentNullException(nameof(dicBlack), "Argument Null Exception");
+
+            if (string.IsNullOrEmpty(blackFilePath))
+                throw new ArgumentNullException(nameof(blackFilePath), "Argument Null Exception");
+
+            if (File.Exists(blackFilePath))
+            {
+                dicBlack.Clear();
+
+                var lines = File.ReadAllLines(blackFilePath);
+                if (lines != null && lines.Length != 0)
+                {
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        var line = lines[i];
+                        if (!string.IsNullOrEmpty(line))
+                        {
+                            var key = string.Empty;
+
+                            var values = line.Split(new char[] { ',' });
+                            if (values.Length != 0)
+                                key = values[0];
+
+                            if (!dicBlack.ContainsKey(key))
+                            {
+                                var value = string.Empty;
+
+                                if (values.Length > 1)
+                                    value = values[1];
+
+                                dicBlack.Add(key, value);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Program.Logger.Log.Warn($"Path does not exists: {blackFilePath}");
+            }
+        }
+
         public static void SetDirectoryNetworkServiceAccessControl(string path)
         {
             if (!Directory.Exists(path))
             {
-                Program.Logger.Log.Warn($"Path is not exists: {path}");
+                Program.Logger.Log.Warn($"Path does not exists: {path}");
                 return;
             }
 

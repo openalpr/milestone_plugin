@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VideoOS.Platform;
@@ -556,6 +557,26 @@ namespace OpenALPRPlugin.Client
             {
                 Process.Start("explorer.exe", @"C:\ProgramData\OpenALPR\Log");
 
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.Error(null, ex);
+            }
+        }
+
+        private void BtnBlackList_Click(object sender, EventArgs e)
+        {
+            const string filepath = @"C:\ProgramData\OpenALPR\Mapping\BlackList.txt";
+            try
+            {
+                if (!File.Exists(filepath))
+                {
+                    File.Create(filepath);
+                    Thread.Sleep(1000);
+                }
+
+                if (File.Exists(filepath))
+                    Process.Start("explorer.exe", filepath);
             }
             catch (Exception ex)
             {
