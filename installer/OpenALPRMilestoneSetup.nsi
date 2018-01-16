@@ -66,17 +66,14 @@ Section "Files (required)"
   ;!insertmacro CheckNetFramework 47
   ;!insertmacro CheckNetFramework 471
   
+  ; Set output path to the service sub folder.
+  SetOutPath "$INSTDIR\Service"
   
-  ; Set output path to the installation directory.
-  SetOutPath $INSTDIR
-  
-  ; Put file there
-  File "..\build\OpenALPRPlugin.dll"
   File "..\build\OpenALPRQueueMilestone.exe"
-  File "..\build\OpenALPRPlugin.dll.config"
   File "..\build\OpenALPRQueueMilestone.exe.config"
   
-  File "..\OpenALPRPlugin\plugin.def"
+  File "..\Solution build referenced files\log4net\1.2.15\log4net.dll"
+  File "..\Solution build referenced files\log4net\1.2.15\log4net.xml"
   
   File "..\Solution build referenced files\Newtonsoft\Newtonsoft.Json.dll"
   File "..\Solution build referenced files\Newtonsoft\Newtonsoft.Json.xml"
@@ -91,11 +88,18 @@ Section "Files (required)"
   File "..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.DatabaseUtility.Common.dll"
   File "..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.DatabaseUtility.MediaStorage.dll"
   
+  ; Set output path to the installation directory (Plug-in).
+  SetOutPath $INSTDIR
+  
+  ; Put file there
+  File "..\build\OpenALPRPlugin.dll"
+  File "..\build\OpenALPRPlugin.dll.config"
+  File "..\OpenALPRPlugin\plugin.def"
   File "..\Solution build referenced files\log4net\1.2.15\log4net.dll"
   File "..\Solution build referenced files\log4net\1.2.15\log4net.xml"
   
   ; Install a service - ServiceType own process - StartType automatic - NoDependencies - Logon as System Account
-  SimpleSC::InstallService "OpenALPRMilestone" "OpenALPR Milestone" "16" "2" "$PROGRAMFILES64\VideoOS\MIPPlugins\OpenALPR\OpenALPRQueueMilestone.exe" "" "" ""
+  SimpleSC::InstallService "OpenALPRMilestone" "OpenALPR Milestone" "16" "2" "$PROGRAMFILES64\VideoOS\MIPPlugins\OpenALPR\Service\OpenALPRQueueMilestone.exe" "" "" ""
   Pop $0 ; returns an errorcode (<>0) otherwise success (0)
   
   ; Set the description of a service
@@ -140,28 +144,33 @@ Section "Uninstall"
   SimpleSC::RemoveService "OpenALPRMilestone"
 
   ; Remove files and uninstaller
+  Delete $INSTDIR\Service\OpenALPRQueueMilestone.exe
+  Delete $INSTDIR\Service\OpenALPRQueueMilestone.exe.config
+  Delete $INSTDIR\Service\Newtonsoft.Json.dll
+  Delete $INSTDIR\Service\Newtonsoft.Json.xml
+  Delete $INSTDIR\Service\log4net.dll
+  Delete $INSTDIR\Service\log4net.xml
+  Delete $INSTDIR\Service\Turbocharged.Beanstalk.dll
+  Delete $INSTDIR\Service\Turbocharged.Beanstalk.dll.config
+  Delete $INSTDIR\Service\Turbocharged.Beanstalk.xml
+  Delete $INSTDIR\Service\VideoOS.Platform.dll
+  Delete $INSTDIR\Service\VideoOS.Platform.SDK.dll
+  Delete $INSTDIR\Service\VideoOS.Platform.Primitives.dll
+  Delete $INSTDIR\Service\VideoOS.DatabaseUtility.Common.dll
+  Delete $INSTDIR\Service\VideoOS.DatabaseUtility.MediaStorage.dll
+  
   Delete $INSTDIR\OpenALPRPlugin.dll
-  Delete $INSTDIR\OpenALPRQueueMilestone.exe
   Delete $INSTDIR\OpenALPRPlugin.dll.config
   Delete $INSTDIR\plugin.def
-  Delete $INSTDIR\OpenALPRQueueMilestone.exe.config
-  Delete $INSTDIR\Turbocharged.Beanstalk.dll
-  Delete $INSTDIR\Turbocharged.Beanstalk.dll.config
-  Delete $INSTDIR\VideoOS.Platform.SDK.dll
-  Delete $INSTDIR\VideoOS.Platform.dll
-  Delete $INSTDIR\Newtonsoft.Json.dll
-  Delete $INSTDIR\Newtonsoft.Json.xml
-  Delete $INSTDIR\VideoOS.Platform.Primitives.dll
-  Delete $INSTDIR\VideoOS.DatabaseUtility.Common.dll
-  Delete $INSTDIR\VideoOS.DatabaseUtility.MediaStorage.dll
-  Delete $INSTDIR\Turbocharged.Beanstalk.xml
+  
   Delete $INSTDIR\log4net.dll
-  Delete $INSTDIR\log4net.xml
+  Delete $INSTDIR\log4net.xml 
   
   Delete $INSTDIR\uninstall.exe
 
   ; Remove directories used
-  RMDir "$INSTDIR"
+  RMDir  /r "$INSTDIR\Service"
+  RMDir /r "$INSTDIR"
 
 SectionEnd
 
