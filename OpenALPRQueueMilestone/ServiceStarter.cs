@@ -4,6 +4,7 @@ using OpenALPRQueueConsumer.Utility;
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
@@ -164,7 +165,7 @@ namespace OpenALPRQueueConsumer
             {
 #if DEBUG
                 var name = Assembly.GetExecutingAssembly().GetName().Name;
-                FileVersion = FileVersionInfo.GetVersionInfo(IO.Path.Combine(IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), $"{name}.exe"));
+                FileVersion = FileVersionInfo.GetVersionInfo(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), $"{name}.exe"));
 #else
                 FileVersion = FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule.FileName);
 #endif

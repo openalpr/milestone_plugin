@@ -5,7 +5,6 @@ using OpenALPRPlugin.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -43,10 +42,11 @@ namespace OpenALPRPlugin.Client
             lsvBookmarks.BackColor = ClientControl.Instance.Theme.BackgroundColor;
             lsvBookmarks.ForeColor = ClientControl.Instance.Theme.TextColor;
 
-            
+
             //picOpenALPR.SizeMode = PictureBoxSizeMode.StretchImage;
 
-            var fullDateTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern;
+            var fullDateTimePattern = //CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern;
+                CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern;
 
             datStartTime.CustomFormat = fullDateTimePattern;
             datEndTime.CustomFormat = fullDateTimePattern;
@@ -90,6 +90,9 @@ namespace OpenALPRPlugin.Client
             cmBookmarks.MenuItems.Add(CreateMenuItem(Edit, new EventHandler(EditBookmark)));
             cmBookmarks.MenuItems.Add(CreateMenuItem(Delete, new EventHandler(DeleteBookmark)));
             cmBookmarks.MenuItems.Add(CreateMenuItem(View, new EventHandler(ViewData)));
+
+            if (EnvironmentManager.Instance.MasterSite.ServerId.ServerType == ServerId.EnterpriseServerType)
+                lblMainMessage.Text = "Warning: This version of Milestone XProtect does not support bookmarks.You can still use alerts, but plates will not be searchable until you upgrade your Milestone XProtect license.";
         }
 
         private static MenuItem CreateMenuItem(string text, EventHandler eventHandler)
@@ -207,7 +210,13 @@ namespace OpenALPRPlugin.Client
             var searchString = txtSearchFor.Text.Trim() == string.Empty ? null : txtSearchFor.Text;
             try
             {
-               await Search(DateTime.SpecifyKind(datStartTime.Value, DateTimeKind.Local), DateTime.SpecifyKind(datEndTime.Value, DateTimeKind.Local) , chkMyBookmarksOnly.Checked, searchString);
+                var startTime = datStartTime.Value.ToUniversalTime();
+                startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
+
+                var endTime = datEndTime.Value.ToUniversalTime();
+                endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
+
+                await Search(startTime, endTime, chkMyBookmarksOnly.Checked, searchString);
             }
             catch (Exception ex)
             {
@@ -222,7 +231,7 @@ namespace OpenALPRPlugin.Client
 
             var items = new Item[] { selectedCameraItem };
             var kinds = new Guid[] { Kind.Camera, Kind.Microphone, Kind.Speaker };
-    
+
             var searcher = new BookmarksFinder(items, kinds, myOwnBookmarksOnly, searchString);
             var bookmarks = await searcher.Search(startLocalTime, endLocalTime, bookmarksCount);
 
@@ -230,19 +239,16 @@ namespace OpenALPRPlugin.Client
             OpenALPRBackgroundPlugin.Bookmarks = bookmarks;
         }
 
-        private void AddToListView(Bookmark[]  bookmarks)
+        private void AddToListView(Bookmark[] bookmarks)
         {
             for (int i = 0; i < bookmarks.Length; i++)
             {
                 var bookmark = bookmarks[i];
 
-                //if (bookmark.Reference != OpenALPRBackgroundPlugin.openalprRefrence)
-                //    continue;
-
                 string[] row = new string[]
                                     {
                                         (i+1).ToString(),
-                                        bookmark.TimeBegin.ToLocalTime().ToString (),
+                                        bookmark.TimeBegin.ToLocalTime().ToString(),
                                         bookmark.TimeEnd.ToLocalTime().ToString (),
                                         bookmark.Header,
                                         bookmark.Description
@@ -275,7 +281,13 @@ namespace OpenALPRPlugin.Client
                     {
                         var startTime = DateTime.Now;
                         DateTime.TryParse(lsvItem.SubItems[1].Text, out startTime);
-                        await Next(bookmarkFQID, DateTime.SpecifyKind(startTime, DateTimeKind.Local), DateTime.SpecifyKind(datEndTime.Value, DateTimeKind.Local), chkMyBookmarksOnly.Checked, searchString);
+                        startTime = startTime.ToUniversalTime();
+                        startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
+
+                        var endTime = datEndTime.Value.ToUniversalTime();
+                        endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
+
+                        await Next(bookmarkFQID, startTime, endTime, chkMyBookmarksOnly.Checked, searchString);
                     }
                     catch (Exception ex)
                     {
@@ -285,7 +297,7 @@ namespace OpenALPRPlugin.Client
             }
         }
 
-        private async Task Next(FQID bookmarkFQID, DateTime startLocalTime, DateTime endLocalTime, bool myOwnBookmarksOnly, string searchString)
+        private async Task Next(FQID bookmarkFQID, DateTime startTime, DateTime endTime, bool myOwnBookmarksOnly, string searchString)
         {
             lsvBookmarks.Items.Clear();
             lblMessage.Text = $"Total Bookmarks found:";
@@ -294,7 +306,7 @@ namespace OpenALPRPlugin.Client
             var kinds = new Guid[] { Kind.Camera, Kind.Microphone, Kind.Speaker };
 
             var searcher = new BookmarksFinder(items, kinds, myOwnBookmarksOnly, searchString);
-            var bookmarks = await searcher.Next(bookmarkFQID, startLocalTime, DateTime.SpecifyKind(endLocalTime, DateTimeKind.Local), bookmarksCount);
+            var bookmarks = await searcher.Next(bookmarkFQID, startTime, endTime, bookmarksCount);
 
             AddToListView(bookmarks);
             OpenALPRBackgroundPlugin.Bookmarks = bookmarks;
@@ -342,18 +354,16 @@ namespace OpenALPRPlugin.Client
                     {
                         edit.BeginTime = item.SubItems[1].Text;
                         edit.EndTime = item.SubItems[2].Text;
-                        edit.Reference = item.SubItems[3].Text;
-                        edit.Header = item.SubItems[4].Text;
-                        edit.Description = item.SubItems[5].Text;
+                        edit.Header = item.SubItems[3].Text;
+                        edit.Description = item.SubItems[4].Text;
 
                         edit.ShowDialog(this);
                         if (edit.saved)
                         {
-                            if (await BookmarksFinder.UpdateBookmark(item.Tag as FQID, edit.Reference, edit.Header, edit.Description))
+                            if (await BookmarksFinder.UpdateBookmark(item.Tag as FQID, edit.Header, edit.Description))
                             {
-                                item.SubItems[3].Text = edit.Reference;
-                                item.SubItems[4].Text = edit.Header;
-                                item.SubItems[5].Text = edit.Description;
+                                item.SubItems[3].Text = edit.Header;
+                                item.SubItems[4].Text = edit.Description;
                             }
                         }
                     }
@@ -456,7 +466,7 @@ namespace OpenALPRPlugin.Client
 
         private async void BtnMapCameras_Click(object sender, EventArgs e)
         {
-            IDictionary<string, OpenALPRCameraName> dictionary = new Dictionary<string, OpenALPRCameraName>();
+            IList<OpenALPRmilestoneCameraName> cameraList = new List<OpenALPRmilestoneCameraName>();
 
             try
             {
@@ -481,7 +491,7 @@ namespace OpenALPRPlugin.Client
                             alprCameraId = entry[2];
 
                         if (milestoneCameraName.Length != 0)
-                            dictionary.Add(milestoneCameraName, new OpenALPRCameraName { OpenALPRname = alprCameraName, OpenALPRid = alprCameraId });
+                            cameraList.Add(new OpenALPRmilestoneCameraName { MilestoneName = milestoneCameraName, OpenALPRname = alprCameraName, OpenALPRId = alprCameraId });
                     }
                 }
             }
@@ -494,19 +504,22 @@ namespace OpenALPRPlugin.Client
             {
                 try
                 {
-                    cameraMapping.dictionary = dictionary;
+                    cameraMapping.CameraList = cameraList;
                     cameraMapping.ShowDialog(this);
                     if (cameraMapping.Saved)
                     {
-                        dictionary = cameraMapping.dictionary;
+                        cameraList = cameraMapping.CameraList;
                         var filePath = CameraMappingFile();
                         if (!string.IsNullOrEmpty(filePath))
                         {
                             using (var outputFile = new StreamWriter(filePath))
-                                foreach (var item in dictionary)
+                            {
+                                foreach (var item in cameraList)
                                 {
-                                    await outputFile.WriteLineAsync($"{item.Key}|{item.Value.OpenALPRname}|{item.Value.OpenALPRid}");
+                                    //AXIS M1054 Network Camera (192.168.0.33) - Camera 1|TestCamera|237528343
+                                    await outputFile.WriteLineAsync($"{item.MilestoneName}|{item.OpenALPRname}|{item.OpenALPRId}");
                                 }
+                            }
                         }
                     }
                 }

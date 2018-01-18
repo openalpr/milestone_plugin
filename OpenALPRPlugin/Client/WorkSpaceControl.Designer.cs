@@ -53,8 +53,9 @@ namespace OpenALPRPlugin.Client
             this.btnMapCameras = new System.Windows.Forms.Button();
             this.btnHelp = new System.Windows.Forms.Button();
             this.btnOpenLogLocation = new System.Windows.Forms.Button();
-            this.picOpenALPR = new System.Windows.Forms.PictureBox();
             this.btnBlackList = new System.Windows.Forms.Button();
+            this.lblMainMessage = new System.Windows.Forms.Label();
+            this.picOpenALPR = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,7 +72,7 @@ namespace OpenALPRPlugin.Client
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 107);
+            this.label1.Location = new System.Drawing.Point(13, 107);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(101, 13);
             this.label1.TabIndex = 0;
@@ -123,9 +124,9 @@ namespace OpenALPRPlugin.Client
             // datStartTime
             // 
             this.datStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.datStartTime.Location = new System.Drawing.Point(115, 101);
+            this.datStartTime.Location = new System.Drawing.Point(117, 101);
             this.datStartTime.Name = "datStartTime";
-            this.datStartTime.Size = new System.Drawing.Size(258, 20);
+            this.datStartTime.Size = new System.Drawing.Size(254, 20);
             this.datStartTime.TabIndex = 1;
             // 
             // lblMessage
@@ -157,7 +158,7 @@ namespace OpenALPRPlugin.Client
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 135);
+            this.label2.Location = new System.Drawing.Point(13, 135);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(78, 13);
             this.label2.TabIndex = 2;
@@ -166,9 +167,9 @@ namespace OpenALPRPlugin.Client
             // datEndTime
             // 
             this.datEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.datEndTime.Location = new System.Drawing.Point(115, 129);
+            this.datEndTime.Location = new System.Drawing.Point(117, 129);
             this.datEndTime.Name = "datEndTime";
-            this.datEndTime.Size = new System.Drawing.Size(258, 20);
+            this.datEndTime.Size = new System.Drawing.Size(254, 20);
             this.datEndTime.TabIndex = 3;
             // 
             // txtSearchFor
@@ -190,7 +191,7 @@ namespace OpenALPRPlugin.Client
             // chkMyBookmarksOnly
             // 
             this.chkMyBookmarksOnly.AutoSize = true;
-            this.chkMyBookmarksOnly.Location = new System.Drawing.Point(115, 155);
+            this.chkMyBookmarksOnly.Location = new System.Drawing.Point(397, 131);
             this.chkMyBookmarksOnly.Name = "chkMyBookmarksOnly";
             this.chkMyBookmarksOnly.Size = new System.Drawing.Size(118, 17);
             this.chkMyBookmarksOnly.TabIndex = 6;
@@ -239,17 +240,6 @@ namespace OpenALPRPlugin.Client
             this.btnOpenLogLocation.UseVisualStyleBackColor = true;
             this.btnOpenLogLocation.Click += new System.EventHandler(this.BtnOpenLogLocation_Click);
             // 
-            // picOpenALPR
-            // 
-            this.picOpenALPR.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.picOpenALPR.Image = global::OpenALPRPlugin.Properties.Resources.logo_bluegray;
-            this.picOpenALPR.InitialImage = global::OpenALPRPlugin.Properties.Resources.logo_bluegray;
-            this.picOpenALPR.Location = new System.Drawing.Point(429, 3);
-            this.picOpenALPR.Name = "picOpenALPR";
-            this.picOpenALPR.Size = new System.Drawing.Size(519, 93);
-            this.picOpenALPR.TabIndex = 16;
-            this.picOpenALPR.TabStop = false;
-            // 
             // btnBlackList
             // 
             this.btnBlackList.Location = new System.Drawing.Point(150, 801);
@@ -260,12 +250,32 @@ namespace OpenALPRPlugin.Client
             this.btnBlackList.UseVisualStyleBackColor = true;
             this.btnBlackList.Click += new System.EventHandler(this.BtnBlackList_Click);
             // 
+            // lblMainMessage
+            // 
+            this.lblMainMessage.ForeColor = System.Drawing.Color.Brown;
+            this.lblMainMessage.Location = new System.Drawing.Point(13, 19);
+            this.lblMainMessage.Name = "lblMainMessage";
+            this.lblMainMessage.Size = new System.Drawing.Size(398, 77);
+            this.lblMainMessage.TabIndex = 18;
+            // 
+            // picOpenALPR
+            // 
+            this.picOpenALPR.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.picOpenALPR.Image = global::OpenALPRPlugin.Properties.Resources.logo_bluegray;
+            this.picOpenALPR.InitialImage = global::OpenALPRPlugin.Properties.Resources.logo_bluegray;
+            this.picOpenALPR.Location = new System.Drawing.Point(685, 30);
+            this.picOpenALPR.Name = "picOpenALPR";
+            this.picOpenALPR.Size = new System.Drawing.Size(261, 47);
+            this.picOpenALPR.TabIndex = 16;
+            this.picOpenALPR.TabStop = false;
+            // 
             // WorkSpaceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.lblMainMessage);
             this.Controls.Add(this.btnBlackList);
             this.Controls.Add(this.picOpenALPR);
             this.Controls.Add(this.btnOpenLogLocation);
@@ -319,5 +329,6 @@ namespace OpenALPRPlugin.Client
         private Button btnOpenLogLocation;
         private PictureBox picOpenALPR;
         private Button btnBlackList;
+        private Label lblMainMessage;
     }
 }

@@ -31,9 +31,7 @@
             this.BtnCancel = new System.Windows.Forms.Button();
             this.BtnSave = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtReference = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.txtHeader = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -45,7 +43,7 @@
             // BtnCancel
             // 
             this.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.BtnCancel.Location = new System.Drawing.Point(260, 222);
+            this.BtnCancel.Location = new System.Drawing.Point(261, 179);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(139, 36);
             this.BtnCancel.TabIndex = 11;
@@ -55,7 +53,7 @@
             // 
             // BtnSave
             // 
-            this.BtnSave.Location = new System.Drawing.Point(115, 222);
+            this.BtnSave.Location = new System.Drawing.Point(116, 179);
             this.BtnSave.Name = "BtnSave";
             this.BtnSave.Size = new System.Drawing.Size(139, 36);
             this.BtnSave.TabIndex = 10;
@@ -73,14 +71,6 @@
             this.label1.Text = "Begin time";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // txtReference
-            // 
-            this.txtReference.Location = new System.Drawing.Point(95, 102);
-            this.txtReference.Name = "txtReference";
-            this.txtReference.Size = new System.Drawing.Size(303, 20);
-            this.txtReference.TabIndex = 5;
-            this.txtReference.TabStop = false;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -91,20 +81,10 @@
             this.label2.Text = "End time";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(33, 105);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(57, 13);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Reference";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(47, 145);
+            this.label4.Location = new System.Drawing.Point(48, 102);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(42, 13);
             this.label4.TabIndex = 6;
@@ -113,7 +93,7 @@
             // 
             // txtHeader
             // 
-            this.txtHeader.Location = new System.Drawing.Point(95, 142);
+            this.txtHeader.Location = new System.Drawing.Point(96, 99);
             this.txtHeader.Name = "txtHeader";
             this.txtHeader.Size = new System.Drawing.Size(303, 20);
             this.txtHeader.TabIndex = 7;
@@ -122,7 +102,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(30, 185);
+            this.label5.Location = new System.Drawing.Point(31, 142);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(60, 13);
             this.label5.TabIndex = 8;
@@ -131,7 +111,7 @@
             // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(95, 182);
+            this.txtDescription.Location = new System.Drawing.Point(96, 139);
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(303, 20);
             this.txtDescription.TabIndex = 9;
@@ -160,16 +140,14 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.BtnCancel;
-            this.ClientSize = new System.Drawing.Size(427, 275);
+            this.ClientSize = new System.Drawing.Size(427, 223);
             this.Controls.Add(this.txtEndTime);
             this.Controls.Add(this.txtBeginTime);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtDescription);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtHeader);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.txtReference);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.BtnSave);
             this.Controls.Add(this.BtnCancel);
@@ -192,9 +170,7 @@
         private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.Button BtnSave;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtReference;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtHeader;
         private System.Windows.Forms.Label label5;

@@ -74,7 +74,7 @@
   <ItemGroup>
     <Compile Include="Background\BookmarksFinder.cs" />
     <Compile Include="Background\OpenALPRBackgroundPlugin.cs" />
-    <Compile Include="Client\OpenALPRCameraName.cs" />
+    <Compile Include="Client\OpenALPRmilestoneCameraName.cs" />
     <Compile Include="Client\OpenALPRViewItemManager.cs" />
     <Compile Include="Client\OpenALPRViewItemPlugin.cs" />
     <Compile Include="Client\WorkSpaceControl.cs">
@@ -128,6 +128,7 @@
     </Compile>
     <Compile Include="Utility\Helper.cs" />
     <Compile Include="Utility\Logger.cs" />
+    <Compile Include="Utility\OpenALPRLNameHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -140,7 +141,6 @@
   <ItemGroup>
     <Content Include="plugin.def" />
     <None Include="Resources\logo_bluegray.png" />
-    <None Include="Resources\logo_white_big.png" />
     <None Include="Resources\logo_white_512x93.png" />
     <Content Include="Resources\Server.png" />
   </ItemGroup>

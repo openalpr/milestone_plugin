@@ -123,11 +123,13 @@
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\BlackListHelper.cs" />
     <Compile Include="Utility\CameraMapper.cs" />
     <Compile Include="Utility\Helper.cs" />
     <Compile Include="Utility\Impersonation.cs" />
     <Compile Include="Utility\JsonHelper.cs" />
     <Compile Include="Utility\Logging.cs" />
+    <Compile Include="Utility\OpenALPRLNameHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

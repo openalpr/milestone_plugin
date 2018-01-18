@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using VideoOS.Platform;
 using VideoOS.Platform.Login;
 using VideoOS.Platform.SDK.Proxy.Server;
@@ -59,7 +60,21 @@ namespace OpenALPRQueueConsumer.Milestone
             {
                 using (var impersonation = new Impersonation(BuiltinUser.NetworkService))
                 {
-                    PrepareToLogin(serverName, userName, password);
+                    var firstTimeMessage = true;
+                    while (!connectedToMilestone && !ServiceStarter.IsClosing)
+                    {
+                        PrepareToLogin(serverName, userName, password);
+                        if (!connectedToMilestone && firstTimeMessage)
+                        {
+                            firstTimeMessage = false;
+                            Program.Logger.Log.Warn("Failed to connect to Milestone");
+                        }
+
+                        Thread.Sleep(1000);
+                    }
+
+                    if (connectedToMilestone)
+                        Program.Logger.Log.Info("Connected to Milestone");
                 }
             }
             catch (Exception ex)
@@ -132,11 +147,8 @@ namespace OpenALPRQueueConsumer.Milestone
                 logged = Login(loginSettings.Uri);
             }
 
-            if (!logged)
-            {
-                Program.Logger.Log.Warn("Failed to connect to Milestone");
+            if (!logged)                
                 return;
-            }
 
             try
             {

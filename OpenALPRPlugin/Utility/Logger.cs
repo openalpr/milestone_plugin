@@ -54,7 +54,7 @@ namespace OpenALPRPlugin.Utility
                 AppendToFile = true,
                 MaxSizeRollBackups = -1,
                 RollingStyle = RollingFileAppender.RollingMode.Size,
-                MaximumFileSize = "10MB",
+                MaximumFileSize = "50MB",
                 Layout = patternLayout,
                 LockingModel = new FileAppender.MinimalLock(),
                 StaticLogFileName = true,

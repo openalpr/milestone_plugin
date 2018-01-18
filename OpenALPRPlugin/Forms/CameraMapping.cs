@@ -1,40 +1,50 @@
 ﻿using OpenALPRPlugin.Background;
+using OpenALPRPlugin.Client;
+using OpenALPRPlugin.Utility;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using VideoOS.Platform;
-using System.Linq;
-using OpenALPRPlugin.Client;
 
 namespace OpenALPRPlugin.Forms
 {
     public partial class CameraMapping : Form
     {
-        internal IDictionary<string, OpenALPRCameraName> dictionary;
+        internal IList<OpenALPRmilestoneCameraName> CameraList;
         internal bool Saved;
 
         public CameraMapping()
         {
             InitializeComponent();
             ClientControl.Instance.RegisterUIControlForAutoTheming(this);
-            dictionary = new Dictionary<string, OpenALPRCameraName>();
+            CameraList = new List<OpenALPRmilestoneCameraName> ();
         }
 
         private void CameraMapping_Load(object sender, EventArgs e)
         {
+            var namesList = new List<KeyValuePair<string, string>>();
+            OpenALPRLNameHelper.FillCameraNameList(namesList);
+
             var cameraItems = new List<Item>();
             OpenALPRBackgroundPlugin.FindAllCameras(Configuration.Instance.GetItemsByKind(Kind.Camera), cameraItems);
             for (int i = 0; i < cameraItems.Count; i++)
             {
                 var cameraPairControl = new CameraPairControl();
-                cameraPairControl.TxtMilestoneCameraName.Text = cameraItems[i].Name;
-                var mapping = dictionary.FirstOrDefault(m => m.Key == cameraItems[i].Name);
-                if (!string.IsNullOrEmpty(mapping.Key))
-                {
-                    cameraPairControl.TxtALPRCameraName.Text = mapping.Value.OpenALPRname;
-                    cameraPairControl.TxtALPRCameraId.Text = mapping.Value.OpenALPRid;
-                }
 
+                cameraPairControl.cboName.DataSource = new BindingSource(namesList, null);
+                cameraPairControl.cboName.DisplayMember = "Value";
+                cameraPairControl.cboName.ValueMember = "Key";
+
+                cameraPairControl.TxtMilestoneCameraName.Text = cameraItems[i].Name;
+                var mapping = CameraList.FirstOrDefault(m => m.MilestoneName == cameraItems[i].Name);
+                if (mapping != null)
+                {
+                    var index = namesList.FindIndex(a => a.Key == mapping.OpenALPRId);
+                    if (index > -1)
+                        cameraPairControl.cboName.SelectedIndex = index;
+                }
+     
                 flowLayoutPanel1.Controls.Add(cameraPairControl);
             }
         }
@@ -52,16 +62,20 @@ namespace OpenALPRPlugin.Forms
                 if (cameraPairControl != null)
                 {
                     var currentMilestoneCameraName = cameraPairControl.TxtMilestoneCameraName.Text;
-                    var currentALPRCameraName = cameraPairControl.TxtALPRCameraName.Text;
-                    var currentALPRCameraId = cameraPairControl.TxtALPRCameraId.Text;
+
+                    string currentALPRCameraId = ((KeyValuePair<string, string>)cameraPairControl.cboName.SelectedItem).Key;
+                    string currentALPRCameraName = ((KeyValuePair<string, string>)cameraPairControl.cboName.SelectedItem).Value;
 
                     if (!string.IsNullOrEmpty(currentMilestoneCameraName))
                     {
-                        var mapping = dictionary.FirstOrDefault(m => m.Key == currentMilestoneCameraName);
-                        if (string.IsNullOrEmpty(mapping.Key))
-                            dictionary.Add(currentMilestoneCameraName, new OpenALPRCameraName { OpenALPRname = currentALPRCameraName, OpenALPRid = currentALPRCameraId });
+                        var mapping = CameraList.FirstOrDefault(m => m.MilestoneName == currentMilestoneCameraName);
+                        if (mapping == null)
+                            CameraList.Add(new OpenALPRmilestoneCameraName { MilestoneName = currentMilestoneCameraName, OpenALPRname = currentALPRCameraName, OpenALPRId = currentALPRCameraId });
                         else
-                            dictionary[currentMilestoneCameraName] = new OpenALPRCameraName { OpenALPRname = currentALPRCameraName, OpenALPRid = currentALPRCameraId };
+                        {
+                            mapping.OpenALPRname = currentALPRCameraName;
+                            mapping.OpenALPRId = currentALPRCameraId;
+                        }
                     }
                 }
             }

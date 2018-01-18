@@ -1,10 +1,9 @@
-﻿using VideoOS.Platform;
-
-namespace OpenALPRQueueConsumer.BeanstalkWorker
+﻿namespace OpenALPRQueueConsumer.BeanstalkWorker
 {
     internal class OpenALPRmilestoneCameraName
     {
-        public FQID MilestoneId;
+        public string MilestoneName;
+        public string OpenALPRId;
         public string OpenALPRname;
     }
 }

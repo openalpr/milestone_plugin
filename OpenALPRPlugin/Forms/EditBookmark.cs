@@ -8,7 +8,6 @@ namespace OpenALPRPlugin.Forms
     {
         internal string BeginTime;
         internal string EndTime;
-        internal string Reference;
         internal string Header;
         internal string Description;
         internal bool saved;
@@ -23,7 +22,6 @@ namespace OpenALPRPlugin.Forms
         {
             txtBeginTime.Text = BeginTime;
             txtEndTime.Text = EndTime;
-            txtReference.Text = Reference;
             txtHeader.Text = Header;
             txtDescription.Text = Description;
         }
@@ -37,7 +35,6 @@ namespace OpenALPRPlugin.Forms
         {
             BeginTime = txtBeginTime.Text;
             EndTime = txtEndTime.Text;
-            Reference = txtReference.Text;
             Header = txtHeader.Text;
             Description = txtDescription.Text;
 

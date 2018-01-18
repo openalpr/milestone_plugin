@@ -154,39 +154,6 @@ namespace OpenALPRPlugin.Utility
             }
         }
 
-        //internal static string ReadConfigKey(string key)
-        //{
-        //    try
-        //    {
-        //        return ConfigurationManager.AppSettings[key];
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Log.Error(key, ex);
-        //    }
 
-        //    return string.Empty;
-        //}
-
-        //internal static void AddUpdateAppSettings(string key, string value)
-        //{
-        //    try
-        //    {
-        //        var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-        //        var settings = configFile.AppSettings.Settings;
-
-        //        if (settings[key] == null)
-        //            settings.Add(key, value);
-        //        else
-        //            settings[key].Value = value;
-
-        //        configFile.Save(ConfigurationSaveMode.Modified);
-        //        ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Log.Error(null, ex);
-        //    }
-        //}
     }
 }

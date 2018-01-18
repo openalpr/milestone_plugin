@@ -40,12 +40,14 @@ namespace OpenALPRPlugin.Background
         {
         }
 
-        internal async Task<Bookmark[]> Search(DateTime startlocalTime, DateTime endlocalTime, int bookmarksCount)
+        internal async Task<Bookmark[]> Search(DateTime startTime, DateTime endTime, int bookmarksCount)
         {
-            if (startlocalTime <= endlocalTime)
+            if (startTime <= endTime)
             {
-                long timeLimitUSec = (long)(endlocalTime - startlocalTime).TotalMilliseconds * 10000; // see https://developer.milestonesys.com/s/question/0D50O00003uvfSbSAI/retrieving-bookmarks-in-smart-client-plugin
-                return await BookmarkSearch(startlocalTime, timeLimitUSec, bookmarksCount);
+                long timeLimitUSec = //(long)(endTime - startTime).TotalMilliseconds * 10000; // see https://developer.milestonesys.com/s/question/0D50O00003uvfSbSAI/retrieving-bookmarks-in-smart-client-plugin
+                                    (long)(endTime - startTime).TotalMilliseconds * 1000; // <====== this works fine after testing it many times
+
+                return await BookmarkSearch(startTime, timeLimitUSec, bookmarksCount);
             }
 
             return new Bookmark[0];
@@ -81,11 +83,11 @@ namespace OpenALPRPlugin.Background
             return new Bookmark[0];
         }
 
-        internal async Task<Bookmark[]> Next(FQID bookmarkFQID, DateTime startlocalTime, DateTime endlocalTime, int bookmarksCount)
+        internal async Task<Bookmark[]> Next(FQID bookmarkFQID, DateTime startTime, DateTime endTime, int bookmarksCount)
         {
-            if (startlocalTime <= endlocalTime)
+            if (startTime <= endTime)
             {
-                long timeLimitUSec = (long)(endlocalTime - startlocalTime).TotalMilliseconds * 10000; // see https://developer.milestonesys.com/s/question/0D50O00003uvfSbSAI/retrieving-bookmarks-in-smart-client-plugin
+                long timeLimitUSec = (long)(endTime - startTime).TotalMilliseconds * 10000; // see https://developer.milestonesys.com/s/question/0D50O00003uvfSbSAI/retrieving-bookmarks-in-smart-client-plugin
                 return await BookmarkSearch(bookmarkFQID, timeLimitUSec, bookmarksCount);
             }
 
@@ -140,14 +142,13 @@ namespace OpenALPRPlugin.Background
             return null;
         }
 
-        internal static async Task<bool> UpdateBookmark(FQID bookmarkFQID, string newReference, string newHeader, string newDescription)
+        internal static async Task<bool> UpdateBookmark(FQID bookmarkFQID, string newHeader, string newDescription)
         {
             try
             {
                 var bookmarkFetched = await Task.Run(() => BookmarkService.Instance.BookmarkGet(bookmarkFQID));
                 if (bookmarkFetched != null)
                 {
-                    bookmarkFetched.Reference = newReference;
                     bookmarkFetched.Header = newHeader;
                     bookmarkFetched.Description = newDescription;
                     var bookmarkUpdated = await Task.Run(() => BookmarkService.Instance.BookmarkUpdate(bookmarkFetched));

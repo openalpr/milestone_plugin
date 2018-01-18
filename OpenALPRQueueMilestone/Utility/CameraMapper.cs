@@ -1,47 +1,60 @@
-﻿using System;
+﻿using OpenALPRQueueConsumer.BeanstalkWorker;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace OpenALPRQueueConsumer.Utility
 {
     internal static class CameraMapper
     {
+        //AXIS M1054 Network Camera (192.168.0.33) - Camera 1|TestCamera|237528343
+        internal static void FillCameraList(IList<OpenALPRmilestoneCameraName> cameraList)
+        {
+            var lines = GetCameraMapping();
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i];
+                if (!string.IsNullOrEmpty(line))
+                {
+                    var entry = line.Split(new char[] { '|' });
+                    if (entry.Length != 0)
+                    {
+                        var camera = new OpenALPRmilestoneCameraName { MilestoneName = entry[0] };
+                        if (entry.Length > 1)
+                            camera.OpenALPRname = entry[1];
+
+                        if (entry.Length > 2)
+                            camera.OpenALPRId = entry[2];
+
+                        cameraList.Add(camera);
+                    }
+                }
+            }
+        }
+
         internal static string[] GetCameraMapping()
         {
-            var filePath = CameraMappingFile();
+            var filePath = GetFilePath();
             if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
                 return File.ReadAllLines(filePath);
 
             return new string[0];
         }
 
-        internal static void AddCamera(string milestoneCameraName, string alprCameraName, string alprCameraId)
+        internal static void SaveCameraList(IList<OpenALPRmilestoneCameraName> cameraList)
         {
             try
             {
-                var lines = GetCameraMapping();
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    var line = lines[i];
-                    if (!string.IsNullOrEmpty(line))
-                    {
-                        var entry = line.Split(new char[] { '|' });
-                        var currentAlprCameraName = string.Empty;
-
-                        if (entry.Length > 1)
-                            currentAlprCameraName = entry[1];
-
-                        if (currentAlprCameraName == alprCameraName)
-                            return; // no need to add it
-                    }
-                }
-
-                // This mean we need to add it to the file
-
-                var filePath = CameraMappingFile();
+                var filePath = GetFilePath();
                 if (!string.IsNullOrEmpty(filePath))
                 {
-                    using (var outputFile = new StreamWriter(filePath, true))
-                        outputFile.WriteLine($"{milestoneCameraName}|{alprCameraName}|{alprCameraId}");
+                    using (var outputFile = new StreamWriter(filePath, false))
+                    {
+                        for (int i = 0; i < cameraList.Count; i++)
+                        {
+                            outputFile.WriteLine($"{cameraList[i].MilestoneName}|{cameraList[i].OpenALPRname}|{cameraList[i].OpenALPRId}");
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -50,7 +63,7 @@ namespace OpenALPRQueueConsumer.Utility
             }
         }
 
-        internal static string CameraMappingFile()
+        internal static string GetFilePath()
         {
             const string PlugName = "OpenALPR";
 

@@ -21,18 +21,21 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         public static int EpochEndSecondsAfter = 3;
         private IDictionary<string, string> dicBlack;
         private DateTime lastUpdateTime;
-        private const string blackListPath = @"C:\ProgramData\OpenALPR\Mapping\BlackList.txt";
-
-        //http://www.jsonutils.com/
         private IDisposable worker = null;
-        private IDictionary<string, OpenALPRmilestoneCameraName> cameraDictionary;
+        private IList<OpenALPRmilestoneCameraName> cameraList;
+        private List<KeyValuePair<string,string>> openALPRList;
 
         public Worker()
         {
-            cameraDictionary = new Dictionary<string, OpenALPRmilestoneCameraName>();
+            cameraList = new List<OpenALPRmilestoneCameraName>();
+            CameraMapper.FillCameraList(cameraList);
+
+            openALPRList = new List<KeyValuePair<string, string>>();
+            OpenALPRLNameHelper.FillCameraNameList(openALPRList);
+
             dicBlack = new Dictionary<string, string>();
-            Helper.TryLoadBlackList(dicBlack, blackListPath);
-            lastUpdateTime = Helper.GetLastWriteTime(blackListPath);
+            BlackListHelper.TryLoadBlackList(dicBlack);
+            lastUpdateTime = BlackListHelper.GetLastWriteTime();
         }
 
         public async Task DoWork()
@@ -43,7 +46,13 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 //TaskScheduler = TaskScheduler.Current,
             };
 
-            worker = await BeanstalkConnection.ConnectWorkerAsync("localhost:11300", options, async (iworker, job) =>
+            var beanstalkAddress = Helper.ReadConfigKey("BeanstalkAddress");
+            if (string.IsNullOrEmpty(beanstalkAddress))
+                beanstalkAddress = "localhost:11300";
+
+            Program.Logger.Log.Info($"Beanstalk address used: {beanstalkAddress}");
+
+            worker = await BeanstalkConnection.ConnectWorkerAsync(beanstalkAddress, options, async (iworker, job) =>
             {
                 bool done = true;
 
@@ -200,6 +209,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             return true;
         }
 
+        // Auto mapping happened when there is an ip address in videoStream.Url : rtsp://mhill:cosmos@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
         private bool ProcessAlprHeartbeat(Heartbeats heartbeats)
         {
             if (heartbeats != null)
@@ -209,20 +219,54 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     var videoStream = heartbeats.Video_streams[i];
                     if (videoStream != null)
                     {
+                        var kv = new KeyValuePair<string, string>(videoStream.Camera_id.ToString(), videoStream.Camera_name);
+                        if (!openALPRList.Contains(kv))
+                        {
+                            openALPRList.Add(kv);
+                            OpenALPRLNameHelper.SaveCameraNameList(openALPRList);
+                        }
+
                         var cameraId = videoStream.Camera_id;
                         if (!string.IsNullOrEmpty(videoStream.Url)) ////rtsp://mhill:cosmos@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
                         {
                             var match = Regex.Match(videoStream.Url, @"\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b");
                             if (match.Success)
                             {
-                                if (!cameraDictionary.ContainsKey(videoStream.Camera_id.ToString()))
+                                // 1st case (No Camera_id found): AXIS M1054 Network Camera (192.168.0.36) - Camera 1|TestCamera|
+                                var exists = cameraList.Any(m => m.OpenALPRId == videoStream.Camera_id.ToString()); 
+
+                                if (!exists)
                                 {
-                                    var milestoneCamera = MilestoneServer.GetCameraItem(match.Captures[0].Value);
+                                    exists = cameraList.Any(m => m.OpenALPRname == videoStream.Camera_name); 
+                                    if (exists)
+                                    {
+                                        var cameras = cameraList.Where(m => m.OpenALPRname == videoStream.Camera_name);
+                                        foreach (var camera in cameras)
+                                        {
+                                            camera.OpenALPRId = videoStream.Camera_id.ToString();
+                                        }
+
+                                        CameraMapper.SaveCameraList(cameraList);
+                                    }
+                                }
+
+                                // 2nd case (No Camera_id No Camera_Name found): AXIS M1054 Network Camera (192.168.0.36) - Camera 1
+                                if (!exists)
+                                {
+                                    var milestoneCamera = MilestoneServer.GetCameraItem(match.Captures[0].Value); 
                                     if (milestoneCamera != null)
                                     {
-                                        var openALPRmilestoneCameraName = new OpenALPRmilestoneCameraName { OpenALPRname = videoStream.Camera_name, MilestoneId = milestoneCamera.FQID };
-                                        cameraDictionary.Add(videoStream.Camera_id.ToString(), openALPRmilestoneCameraName);
-                                        CameraMapper.AddCamera(milestoneCamera.Name, videoStream.Camera_name, videoStream.Camera_id.ToString());
+                                        exists = cameraList.Any(m => m.MilestoneName == milestoneCamera.Name);
+                                        if (exists)
+                                        {
+                                            var cameras = cameraList.Where(m => m.MilestoneName == milestoneCamera.Name);
+                                            foreach (var camera in cameras)
+                                            {
+                                                camera.OpenALPRId = videoStream.Camera_id.ToString();
+                                                camera.OpenALPRname = videoStream.Camera_name;
+                                            }
+                                            CameraMapper.SaveCameraList(cameraList);
+                                        }
                                     }
                                 }
                             }
@@ -251,75 +295,78 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         {
             FQID fqid = null;
             Bookmark bookmark = null;
-
+            var bookmarks = new List<Bookmark>();
             try
             {
-                var camera = cameraDictionary.FirstOrDefault(c => c.Key == plateInfo.CameraId.ToString());
+                var cameras = cameraList.Where(c => c.OpenALPRId == plateInfo.CameraId.ToString());
 
-                fqid = camera.Key == null || camera.Value == null ?
-                        GetCameraFQIDFromMapping(plateInfo.CameraId.ToString()) :
-                        camera.Value.MilestoneId;
-
-                if (fqid == null)
+                foreach (var camera in cameras)
                 {
-                    Program.Logger.Log.Info($"No mapping found for camera: {plateInfo.CameraId.ToString()}");
-                    return true; // As Matt suggest, this will remove this job from the queue
+                    fqid = MilestoneServer.GetCameraByName(camera.MilestoneName);
+
+                    if (fqid == null)
+                    {
+                        Program.Logger.Log.Info($"No mapping found for camera: {plateInfo.CameraId.ToString()}");
+                        continue; // As Matt suggest, this will remove this job from the queue
+                    }
+
+                    bookmark = BookmarkService.Instance.BookmarkCreate(
+                                        fqid,
+                                        plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore),  //subtracted 3 secondes from the start time to give more chances to capture the video
+                                        plateInfo.EpochStart,                                       //timeTrigged
+                                        plateInfo.EpochEnd.AddSeconds(EpochEndSecondsAfter),        //added 3 secondes to give more chances to capture the video
+                                        "openalpr",                                                 //so we can reterive openalpr bookmarks only in the plug-in
+                                        plateInfo.BestPlateNumber,
+                                        $"Make={plateInfo.Make};MakeModel:{plateInfo.MakeModel};BodyType={plateInfo.BodyType};Color={plateInfo.Color};BestRegion={plateInfo.BestRegion};Candidates={plateInfo.CandidatesPlate}");
+
+                    if (bookmark == null)
+                        Program.Logger.Log.Info($"Failed to create a Bookmark for Plate number: {plateInfo.BestPlateNumber}");
+                    else
+                    {
+                        bookmarks.Add(bookmark);
+                        Program.Logger.Log.Info($"Created Bookmark for Plate number: {plateInfo.BestPlateNumber}");
+                    }
                 }
-
-
-                bookmark = BookmarkService.Instance.BookmarkCreate(
-                                    fqid,
-                                    plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore),  //subtracted 3 secondes from the start time to give more chances to capture the video
-                                    plateInfo.EpochStart,                                       //timeTrigged
-                                    plateInfo.EpochEnd.AddSeconds(EpochEndSecondsAfter),        //added 3 secondes to give more chances to capture the video
-                                    "openalpr",                                                 //so we can reterive openalpr bookmarks only in the plug-in
-                                    plateInfo.BestPlateNumber,
-                                    $"Make={plateInfo.Make};MakeModel:{plateInfo.MakeModel};BodyType={plateInfo.BodyType};Color={plateInfo.Color};BestRegion={plateInfo.BestRegion};Candidates={plateInfo.CandidatesPlate}");
-
-                if (bookmark == null)
-                {
-                    Program.Logger.Log.Info($"Failed to create a Bookmark for Plate number: {plateInfo.BestPlateNumber}");
-                    return false;
-                }
-
-                Program.Logger.Log.Info($"Created Bookmark for Plate number: {plateInfo.BestPlateNumber}");
             }
             catch (Exception ex)
             {
                 Program.Logger.Log.Error(null, ex);
             }
 
-            var temp = Helper.GetLastWriteTime(blackListPath);
-            if (temp != lastUpdateTime)
+            if (bookmarks.Count != 0)
             {
-                Helper.TryLoadBlackList(dicBlack, blackListPath);
-                lastUpdateTime = temp;
-                Console.WriteLine("========== Reload Black list");
-            }
-            else
-                Console.WriteLine("==========");
-
-            var plateFromBlackList = plateInfo.BestPlateNumber;
-
-            var existsInBlackList = dicBlack.ContainsKey(plateInfo.BestPlateNumber);
-            if (!existsInBlackList)
-            {
-                existsInBlackList = plateInfo.CandidatesPlate.Split(',').Any(p => dicBlack.ContainsKey(p));
-                if (existsInBlackList)
-                    plateFromBlackList = plateInfo.CandidatesPlate.Split(',').FirstOrDefault(p => dicBlack.ContainsKey(p));
-            }
-
-            if (existsInBlackList)
-            {
-                var descFromBlackList = dicBlack[plateFromBlackList];
-
-                try
+                var temp = BlackListHelper.GetLastWriteTime();
+                if (temp != lastUpdateTime)
                 {
-                    SendAlarm(plateInfo, bookmark, fqid, plateFromBlackList, descFromBlackList);
+                    BlackListHelper.TryLoadBlackList(dicBlack);
+                    lastUpdateTime = temp;
+                    Console.WriteLine("========== Reload Black list");
                 }
-                catch (Exception ex)
+                else
+                    Console.WriteLine("==========");
+
+                var plateFromBlackList = plateInfo.BestPlateNumber;
+
+                var existsInBlackList = dicBlack.ContainsKey(plateInfo.BestPlateNumber);
+                if (!existsInBlackList)
                 {
-                    Program.Logger.Log.Error(null, ex);
+                    existsInBlackList = plateInfo.CandidatesPlate.Split(',').Any(p => dicBlack.ContainsKey(p));
+                    if (existsInBlackList)
+                        plateFromBlackList = plateInfo.CandidatesPlate.Split(',').FirstOrDefault(p => dicBlack.ContainsKey(p));
+                }
+
+                if (existsInBlackList)
+                {
+                    var descFromBlackList = dicBlack[plateFromBlackList];
+
+                    try
+                    {
+                        SendAlarm(plateInfo, bookmarks[0], fqid, plateFromBlackList, descFromBlackList);
+                    }
+                    catch (Exception ex)
+                    {
+                        Program.Logger.Log.Error(null, ex);
+                    }
                 }
             }
 
@@ -439,49 +486,6 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
             // Send the Alarm directly to the EventServer, to store in the Alarm database. No rule is being activated.
             EnvironmentManager.Instance.SendMessage(new Message(MessageId.Server.NewAlarmCommand) { Data = alarm });
-        }
-
-
-        private FQID GetCameraFQIDFromMapping(string alprCameraId)
-        {
-            try
-            {
-                var lines = CameraMapper.GetCameraMapping();
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    var line = lines[i];
-                    if (!string.IsNullOrEmpty(line))
-                    {
-                        var entry = line.Split(new char[] { '|' });
-                        var currentAlprCameraId = string.Empty;
-                        var currentMilestoneCameraName = string.Empty;
-
-                        if (entry.Length != 0)
-                            currentMilestoneCameraName = entry[0];
-
-                        if (entry.Length > 2)
-                            currentAlprCameraId = entry[2];
-
-                        if (currentAlprCameraId == alprCameraId)
-                        {
-                            if (currentMilestoneCameraName.Length != 0)
-                            {
-                                var fqid = MilestoneServer.GetCameraByName(currentMilestoneCameraName);
-                                if (fqid != null)
-                                    cameraDictionary.Add(alprCameraId, new OpenALPRmilestoneCameraName { MilestoneId = fqid, OpenALPRname = currentMilestoneCameraName });
-
-                                return fqid;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Program.Logger.Log.Error(null, ex);
-            }
-
-            return null;
         }
 
         public void Close()
