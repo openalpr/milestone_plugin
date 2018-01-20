@@ -29,7 +29,7 @@ namespace OpenALPRPlugin.Forms
             if (namesList.Count != 0)
             {
                 namesList = namesList.OrderBy(o => o.Key).ToList();
-                namesList.Insert(0, new KeyValuePair<string, string>("-1", "Select"));
+                namesList.Insert(0, new KeyValuePair<string, string>("-1", "No ALPR mapping"));
             }
 
             var cameraItems = new List<Item>();
