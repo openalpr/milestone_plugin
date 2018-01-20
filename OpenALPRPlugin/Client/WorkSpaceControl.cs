@@ -252,7 +252,9 @@ namespace OpenALPRPlugin.Client
 
         private void AddToListView(Bookmark[] bookmarks)
         {
-            for (int i = 0; i < bookmarks.Length; i++)
+            var limit = bookmarks.Length > bookmarksCount ? bookmarksCount : bookmarks.Length;
+
+            for (int i = 0; i < limit; i++)
             {
                 var bookmark = bookmarks[i];
 
@@ -275,8 +277,10 @@ namespace OpenALPRPlugin.Client
                     break;
             }
 
-            btnNext.Enabled = bookmarks.Length == bookmarksCount;
-            lblMessage.Text = $"Total Bookmarks found: {bookmarks.Length.ToString()}";
+            var plus = bookmarks.Length > bookmarksCount ? "+" : string.Empty;
+            
+            btnNext.Enabled = bookmarks.Length > bookmarksCount;
+            lblMessage.Text = $"Total Bookmarks found: {limit.ToString()}{plus}";
         }
 
         private async void BtnNext_Click(object sender, EventArgs e)

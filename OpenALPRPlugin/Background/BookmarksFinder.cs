@@ -69,7 +69,7 @@ namespace OpenALPRPlugin.Background
                     items[0].FQID.ServerId,         //The ServerId of the management server to be searched for Bookmarks.
                     startTime,                      //Start time of the search interval. Mandatory
                     period,                         //Period of time to search within (in microseconds). Mandatory
-                    bookmarksCount,                 //Maximum number of bookmarks to be returned in the result. Mandatory
+                    bookmarksCount + 1,             //Maximum number of bookmarks to be returned in the result. Mandatory
                     Kinds,                          //The Kinds to be searched for. Null => all kinds
                     new FQID[] { items[0].FQID },   //Array of Item identifications to search. Null => Any
                     optUsers,                       //Array of User names (the users that created the bookmark). Null => Ignored
@@ -106,7 +106,7 @@ namespace OpenALPRPlugin.Background
                                 BookmarkService.Instance.BookmarkSearchFromBookmark(
                                     bookmarkFQID,
                                     period,
-                                    bookmarksCount,
+                                    bookmarksCount +1,
                                     Kinds,
                                     new FQID[] { items[0].FQID },
                                     optUsers,

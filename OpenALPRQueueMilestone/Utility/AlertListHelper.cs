@@ -72,7 +72,18 @@ namespace OpenALPRQueueConsumer.Utility
                             if (values.Length != 0)
                                 key = values[0].Trim();
 
-                            if (!dicBlack.ContainsKey(key))
+                            if(key.Length != 0)
+                            {
+                                if (key.Contains(" "))
+                                    key = key.Replace(" ", string.Empty);
+
+                                if (key.Contains("-"))
+                                    key = key.Replace("-", string.Empty);
+
+                                key = key.ToUpper();
+                            }
+
+                            if (key.Length != 0 && !dicBlack.ContainsKey(key))
                             {
                                 var value = string.Empty;
 

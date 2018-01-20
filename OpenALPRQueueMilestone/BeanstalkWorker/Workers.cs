@@ -62,7 +62,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     done = ProcessJob(json);
                 }
                 else
-                    Program.Logger.Log.Info("Job received was null.");
+                    Program.Logger.Log.Warn("Job received was null.");
 
                 if (done)
                     await iworker.DeleteAsync();
@@ -101,7 +101,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                             if (!palteInfo.Is_parked)
                                 done = ProcessAlprGroupOrResults(palteInfo);
                             else
-                                Program.Logger.Log.Info($"{palteInfo.Best_plate_number} is parked, no Bookmark or Alert created.");
+                                Program.Logger.Log.Info($"{palteInfo.Best_plate_number} is parked, no Bookmark or Alert will be created.");
                         }
                         catch (Exception ex)
                         {
@@ -368,7 +368,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             {
                 AlertListHelper.LoadAlertList(dicBlack);
                 lastUpdateTime = temp;
-                Program.Logger.Log.Info("Reload Black list");
+                Program.Logger.Log.Info("Reload Alert list");
             }
 
             var plateFromAlertList = plateInfo.BestPlateNumber;
@@ -524,7 +524,11 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             // Send the Alarm directly to the EventServer, to store in the Alarm database. No rule is being activated.
             try
             {
-                EnvironmentManager.Instance.SendMessage(new Message(MessageId.Server.NewAlarmCommand) { Data = alarm });
+                var result = EnvironmentManager.Instance.SendMessage(new Message(MessageId.Server.NewAlarmCommand) { Data = alarm });
+                if(result.Count != 0)
+                {
+
+                }
             }
             catch (Exception ex)
             {
