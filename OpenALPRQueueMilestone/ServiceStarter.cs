@@ -131,12 +131,12 @@ namespace OpenALPRQueueConsumer
                 if (worker == null)
                 {
                     worker = new Worker();
-                    workerTask = Task.Run(() => worker.DoWork());
+                    //workerTask = Task.Run(() => worker.DoWork());
 
                     //comment the above line to test using json files
-                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\heartbeat.json");
-                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group1.json");
-                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group2.json");
+                    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\heartbeat.json");
+                    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group1.json");
+                    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group2.json");
                     //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group3.json");
                     //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group4.json");
                     //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group1.json");

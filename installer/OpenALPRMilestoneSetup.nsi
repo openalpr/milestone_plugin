@@ -133,16 +133,16 @@ SectionEnd
 
 Section "Uninstall"
   
-  ; Remove registry keys
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenALPRMilestone"
-  DeleteRegKey HKLM SOFTWARE\OpenALPRMilestone
-
   ; Stop a service and waits for file release
   SimpleSC::StopService "OpenALPRMilestone" 1 30
   Pop $0 ; returns an errorcode (<>0) otherwise success (0)
   
   SimpleSC::RemoveService "OpenALPRMilestone"
 
+  ; Remove registry keys
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenALPRMilestone"
+  DeleteRegKey HKLM SOFTWARE\OpenALPRMilestone
+  
   ; Remove files and uninstaller
   Delete $INSTDIR\Service\OpenALPRQueueMilestone.exe
   Delete $INSTDIR\Service\OpenALPRQueueMilestone.exe.config
@@ -174,3 +174,23 @@ Section "Uninstall"
 
 SectionEnd
 
+Function .onInit
+ 
+  ReadRegStr $R0 HKLM \
+  "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenALPRMilestone" \
+  "UninstallString"
+  StrCmp $R0 "" done
+ 
+  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+  "OpenALPRMilestone is already installed. $\n$\nClick `OK` to remove the \
+  previous version or `Cancel` to cancel this upgrade." \
+  IDOK uninst
+  Abort
+ 
+;Run the uninstaller
+
+uninst:
+    ClearErrors
+    Exec $R0
+  done:
+FunctionEnd

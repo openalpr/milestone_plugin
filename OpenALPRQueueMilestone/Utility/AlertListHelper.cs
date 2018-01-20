@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace OpenALPRQueueConsumer.Utility
 {
-    internal static class BlackListHelper
+    internal static class AlertListHelper
     {
         public static DateTime GetLastWriteTime()
         {
@@ -24,7 +24,7 @@ namespace OpenALPRQueueConsumer.Utility
             return DateTime.MinValue;
         }
 
-        public static void TryLoadBlackList(IDictionary<string, string> dicBlack)
+        public static void LoadAlertList(IDictionary<string, string> dicBlack)
         {
             var path = GetFilePath();
 
@@ -32,7 +32,7 @@ namespace OpenALPRQueueConsumer.Utility
             {
                 try
                 {
-                    LoadBlackList(dicBlack, path);
+                    LoadAlertList(dicBlack, path);
                     break;
                 }
                 catch (Exception ex)
@@ -43,7 +43,7 @@ namespace OpenALPRQueueConsumer.Utility
             }
         }
 
-        private static void LoadBlackList(IDictionary<string, string> dicBlack, string blackFilePath)
+        private static void LoadAlertList(IDictionary<string, string> dicBlack, string blackFilePath)
         {
             if (dicBlack == null)
                 throw new ArgumentNullException(nameof(dicBlack), "Argument Null Exception");
@@ -61,20 +61,23 @@ namespace OpenALPRQueueConsumer.Utility
                     for (int i = 0; i < lines.Length; i++)
                     {
                         var line = lines[i];
-                        if (!string.IsNullOrEmpty(line))
+                        if (line != null)
+                            line = line.Trim();
+
+                        if (!string.IsNullOrEmpty(line) && !line.StartsWith("#") && !line.StartsWith("Plate Number"))
                         {
                             var key = string.Empty;
 
                             var values = line.Split(new char[] { ',' });
                             if (values.Length != 0)
-                                key = values[0];
+                                key = values[0].Trim();
 
                             if (!dicBlack.ContainsKey(key))
                             {
                                 var value = string.Empty;
 
                                 if (values.Length > 1)
-                                    value = values[1];
+                                    value = values[1].Trim();
 
                                 dicBlack.Add(key, value);
                             }
@@ -100,7 +103,7 @@ namespace OpenALPRQueueConsumer.Utility
                 Helper.SetDirectoryNetworkServiceAccessControl(mappingPath);
             }
 
-            return Path.Combine(mappingPath, "BlackList.txt");
+            return Path.Combine(mappingPath, "AlertList.txt");
         }
     }
 }

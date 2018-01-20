@@ -41,7 +41,7 @@ namespace OpenALPRQueueConsumer.Utility
                     {
                         for (int i = 0; i < list.Count; i++)
                         {
-                            outputFile.WriteLine($"{list[i].Key}|{list[i].Value}");
+                            outputFile.WriteLine($"{list[i].Key}|{list[i].Value}\n");
                         }
                     }
                 }

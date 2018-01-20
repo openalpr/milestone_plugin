@@ -52,7 +52,7 @@ namespace OpenALPRQueueConsumer.Utility
                     {
                         for (int i = 0; i < cameraList.Count; i++)
                         {
-                            outputFile.WriteLine($"{cameraList[i].MilestoneName}|{cameraList[i].OpenALPRname}|{cameraList[i].OpenALPRId}");
+                            outputFile.WriteLine($"{cameraList[i].MilestoneName}|{cameraList[i].OpenALPRname}|{cameraList[i].OpenALPRId}\n");
                         }
                     }
                 }

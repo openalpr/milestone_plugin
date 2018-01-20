@@ -31,7 +31,7 @@ namespace OpenALPRPlugin.Client
         /// </summary>
         private void InitializeComponent()
         {
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.panel1 = new System.Windows.Forms.Panel();
             this.btnSearch = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.lsvBookmarks = new System.Windows.Forms.ListView();
@@ -53,11 +53,19 @@ namespace OpenALPRPlugin.Client
             this.btnMapCameras = new System.Windows.Forms.Button();
             this.btnHelp = new System.Windows.Forms.Button();
             this.btnOpenLogLocation = new System.Windows.Forms.Button();
-            this.btnBlackList = new System.Windows.Forms.Button();
-            this.lblMainMessage = new System.Windows.Forms.Label();
             this.picOpenALPR = new System.Windows.Forms.PictureBox();
+            this.btnAlertList = new System.Windows.Forms.Button();
+            this.lblMainMessage = new System.Windows.Forms.Label();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).BeginInit();
             this.SuspendLayout();
+            // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(963, 845);
+            this.panel1.TabIndex = 0;
             // 
             // btnSearch
             // 
@@ -103,13 +111,13 @@ namespace OpenALPRPlugin.Client
             // 
             // hdrTimeBegin
             // 
-            this.hdrTimeBegin.Text = "Time Begin";
-            this.hdrTimeBegin.Width = 130;
+            this.hdrTimeBegin.Text = "Time";
+            this.hdrTimeBegin.Width = 135;
             // 
             // hdrTimeEnd
             // 
             this.hdrTimeEnd.Text = "Time End";
-            this.hdrTimeEnd.Width = 130;
+            this.hdrTimeEnd.Width = 0;
             // 
             // hdrHeader
             // 
@@ -119,7 +127,7 @@ namespace OpenALPRPlugin.Client
             // hdrDescription
             // 
             this.hdrDescription.Text = "Description";
-            this.hdrDescription.Width = 470;
+            this.hdrDescription.Width = 595;
             // 
             // datStartTime
             // 
@@ -179,6 +187,7 @@ namespace OpenALPRPlugin.Client
             this.txtSearchFor.Size = new System.Drawing.Size(422, 20);
             this.txtSearchFor.TabIndex = 8;
             this.txtSearchFor.TabStop = false;
+            this.txtSearchFor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtSearchFor_KeyDown);
             // 
             // label3
             // 
@@ -240,24 +249,6 @@ namespace OpenALPRPlugin.Client
             this.btnOpenLogLocation.UseVisualStyleBackColor = true;
             this.btnOpenLogLocation.Click += new System.EventHandler(this.BtnOpenLogLocation_Click);
             // 
-            // btnBlackList
-            // 
-            this.btnBlackList.Location = new System.Drawing.Point(150, 801);
-            this.btnBlackList.Name = "btnBlackList";
-            this.btnBlackList.Size = new System.Drawing.Size(110, 36);
-            this.btnBlackList.TabIndex = 17;
-            this.btnBlackList.Text = "Black List";
-            this.btnBlackList.UseVisualStyleBackColor = true;
-            this.btnBlackList.Click += new System.EventHandler(this.BtnBlackList_Click);
-            // 
-            // lblMainMessage
-            // 
-            this.lblMainMessage.ForeColor = System.Drawing.Color.Brown;
-            this.lblMainMessage.Location = new System.Drawing.Point(13, 19);
-            this.lblMainMessage.Name = "lblMainMessage";
-            this.lblMainMessage.Size = new System.Drawing.Size(398, 77);
-            this.lblMainMessage.TabIndex = 18;
-            // 
             // picOpenALPR
             // 
             this.picOpenALPR.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
@@ -269,14 +260,35 @@ namespace OpenALPRPlugin.Client
             this.picOpenALPR.TabIndex = 16;
             this.picOpenALPR.TabStop = false;
             // 
+            // btnAlertList
+            // 
+            this.btnAlertList.Location = new System.Drawing.Point(150, 801);
+            this.btnAlertList.Name = "btnAlertList";
+            this.btnAlertList.Size = new System.Drawing.Size(110, 36);
+            this.btnAlertList.TabIndex = 17;
+            this.btnAlertList.Text = "Alert List";
+            this.btnAlertList.UseVisualStyleBackColor = true;
+            this.btnAlertList.Click += new System.EventHandler(this.BtnAlertList_Click);
+            // 
+            // lblMainMessage
+            // 
+            this.lblMainMessage.ForeColor = System.Drawing.Color.Brown;
+            this.lblMainMessage.Location = new System.Drawing.Point(13, 19);
+            this.lblMainMessage.Name = "lblMainMessage";
+            this.lblMainMessage.Size = new System.Drawing.Size(398, 77);
+            this.lblMainMessage.TabIndex = 18;
+            // 
             // WorkSpaceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.AutoScrollMargin = new System.Drawing.Size(10, 10);
+            this.AutoScrollMinSize = new System.Drawing.Size(956, 844);
             this.BackColor = System.Drawing.SystemColors.Window;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.lblMainMessage);
-            this.Controls.Add(this.btnBlackList);
+            this.Controls.Add(this.btnAlertList);
             this.Controls.Add(this.picOpenALPR);
             this.Controls.Add(this.btnOpenLogLocation);
             this.Controls.Add(this.btnHelp);
@@ -296,7 +308,7 @@ namespace OpenALPRPlugin.Client
             this.Controls.Add(this.btnSearch);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Name = "WorkSpaceControl";
-            this.Size = new System.Drawing.Size(963, 845);
+            this.Size = new System.Drawing.Size(946, 828);
             this.Load += new System.EventHandler(this.BookmarkViewItemManager_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).EndInit();
             this.ResumeLayout(false);
@@ -328,7 +340,8 @@ namespace OpenALPRPlugin.Client
         private Button btnHelp;
         private Button btnOpenLogLocation;
         private PictureBox picOpenALPR;
-        private Button btnBlackList;
+        private Button btnAlertList;
         private Label lblMainMessage;
+        private Panel panel1;
     }
 }

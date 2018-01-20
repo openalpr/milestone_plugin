@@ -26,6 +26,12 @@ namespace OpenALPRPlugin.Forms
             var namesList = new List<KeyValuePair<string, string>>();
             OpenALPRLNameHelper.FillCameraNameList(namesList);
 
+            if (namesList.Count != 0)
+            {
+                namesList = namesList.OrderBy(o => o.Key).ToList();
+                namesList.Insert(0, new KeyValuePair<string, string>("-1", "Select"));
+            }
+
             var cameraItems = new List<Item>();
             OpenALPRBackgroundPlugin.FindAllCameras(Configuration.Instance.GetItemsByKind(Kind.Camera), cameraItems);
             for (int i = 0; i < cameraItems.Count; i++)
@@ -63,8 +69,17 @@ namespace OpenALPRPlugin.Forms
                 {
                     var currentMilestoneCameraName = cameraPairControl.TxtMilestoneCameraName.Text;
 
-                    string currentALPRCameraId = ((KeyValuePair<string, string>)cameraPairControl.cboName.SelectedItem).Key;
-                    string currentALPRCameraName = ((KeyValuePair<string, string>)cameraPairControl.cboName.SelectedItem).Value;
+                    string currentALPRCameraId = string.Empty;
+                    string currentALPRCameraName = string.Empty;
+
+                    if (cameraPairControl.cboName.SelectedItem != null)
+                    {
+                        currentALPRCameraId = ((KeyValuePair<string, string>)cameraPairControl.cboName.SelectedItem).Key;
+                        if (currentALPRCameraId == "-1")
+                            currentALPRCameraId = string.Empty;
+                        else
+                            currentALPRCameraName = ((KeyValuePair<string, string>)cameraPairControl.cboName.SelectedItem).Value;
+                    }
 
                     if (!string.IsNullOrEmpty(currentMilestoneCameraName))
                     {

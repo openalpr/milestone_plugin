@@ -205,7 +205,18 @@ namespace OpenALPRPlugin.Client
             }
         }
 
+        private async void TxtSearchFor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+                await Search();
+        }
+
         private async void Search_Click(object sender, EventArgs e)
+        {
+            await Search();
+        }
+
+        private async Task Search()
         {
             var searchString = txtSearchFor.Text.Trim() == string.Empty ? null : txtSearchFor.Text;
             try
@@ -517,7 +528,7 @@ namespace OpenALPRPlugin.Client
                                 foreach (var item in cameraList)
                                 {
                                     //AXIS M1054 Network Camera (192.168.0.33) - Camera 1|TestCamera|237528343
-                                    await outputFile.WriteLineAsync($"{item.MilestoneName}|{item.OpenALPRname}|{item.OpenALPRId}");
+                                    await outputFile.WriteLineAsync($"{item.MilestoneName}|{item.OpenALPRname}|{item.OpenALPRId}\n");
                                 }
                             }
                         }
@@ -577,19 +588,36 @@ namespace OpenALPRPlugin.Client
             }
         }
 
-        private void BtnBlackList_Click(object sender, EventArgs e)
+        private void BtnAlertList_Click(object sender, EventArgs e)
         {
-            const string filepath = @"C:\ProgramData\OpenALPR\Mapping\BlackList.txt";
+            const string PlugName = "OpenALPR";
+
             try
             {
-                if (!File.Exists(filepath))
+                var mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Mapping");
+
+                if (!Directory.Exists(mappingPath))
                 {
-                    File.Create(filepath);
-                    Thread.Sleep(1000);
+                    Directory.CreateDirectory(mappingPath);
+                    Helper.SetDirectoryNetworkServiceAccessControl(mappingPath);
                 }
 
-                if (File.Exists(filepath))
-                    Process.Start("explorer.exe", filepath);
+                var filePath = Path.Combine(mappingPath, "AlertList.txt");
+
+                if (!File.Exists(filePath))
+                {
+                    using (var outputFile = new StreamWriter(filePath, false))
+                    {
+                        outputFile.WriteLine("# Edit this file to add alerts.");
+                        outputFile.WriteLine("# Each line represents one alert and a description separated by a comma.");
+                        outputFile.WriteLine("# For example (Do not use a \"#\" symbol for your alerts):");
+                        outputFile.WriteLine("# ABC123,Walter Smith's Truck");
+                        outputFile.WriteLine("Plate Number, Description\n");
+                    }
+                }
+
+                if (File.Exists(filePath))
+                    Process.Start("explorer.exe", filePath);
             }
             catch (Exception ex)
             {
