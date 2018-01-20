@@ -61,6 +61,8 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     var json = Encoding.UTF8.GetString(job.Data, 0, job.Data.Length);
                     done = ProcessJob(json);
                 }
+                else
+                    Program.Logger.Log.Info("Job received was null.");
 
                 if (done)
                     await iworker.DeleteAsync();
