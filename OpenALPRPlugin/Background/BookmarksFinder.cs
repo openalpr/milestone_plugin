@@ -44,9 +44,7 @@ namespace OpenALPRPlugin.Background
         {
             if (startTime <= endTime)
             {
-                long timeLimitUSec = //(long)(endTime - startTime).TotalMilliseconds * 10000; // see https://developer.milestonesys.com/s/question/0D50O00003uvfSbSAI/retrieving-bookmarks-in-smart-client-plugin
-                                    (long)(endTime - startTime).TotalMilliseconds * 1000; // <====== this works fine after testing it many times
-
+                long timeLimitUSec = (endTime.Ticks - startTime.Ticks) / 10;
                 return await BookmarkSearch(startTime, timeLimitUSec, bookmarksCount);
             }
 
@@ -87,7 +85,7 @@ namespace OpenALPRPlugin.Background
         {
             if (startTime <= endTime)
             {
-                long timeLimitUSec = (long)(endTime - startTime).TotalMilliseconds * 10000; // see https://developer.milestonesys.com/s/question/0D50O00003uvfSbSAI/retrieving-bookmarks-in-smart-client-plugin
+                long timeLimitUSec = (endTime.Ticks - startTime.Ticks) / 10;
                 return await BookmarkSearch(bookmarkFQID, timeLimitUSec, bookmarksCount);
             }
 

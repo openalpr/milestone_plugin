@@ -6,7 +6,7 @@ namespace OpenALPRQueueConsumer.Utility
 {
     internal static class OpenALPRLNameHelper
     {
-        public static void FillCameraNameList(List<KeyValuePair<string, string>> list)
+        public static void LoadCameraNameList(List<KeyValuePair<string, string>> list)
         {
             var lines = GetCameraMapping();
             for (int i = 0; i < lines.Length; i++)

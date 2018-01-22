@@ -26,6 +26,7 @@ namespace OpenALPRQueueConsumer
         private const string EpochStartSecondsBeforeString = "EpochStartSecondsBefore";
         private const string EpochEndSecondsAfterString = "EpochEndSecondsAfter";
         private const string AddBookmarksString = "AddBookmarks";
+        private const string AutoMappingString = "AutoMapping";
 
         public ServiceStarter()
         {
@@ -125,6 +126,9 @@ namespace OpenALPRQueueConsumer
 
                 temp = Helper.ReadConfigKey(AddBookmarksString);
                 bool.TryParse(temp, out Worker.AddBookmarks);
+
+                temp = Helper.ReadConfigKey(AutoMappingString);
+                bool.TryParse(temp, out Worker.AutoMapping);
 
                 temp = Helper.ReadConfigKey(EventExpireAfterDaysString);
                 int.TryParse(temp, out Worker.EventExpireAfterDays);

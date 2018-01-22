@@ -2,14 +2,33 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 namespace OpenALPRQueueConsumer.Utility
 {
     internal static class CameraMapper
     {
-        //AXIS M1054 Network Camera (192.168.0.33) - Camera 1|TestCamera|237528343
-        internal static void FillCameraList(IList<OpenALPRmilestoneCameraName> cameraList)
+        public static DateTime GetLastWriteTime()
         {
+            try
+            {
+                var path = GetFilePath();
+                if (File.Exists(path))
+                    return File.GetLastWriteTime(path);
+            }
+            catch (Exception ex)
+            {
+                Program.Logger.Log.Error(null, ex);
+                Thread.Sleep(5000);
+            }
+
+            return DateTime.MinValue;
+        }
+
+        //AXIS M1054 Network Camera (192.168.0.33) - Camera 1|TestCamera|237528343
+        internal static void LoadCameraList(IList<OpenALPRmilestoneCameraName> cameraList)
+        {
+            cameraList.Clear();
             var lines = GetCameraMapping();
             for (int i = 0; i < lines.Length; i++)
             {

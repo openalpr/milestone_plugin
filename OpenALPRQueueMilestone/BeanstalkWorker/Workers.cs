@@ -17,11 +17,13 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
     internal class Worker
     {
         public static bool AddBookmarks = true;
+        public static bool AutoMapping = true;
         public static int EventExpireAfterDays = 7;
         public static int EpochStartSecondsBefore = 3;
         public static int EpochEndSecondsAfter = 3;
         private IDictionary<string, string> dicBlack;
-        private DateTime lastUpdateTime;
+        private DateTime lastAlertUpdateTime;
+        private DateTime lastMappingUpdateTime;
         private IDisposable worker = null;
         private IList<OpenALPRmilestoneCameraName> cameraList;
         private List<KeyValuePair<string, string>> openALPRList;
@@ -29,14 +31,15 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         public Worker()
         {
             cameraList = new List<OpenALPRmilestoneCameraName>();
-            CameraMapper.FillCameraList(cameraList);
+            CameraMapper.LoadCameraList(cameraList);
+            lastMappingUpdateTime = CameraMapper.GetLastWriteTime();
 
             openALPRList = new List<KeyValuePair<string, string>>();
-            OpenALPRLNameHelper.FillCameraNameList(openALPRList);
+            OpenALPRLNameHelper.LoadCameraNameList(openALPRList);
 
             dicBlack = new Dictionary<string, string>();
             AlertListHelper.LoadAlertList(dicBlack);
-            lastUpdateTime = AlertListHelper.GetLastWriteTime();
+            lastAlertUpdateTime = AlertListHelper.GetLastWriteTime();
         }
 
         public async Task DoWork()
@@ -207,6 +210,14 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
         private IList<OpenALPRmilestoneCameraName> GetCameraFromMapping(string cameraId)
         {
+            var temp = CameraMapper.GetLastWriteTime();
+            if (temp != lastMappingUpdateTime)
+            {
+                CameraMapper.LoadCameraList(cameraList);
+                lastMappingUpdateTime = temp;
+                Program.Logger.Log.Info("Reload camera mapping list");
+            }
+
             var cameras = cameraList.Where(c => c.OpenALPRId == cameraId).ToList();
             if (cameras.Count == 0)
                 Program.Logger.Log.Warn($"{cameraId} not found in the local camera list");
@@ -232,7 +243,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         }
 
                         var cameraId = videoStream.Camera_id;
-                        if (!string.IsNullOrEmpty(videoStream.Url)) ////rtsp://mhill:cosmos@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
+                        if (!string.IsNullOrEmpty(videoStream.Url) && AutoMapping) ////rtsp://mhill:cosmos@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
                         {
                             var match = Regex.Match(videoStream.Url, @"\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b");
                             if (match.Success)
@@ -352,10 +363,10 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             var fqid = MilestoneServer.GetCameraByName(milestoneCameraName);
 
             var temp = AlertListHelper.GetLastWriteTime();
-            if (temp != lastUpdateTime)
+            if (temp != lastAlertUpdateTime)
             {
                 AlertListHelper.LoadAlertList(dicBlack);
-                lastUpdateTime = temp;
+                lastAlertUpdateTime = temp;
                 Program.Logger.Log.Info("Reload Alert list");
             }
 
