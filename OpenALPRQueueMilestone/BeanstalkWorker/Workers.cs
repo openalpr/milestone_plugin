@@ -16,6 +16,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 {
     internal class Worker
     {
+        public static bool AddBookmarks = true;
         public static int EventExpireAfterDays = 7;
         public static int EpochStartSecondsBefore = 3;
         public static int EpochEndSecondsAfter = 3;
@@ -23,7 +24,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         private DateTime lastUpdateTime;
         private IDisposable worker = null;
         private IList<OpenALPRmilestoneCameraName> cameraList;
-        private List<KeyValuePair<string,string>> openALPRList;
+        private List<KeyValuePair<string, string>> openALPRList;
 
         public Worker()
         {
@@ -132,8 +133,6 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             return done;
         }
 
-
-        //http://www.jsonutils.com/
         private bool ProcessAlprGroupOrResults(OpenALPRData palteInfo)
         {
             if (palteInfo != null)
@@ -152,18 +151,8 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     CandidatesPlate = string.Join(",", candidates)
                 };
 
-                Console.WriteLine($"data_type: {palteInfo.Data_type}");
-                Console.WriteLine($"camera id: {palteInfo.Camera_id}");
-                Console.WriteLine($"plate Number: {palteInfo.Best_plate_number}");
-                Console.WriteLine($"best region: {palteInfo.Best_region}");
-                Console.WriteLine($"country: {palteInfo.Country}");
-                Console.WriteLine($"candidates: {bestPlateInfo.CandidatesPlate}");
-
                 bestPlateInfo.EpochStart = Epoch2LocalDateTime(palteInfo.Epoch_start);
-                Console.WriteLine($"epoch_start: {bestPlateInfo.EpochStart.ToString()}");
-
                 bestPlateInfo.EpochEnd = Epoch2LocalDateTime(palteInfo.Epoch_end);
-                Console.WriteLine($"epoch_end: {bestPlateInfo.EpochEnd}");
 
                 if (palteInfo.Vehicle != null)
                 {
@@ -171,53 +160,58 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     {
                         var make = palteInfo.Vehicle.Make.OrderByDescending(m => m.Confidence).FirstOrDefault();
                         if (make != null)
-                        {
                             bestPlateInfo.Make = make.Name;
-                            Console.WriteLine($"make name: {make.Name}, confidence: {make.Confidence}");
-                        }
                     }
 
                     if (palteInfo.Vehicle.Body_type != null)
                     {
                         var body_type = palteInfo.Vehicle.Body_type.OrderByDescending(m => m.Confidence).FirstOrDefault();
                         if (body_type != null)
-                        {
                             bestPlateInfo.BodyType = body_type.Name;
-                            Console.WriteLine($"body type name: {body_type.Name}, confidence: {body_type.Confidence}");
-                        }
                     }
 
                     if (palteInfo.Vehicle.Make_model != null)
                     {
                         var makeModel = palteInfo.Vehicle.Make_model.OrderByDescending(m => m.Confidence).FirstOrDefault();
                         if (makeModel != null)
-                        {
                             bestPlateInfo.MakeModel = makeModel.Name;
-                            Console.WriteLine($"model name: {makeModel.Name}  , confidence: {makeModel.Confidence}");
-                        }
                     }
 
                     if (palteInfo.Vehicle.Color != null)
                     {
                         var color = palteInfo.Vehicle.Color.OrderBy(c => c.Confidence).FirstOrDefault();
                         if (color != null)
-                        {
                             bestPlateInfo.Color = color.Name;
-                            Console.WriteLine($"color name: {color.Name}, confidence: {color.Confidence}");
-                        }
                     }
                 }
                 else
                     Program.Logger.Log.Warn("Vehicle json data returned null object.");
-                
 
                 if (!string.IsNullOrEmpty(palteInfo.Best_plate_number) && palteInfo.Camera_id != 0)
-                    return AddNewBookmark(bestPlateInfo);
+                {
+                    FQID bookmarkFQID = null;
+                    var cameras = GetCameraFromMapping(bestPlateInfo.CameraId.ToString());
+
+                    if (AddBookmarks)
+                        bookmarkFQID = AddNewBookmark(bestPlateInfo, cameras);
+
+                    if (cameras.Count != 0)
+                        SendAlarm(bestPlateInfo, cameras[cameras.Count - 1].MilestoneName, bookmarkFQID); // Send Alert for the last Camera since we recieved the bookmarkFQID for the last camera used in AddNewBookmark.
+                }
                 else
                     Program.Logger.Log.Warn("Best_plate_number is empty or Camera_id == 0");
             }
 
             return true;
+        }
+
+        private IList<OpenALPRmilestoneCameraName> GetCameraFromMapping(string cameraId)
+        {
+            var cameras = cameraList.Where(c => c.OpenALPRId == cameraId).ToList();
+            if (cameras.Count == 0)
+                Program.Logger.Log.Warn($"{cameraId} not found in the local camera list");
+
+            return cameras;
         }
 
         // Auto mapping happened when there is an ip address in videoStream.Url : rtsp://mhill:cosmos@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
@@ -244,11 +238,11 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                             if (match.Success)
                             {
                                 // 1st case (No Camera_id found): AXIS M1054 Network Camera (192.168.0.36) - Camera 1|TestCamera|
-                                var exists = cameraList.Any(m => m.OpenALPRId == videoStream.Camera_id.ToString()); 
+                                var exists = cameraList.Any(m => m.OpenALPRId == videoStream.Camera_id.ToString());
 
                                 if (!exists)
                                 {
-                                    exists = cameraList.Any(m => m.OpenALPRname == videoStream.Camera_name); 
+                                    exists = cameraList.Any(m => m.OpenALPRname == videoStream.Camera_name);
                                     if (exists)
                                     {
                                         var cameras = cameraList.Where(m => m.OpenALPRname == videoStream.Camera_name);
@@ -264,7 +258,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                                 // 2nd case (No Camera_id No Camera_Name found): AXIS M1054 Network Camera (192.168.0.36) - Camera 1
                                 if (!exists)
                                 {
-                                    var milestoneCamera = MilestoneServer.GetCameraItem(match.Captures[0].Value); 
+                                    var milestoneCamera = MilestoneServer.GetCameraItem(match.Captures[0].Value);
                                     if (milestoneCamera != null)
                                     {
                                         exists = cameraList.Any(m => m.MilestoneName == milestoneCamera.Name);
@@ -282,7 +276,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                                         {
                                             var camera = new OpenALPRmilestoneCameraName
                                             {
-                                                 MilestoneName = milestoneCamera.Name,
+                                                MilestoneName = milestoneCamera.Name,
                                                 OpenALPRId = videoStream.Camera_id.ToString(),
                                                 OpenALPRname = videoStream.Camera_name
                                             };
@@ -313,21 +307,15 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             return DateTime.Now;
         }
 
-        private bool AddNewBookmark(PlateInfo plateInfo)
+        private FQID AddNewBookmark(PlateInfo plateInfo, IList<OpenALPRmilestoneCameraName> cameras)
         {
-            FQID fqid = null;
             Bookmark bookmark = null;
-            var bookmarks = new List<Bookmark>();
 
-            try
+            foreach (var camera in cameras)
             {
-                var cameras = cameraList.Where(c => c.OpenALPRId == plateInfo.CameraId.ToString()).ToList();
-                if (cameras.Count == 0)
-                    Program.Logger.Log.Warn($"{plateInfo.CameraId.ToString()} not found in the local camera list");
-
-                foreach (var camera in cameras)
+                try
                 {
-                    fqid = MilestoneServer.GetCameraByName(camera.MilestoneName);
+                    var fqid = MilestoneServer.GetCameraByName(camera.MilestoneName);
 
                     if (fqid == null)
                     {
@@ -335,33 +323,33 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         continue; // As Matt suggest, this will remove this job from the queue
                     }
 
+                    bookmark = null;
                     bookmark = BookmarkService.Instance.BookmarkCreate(
-                                        fqid,
-                                        plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore),  //subtracted 3 secondes from the start time to give more chances to capture the video
-                                        plateInfo.EpochStart,                                       //timeTrigged
-                                        plateInfo.EpochEnd.AddSeconds(EpochEndSecondsAfter),        //added 3 secondes to give more chances to capture the video
-                                        "openalpr",                                                 //so we can reterive openalpr bookmarks only in the plug-in
-                                        plateInfo.BestPlateNumber,
-                                        $"Make={plateInfo.Make};MakeModel={plateInfo.MakeModel};BodyType={plateInfo.BodyType};Color={plateInfo.Color};BestRegion={plateInfo.BestRegion};Candidates={plateInfo.CandidatesPlate}");
+                                fqid,
+                                plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore),  //subtracted 3 secondes from the start time to give more chances to capture the video
+                                plateInfo.EpochStart,                                       //timeTrigged
+                                plateInfo.EpochEnd.AddSeconds(EpochEndSecondsAfter),        //added 3 secondes to give more chances to capture the video
+                                "openalpr",                                                 //so we can reterive openalpr bookmarks only in the plug-in
+                                plateInfo.BestPlateNumber,
+                                $"Make={plateInfo.Make};MakeModel={plateInfo.MakeModel};BodyType={plateInfo.BodyType};Color={plateInfo.Color};BestRegion={plateInfo.BestRegion};Candidates={plateInfo.CandidatesPlate}");
 
                     if (bookmark == null)
                         Program.Logger.Log.Warn($"Failed to create a Bookmark for Plate number: {plateInfo.BestPlateNumber}");
                     else
-                    {
-                        bookmarks.Add(bookmark);
                         Program.Logger.Log.Info($"Created Bookmark for Plate number: {plateInfo.BestPlateNumber}");
-                    }
+                }
+                catch (Exception ex)
+                {
+                    Program.Logger.Log.Error(null, ex);
                 }
             }
-            catch (Exception ex)
-            {
-                Program.Logger.Log.Error(null, ex);
-            }
 
-            // sending Alert
-            FQID BookmarkFQID = null;
-            if (bookmarks.Count != 0)
-                BookmarkFQID = bookmarks[0].BookmarkFQID;
+            return bookmark?.BookmarkFQID; // bookmark for the last camera used.
+        }
+
+        private void SendAlarm(PlateInfo plateInfo, string milestoneCameraName, FQID bookmarkFQID)//, string plateFromAlertList, string descFromAlertList)
+        {
+            var fqid = MilestoneServer.GetCameraByName(milestoneCameraName);
 
             var temp = AlertListHelper.GetLastWriteTime();
             if (temp != lastUpdateTime)
@@ -395,144 +383,127 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             {
                 var descFromAlertList = dicBlack[plateFromAlertList];
 
+                Program.Logger.Log.Info($"Sending an alert for {plateInfo.BestPlateNumber}");
+
+                var cameraName = MilestoneServer.GetCameraName(fqid.ObjectId);
+
+                var eventSource = new EventSource()
+                {
+                    FQID = fqid,
+                    Name = cameraName,
+                    //Description = "",
+                    //ExtensionData = 
+                };
+
+                var eventHeader = new EventHeader()
+                {
+                    //The unique ID of the event.
+                    ID = Guid.NewGuid(),
+
+                    //The class of the event, e.g. "Analytics", "Generic", "User-defined".
+                    Class = "Analytics",
+
+                    //The type - a sub-classification - of the event, if applicable.
+                    Type = null,
+
+                    //The time of the event.
+                    Timestamp = plateInfo.EpochStart,
+
+                    //The event message. This is the field that will be matched with the AlarmDefinition message when sending this event to the Event Server. 
+                    Message = "OpenALPR Alarm",
+
+                    //The event name.
+                    Name = plateInfo.BestPlateNumber,
+
+                    //The source of the event. This can represent e.g. a camera, a microphone, a user-defined event, etc.
+                    Source = eventSource,
+
+                    //The priority of the event.
+                    Priority = 2,
+
+                    //The priority name of the event.
+                    PriorityName = "Medium",
+
+                    //optional
+                    //The message id of the event. The message id coorsponds to the ID part returned in ItemManager.GetKnownEventTypes.
+                    MessageId = Guid.Empty,
+
+                    //A custom tag set by the user to filter the events.
+                    CustomTag = plateFromAlertList,// the value we got from the config file
+
+                    //The expire time of the event. The event will be deleted from the event database when the time is reached. When creating events a value of DateTime.MinValue (default value) indicates that the default event expire time should be used. 
+                    ExpireTimestamp = DateTime.Now.AddDays(EventExpireAfterDays),
+
+                    //ExtensionData = System.Runtime .Serialization.
+                    //The version of this document schema.
+                    Version = null
+                };
+
+                var alarm = new Alarm()
+                {
+                    //The EventHeader, containing information common for all Milestone events.
+                    EventHeader = eventHeader,
+
+                    //The current state name. 
+                    StateName = "In progress",
+
+                    //The current state of the alarm. 0: Any 1: New 4: In progress 9: On hold 11: Closed. 
+                    State = 4,
+
+                    //The user to which the alarm is currently assigned. Can be seen in the Smart Client dropdown
+                    AssignedTo = null,//Environment.UserName,
+
+                    // Other fields could be filled out, e.g. objectList
+
+                    //The current category of the alarm. This should be created first on the Client Management under Alarms then Alaem Data Settings
+                    //Category = 0,
+
+                    //The current category name.
+                    //CategoryName = null,//"Critical",
+
+                    //The count value, if the alarm is a counting alarm. Default: 0 (no count).
+                    Count = 0,
+
+                    //The description of the alarm.
+                    Description = descFromAlertList,
+
+                    //The end time of the alarm, if it takes plate over a period of time.
+                    EndTime = plateInfo.EpochStart.AddSeconds(EpochEndSecondsAfter),
+
+                    //  ExtensionData = 
+
+                    //The location of the alarm (this will typically be the same as the camera's location). 
+                    //Location = null,
+
+                    //The ObjectList, containing information about the detected object(s) in the scene. //new AnalyticsObjectList()
+                    //ObjectList = null,
+
+                    // The ReferenceList, containing any number of references to other entities in the system, e.g. alarms or cameras, by FQID. 
+                    ReferenceList = new ReferenceList { new Reference { FQID = bookmarkFQID } },  // save bookmark id
+
+                    //The RuleList, containing information contains information about the rule(s), which triggered the alarm. 
+                    //RuleList = null,//new RuleList(),
+
+                    //The SnapshotList, containing any number of images related to the alarm. If the Source is a camera, it is not neccesary to attach a snapshot from that camera at the time of the alarm. 
+                    //SnapshotList = null,// new SnapshotList(),
+
+                    //The start time of the alarm, if it takes plate over a period of time.
+                    StartTime = plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore),
+
+                    //The Vendor, containing information about the analytics vendor including any custom data.
+                    Vendor = new Vendor { CustomData = plateInfo.ToString() } // save json data
+                };
+
+                // Send the Alarm directly to the EventServer, to store in the Alarm database. No rule is being activated.
                 try
                 {
-                    SendAlarm(plateInfo, fqid, BookmarkFQID, plateFromAlertList, descFromAlertList);
+                    using (var impersonation = new Impersonation(BuiltinUser.NetworkService))
+                        EnvironmentManager.Instance.SendMessage(new Message(MessageId.Server.NewAlarmCommand) { Data = alarm });
                 }
                 catch (Exception ex)
                 {
                     Program.Logger.Log.Error(null, ex);
                 }
-            }
-
-            return true;
-        }
-
-        private void SendAlarm(PlateInfo plateInfo, FQID fqid, FQID bookmarkFQID, string plateFromAlertList, string descFromAlertList)
-        {
-            Program.Logger.Log.Info($"Sending an alert for {plateInfo.BestPlateNumber}");
-
-            var cameraName = MilestoneServer.GetCameraName(fqid.ObjectId);
-
-            var eventSource = new EventSource()
-            {
-                FQID = fqid,
-                Name = cameraName,
-                //Description = "",
-                //ExtensionData = 
-            };
-
-            var eventHeader = new EventHeader()
-            {
-                //The unique ID of the event.
-                ID = Guid.NewGuid(),
-
-                //The class of the event, e.g. "Analytics", "Generic", "User-defined".
-                Class = "Analytics",
-
-                //The type - a sub-classification - of the event, if applicable.
-                Type = null,
-
-                //The time of the event.
-                Timestamp = plateInfo.EpochStart,
-
-                //The event message. This is the field that will be matched with the AlarmDefinition message when sending this event to the Event Server. 
-                Message = "OpenALPR Alarm",
-
-                //The event name.
-                Name = plateInfo.BestPlateNumber,
-
-                //The source of the event. This can represent e.g. a camera, a microphone, a user-defined event, etc.
-                Source = eventSource,
-
-                //The priority of the event.
-                Priority = 2,
-
-                //The priority name of the event.
-                PriorityName = "Medium",
-
-                //optional
-                //The message id of the event. The message id coorsponds to the ID part returned in ItemManager.GetKnownEventTypes.
-                MessageId = Guid.Empty,
-
-                //A custom tag set by the user to filter the events.
-                CustomTag = plateFromAlertList,// the value we got from the config file
-
-                //The expire time of the event. The event will be deleted from the event database when the time is reached. When creating events a value of DateTime.MinValue (default value) indicates that the default event expire time should be used. 
-                ExpireTimestamp = DateTime.Now.AddDays(EventExpireAfterDays),
-
-                //ExtensionData = System.Runtime .Serialization.
-                //The version of this document schema.
-                Version = null
-            };
-
-            var alarm = new Alarm()
-            {
-                //The EventHeader, containing information common for all Milestone events.
-                EventHeader = eventHeader,
-
-                //The current state name. 
-                StateName = "In progress",
-
-                //The current state of the alarm. 0: Any 1: New 4: In progress 9: On hold 11: Closed. 
-                State = 4,
-
-                //The user to which the alarm is currently assigned. Can be seen in the Smart Client dropdown
-                AssignedTo = null,//Environment.UserName,
-
-                // Other fields could be filled out, e.g. objectList
-
-                //The current category of the alarm. This should be created first on the Client Management under Alarms then Alaem Data Settings
-                //Category = 0,
-
-                //The current category name.
-                //CategoryName = null,//"Critical",
-
-                //The count value, if the alarm is a counting alarm. Default: 0 (no count).
-                Count = 0,
-
-                //The description of the alarm.
-                Description = descFromAlertList,
-
-                //The end time of the alarm, if it takes plate over a period of time.
-                EndTime = plateInfo.EpochStart.AddSeconds(EpochEndSecondsAfter),
-
-                //  ExtensionData = 
-
-                //The location of the alarm (this will typically be the same as the camera's location). 
-                //Location = null,
-
-                //The ObjectList, containing information about the detected object(s) in the scene. //new AnalyticsObjectList()
-                //ObjectList = null,
-
-                // The ReferenceList, containing any number of references to other entities in the system, e.g. alarms or cameras, by FQID. 
-                ReferenceList = new ReferenceList { new Reference { FQID = bookmarkFQID } },  // save bookmark id
-
-                //The RuleList, containing information contains information about the rule(s), which triggered the alarm. 
-                //RuleList = null,//new RuleList(),
-
-                //The SnapshotList, containing any number of images related to the alarm. If the Source is a camera, it is not neccesary to attach a snapshot from that camera at the time of the alarm. 
-                //SnapshotList = null,// new SnapshotList(),
-
-                //The start time of the alarm, if it takes plate over a period of time.
-                StartTime = plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore),
-
-                //The Vendor, containing information about the analytics vendor including any custom data.
-                Vendor = new Vendor { CustomData = plateInfo.ToString() } // save json data
-            };
-
-            // Send the Alarm directly to the EventServer, to store in the Alarm database. No rule is being activated.
-            try
-            {
-                var result = EnvironmentManager.Instance.SendMessage(new Message(MessageId.Server.NewAlarmCommand) { Data = alarm });
-                if(result.Count != 0)
-                {
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Program.Logger.Log.Error(null, ex);
             }
         }
 

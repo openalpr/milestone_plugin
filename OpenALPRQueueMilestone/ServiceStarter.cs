@@ -25,6 +25,7 @@ namespace OpenALPRQueueConsumer
         private const string EventExpireAfterDaysString = "EventExpireAfterDays";
         private const string EpochStartSecondsBeforeString = "EpochStartSecondsBefore";
         private const string EpochEndSecondsAfterString = "EpochEndSecondsAfter";
+        private const string AddBookmarksString = "AddBookmarks";
 
         public ServiceStarter()
         {
@@ -58,32 +59,35 @@ namespace OpenALPRQueueConsumer
 
             LogSystemInfo();
             WriteExecutingAssemblyVersion();
-            try
-            {
+
 #if !DEBUG
-                using (var impersonation = new Impersonation(BuiltinUser.NetworkService))
-                {
+            using (var impersonation = new Impersonation(BuiltinUser.NetworkService))
+            {
 #endif
                 try
                 {
-                    SDKEnvironment.Initialize();                            // General initialize. Always required
+                    try
+                    {
+                        SDKEnvironment.Initialize();// General initialize. Always required
+                    }
+                    catch (Exception ex)
+                    {
+                        Program.Logger.Log.Error(null, ex);
+                    }
+
                 }
                 catch (Exception ex)
                 {
-                    Program.Logger.Log.Error("SDKEnvironment.Initialize()", ex);
+                    Program.Logger.Log.Error(null, ex);
+                    Program.Logger.Log.Info($"Windows identity: {WindowsIdentity.GetCurrent().Name}"); //Windows identity: NT AUTHORITY\NETWORK SERVICE
                 }
-#if !DEBUG
-                }
-#endif
-            }
-            catch (Exception ex)
-            {
-                Program.Logger.Log.Error("Impersonation", ex);
-                Program.Logger.Log.Info($"Windows identity: {WindowsIdentity.GetCurrent().Name}"); //Windows identity: NT AUTHORITY\NETWORK SERVICE
-            }
 
-            SDKEnvironment.RemoveAllServers();
-            TryConnectingToMilestoneServer();
+                SDKEnvironment.RemoveAllServers();
+                TryConnectingToMilestoneServer();
+
+#if !DEBUG
+            }
+#endif
         }
 
         private void TryConnectingToMilestoneServer(string serverName = null, string userName = null, string password = null)
@@ -118,6 +122,9 @@ namespace OpenALPRQueueConsumer
                 var temp = Helper.ReadConfigKey(MilestoneServerNameString);
                 if (temp != serverName)
                     Helper.AddUpdateAppSettings(MilestoneServerNameString, serverName);
+
+                temp = Helper.ReadConfigKey(AddBookmarksString);
+                bool.TryParse(temp, out Worker.AddBookmarks);
 
                 temp = Helper.ReadConfigKey(EventExpireAfterDaysString);
                 int.TryParse(temp, out Worker.EventExpireAfterDays);

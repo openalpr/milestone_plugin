@@ -50,32 +50,32 @@ namespace OpenALPRQueueConsumer.Milestone
         // Create the OnPropertyChanged method to raise the event
         protected static void OnPropertyChanged(string name)
         {
-            Logout();
-            LoginUsingCurrentCredentials(ServerName, milestoneUserName, milestonePassword);
+            using (var impersonation = new Impersonation(BuiltinUser.NetworkService))
+            {
+                Logout();
+                LoginUsingCurrentCredentials(ServerName, milestoneUserName, milestonePassword);
+            }
         }
 
         internal static void LoginUsingCurrentCredentials(string serverName, string userName, string password)
         {
             try
             {
-                using (var impersonation = new Impersonation(BuiltinUser.NetworkService))
+                var firstTimeMessage = true;
+                while (!connectedToMilestone && !ServiceStarter.IsClosing)
                 {
-                    var firstTimeMessage = true;
-                    while (!connectedToMilestone && !ServiceStarter.IsClosing)
+                    PrepareToLogin(serverName, userName, password);
+                    if (!connectedToMilestone && firstTimeMessage)
                     {
-                        PrepareToLogin(serverName, userName, password);
-                        if (!connectedToMilestone && firstTimeMessage)
-                        {
-                            firstTimeMessage = false;
-                            Program.Logger.Log.Warn("Failed to connect to Milestone");
-                        }
-
-                        Thread.Sleep(1000);
+                        firstTimeMessage = false;
+                        Program.Logger.Log.Warn("Failed to connect to Milestone");
                     }
 
-                    if (connectedToMilestone)
-                        Program.Logger.Log.Info("Connected to Milestone");
+                    Thread.Sleep(1000);
                 }
+
+                if (connectedToMilestone)
+                    Program.Logger.Log.Info("Connected to Milestone");
             }
             catch (Exception ex)
             {

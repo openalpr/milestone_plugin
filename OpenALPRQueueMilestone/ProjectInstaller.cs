@@ -24,7 +24,7 @@ namespace OpenALPRQueueConsumer
 
             // Set a description
             ServiceInstaller.Description = "Consume beanstalk queue and create Milestone bookmarks";
-            ServiceProcessInstaller.Account = ServiceAccount.NetworkService;
+            ServiceProcessInstaller.Account = ServiceAccount.LocalSystem;//.NetworkService;
             //ServiceProcessInstaller.Username = @"NT AUTHORITY\NetworkService";
             //ServiceProcessInstaller.Password = string.Empty;
 

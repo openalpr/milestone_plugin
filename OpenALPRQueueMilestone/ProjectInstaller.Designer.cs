@@ -34,7 +34,7 @@ namespace OpenALPRQueueConsumer
             // 
             // ServiceProcessInstaller
             // 
-            this.ServiceProcessInstaller.Account = System.ServiceProcess.ServiceAccount.NetworkService;
+            this.ServiceProcessInstaller.Account = System.ServiceProcess.ServiceAccount.LocalSystem;
             this.ServiceProcessInstaller.Password = null;
             this.ServiceProcessInstaller.Username = null;
             // 
