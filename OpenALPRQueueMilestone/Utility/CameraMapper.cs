@@ -14,7 +14,15 @@ namespace OpenALPRQueueConsumer.Utility
             {
                 var path = GetFilePath();
                 if (File.Exists(path))
-                    return File.GetLastWriteTime(path);
+                {
+                    var lastWriteTime = File.GetLastWriteTime(path);
+                    var creationTime = File.GetCreationTime(path);
+
+                    if (lastWriteTime > creationTime)
+                        return lastWriteTime;
+
+                    return creationTime;
+                }
             }
             catch (Exception ex)
             {

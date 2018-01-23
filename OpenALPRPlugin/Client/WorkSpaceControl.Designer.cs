@@ -57,6 +57,7 @@ namespace OpenALPRPlugin.Client
             this.btnAlertList = new System.Windows.Forms.Button();
             this.lblMainMessage = new System.Windows.Forms.Label();
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lblVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).BeginInit();
             this.SuspendLayout();
             // 
@@ -278,6 +279,14 @@ namespace OpenALPRPlugin.Client
             this.lblMainMessage.Size = new System.Drawing.Size(398, 77);
             this.lblMainMessage.TabIndex = 18;
             // 
+            // lblVersion
+            // 
+            this.lblVersion.Location = new System.Drawing.Point(682, 83);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(261, 13);
+            this.lblVersion.TabIndex = 19;
+            this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // WorkSpaceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -287,6 +296,7 @@ namespace OpenALPRPlugin.Client
             this.AutoScrollMinSize = new System.Drawing.Size(956, 844);
             this.BackColor = System.Drawing.SystemColors.Window;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.lblMainMessage);
             this.Controls.Add(this.btnAlertList);
             this.Controls.Add(this.picOpenALPR);
@@ -308,7 +318,7 @@ namespace OpenALPRPlugin.Client
             this.Controls.Add(this.btnSearch);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Name = "WorkSpaceControl";
-            this.Size = new System.Drawing.Size(946, 828);
+            this.Size = new System.Drawing.Size(929, 811);
             this.Load += new System.EventHandler(this.BookmarkViewItemManager_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).EndInit();
             this.ResumeLayout(false);
@@ -343,5 +353,6 @@ namespace OpenALPRPlugin.Client
         private Button btnAlertList;
         private Label lblMainMessage;
         private Panel panel1;
+        private Label lblVersion;
     }
 }

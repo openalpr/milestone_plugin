@@ -3,7 +3,9 @@ using OpenALPRPlugin.Client;
 using OpenALPRPlugin.Utility;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using VideoOS.Platform;
@@ -26,6 +28,7 @@ namespace OpenALPRPlugin
         internal static bool IsHostedbySmartClient = true;
         internal static string OpenALPRPluginVersionString = "1.0.0.0";
         internal static float Version = 0;
+        internal static FileVersionInfo fileVersion;
 
         #region Private fields
 
@@ -51,6 +54,19 @@ namespace OpenALPRPlugin
             var assembly = Assembly.GetExecutingAssembly();
             string name = assembly.GetName().Name;
             Logger.Initialize(name);
+
+#if DEBUG
+            assembly = Assembly.GetExecutingAssembly();
+            if (assembly != null)
+                fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
+#else
+            
+            var path = @"C:\Program Files\VideoOS\MIPPlugins\OpenALPR\OpenALPRPlugin.dll";
+
+            fileVersion = File.Exists(path) ?
+                FileVersionInfo.GetVersionInfo(path) :
+                FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule.FileName);
+#endif
 
             var pluginStream = assembly.GetManifestResourceStream($"{name}.Resources.logo_bluegray.png");//OpenALPRPlugin
             if (pluginStream != null)
@@ -160,6 +176,11 @@ namespace OpenALPRPlugin
         public override string VersionString
         {
             get { return OpenALPRPluginVersionString; }
+        }
+
+        internal static string ExtractVersionString
+        {
+            get { return $"{fileVersion.FileMajorPart.ToString()}.{fileVersion.FileMinorPart.ToString()}.{fileVersion.FileBuildPart.ToString()}.{fileVersion.FilePrivatePart.ToString()}"; }
         }
 
         /// <summary>

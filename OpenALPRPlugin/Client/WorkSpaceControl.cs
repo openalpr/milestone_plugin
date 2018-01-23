@@ -86,6 +86,8 @@ namespace OpenALPRPlugin.Client
                 Refresh();
             }
 
+            lblVersion.Text = $"Version {OpenALPRPluginDefinition.ExtractVersionString}";
+
             cmBookmarks = new ContextMenu();
             cmBookmarks.MenuItems.Add(CreateMenuItem(Edit, new EventHandler(EditBookmark)));
             cmBookmarks.MenuItems.Add(CreateMenuItem(Delete, new EventHandler(DeleteBookmark)));

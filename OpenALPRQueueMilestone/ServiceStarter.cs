@@ -146,14 +146,18 @@ namespace OpenALPRQueueConsumer
 
                     //comment the above line to test using json files
                     //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\heartbeat.json");
-                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group1.json");
-                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group2.json");
-                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group3.json");
-                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group4.json");
-                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group1.json");
-                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group2.json");
-                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group3.json");
-                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group4.json");
+                    //while (!IsClosing)
+                    //{
+                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group1.json");
+                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group2.json");
+                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group3.json");
+                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group4.json");
+                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group1.json");
+                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group2.json");
+                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group3.json");
+                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group4.json");
+                    //    Thread.Sleep(5000);
+                    //}
                     //Console.WriteLine("Done...");
                 }
             }
