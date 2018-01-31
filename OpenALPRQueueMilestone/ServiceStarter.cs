@@ -50,7 +50,6 @@ namespace OpenALPRQueueConsumer
 
         private void LocalStartService()
         {
-            Thread.CurrentThread.Name = $"{Program.Abbreviation} - Main";
             Program.Logger.Log.Info("Start the service");
 
             AppDomain.CurrentDomain.SetPrincipalPolicy(PrincipalPolicy.WindowsPrincipal);
@@ -67,25 +66,15 @@ namespace OpenALPRQueueConsumer
 #endif
                 try
                 {
-                    try
-                    {
-                        SDKEnvironment.Initialize();// General initialize. Always required
-                    }
-                    catch (Exception ex)
-                    {
-                        Program.Logger.Log.Error(null, ex);
-                    }
-
+                    SDKEnvironment.Initialize();// General initialize. Always required
+                    SDKEnvironment.RemoveAllServers();
+                    TryConnectingToMilestoneServer();
                 }
                 catch (Exception ex)
                 {
                     Program.Logger.Log.Error(null, ex);
                     Program.Logger.Log.Info($"Windows identity: {WindowsIdentity.GetCurrent().Name}"); //Windows identity: NT AUTHORITY\NETWORK SERVICE
                 }
-
-                SDKEnvironment.RemoveAllServers();
-                TryConnectingToMilestoneServer();
-
 #if !DEBUG
             }
 #endif
@@ -109,7 +98,7 @@ namespace OpenALPRQueueConsumer
                 serverName = "http://localhost:80/";
 
             if (!serverName.StartsWith("http://"))
-                serverName = $"http://{serverName}";//serverName = $"http://{serverName}:80/";
+                serverName = $"http://{serverName}";// $"http://{serverName}:80/";
 
             if (milestoneServer == null)
                 milestoneServer = new MilestoneServer();

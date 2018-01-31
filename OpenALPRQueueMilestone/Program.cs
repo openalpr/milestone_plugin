@@ -17,7 +17,6 @@ namespace OpenALPRQueueConsumer
     {
         internal static string ProductName = "OpenALPRQueueMilestone";
         internal static string CompanyName = "OpenALPR";
-        internal static string Abbreviation = "OpenALPR";
         internal static Logging Logger;
         /// <summary>
         /// The main entry point for the application.

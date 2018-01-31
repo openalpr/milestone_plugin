@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VideoOS.Platform;
@@ -28,38 +27,33 @@ namespace OpenALPRPlugin.Client
         private const string Delete = "Delete";
         private const string View = "View";
         private const int bookmarksCount = 32;
-
+        
         public WorkSpaceControl(OpenALPRViewItemManager viewItemManager)
         {
             _themeChangedReceiver = EnvironmentManager.Instance.RegisterReceiver(new MessageReceiver(ThemeChangedIndicationHandler),
                                              new MessageIdFilter(MessageId.SmartClient.ThemeChangedIndication));
 
             InitializeComponent();
-            //Size = new Size(2200, 812);//Size = new Size(965, 812);
 
             ClientControl.Instance.RegisterUIControlForAutoTheming(this);
 
             lsvBookmarks.BackColor = ClientControl.Instance.Theme.BackgroundColor;
             lsvBookmarks.ForeColor = ClientControl.Instance.Theme.TextColor;
 
-
-            //picOpenALPR.SizeMode = PictureBoxSizeMode.StretchImage;
-
-            var fullDateTimePattern = //CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern;
-                CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern;
+            var fullDateTimePattern = CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern;
 
             datStartTime.CustomFormat = fullDateTimePattern;
             datEndTime.CustomFormat = fullDateTimePattern;
 
             datStartTime.Value = DateTime.Now.AddDays(-2);
-            datEndTime.Value = DateTime.Now;
+            datEndTime.Value = DateTime.Now.AddDays (1);
 
             chkMyBookmarksOnly.Checked = OpenALPRBackgroundPlugin.MyOwnBookmarksOnly ;
             txtSearchFor.Text = OpenALPRBackgroundPlugin.SearchString;
             if (OpenALPRBackgroundPlugin.Bookmarks != null)
                 AddToListView(OpenALPRBackgroundPlugin.Bookmarks);
 
-            var savedCameraId = Settings1.Default.usedFQID;// = selectedCameraItem.FQID;
+            var savedCameraId = Settings1.Default.usedFQID;
             if (savedCameraId != Guid.Empty)
             {
                 var camera = Configuration.Instance.GetItem(EnvironmentManager.Instance.MasterSite.ServerId, savedCameraId, Kind.Camera);
@@ -68,6 +62,20 @@ namespace OpenALPRPlugin.Client
                     txtCameraName.Text = camera.Name;
                     selectedCameraItem = camera;
                 }
+            }
+
+            OpenALPRBackgroundPlugin.ServiceEvent += OpenALPRBackgroundPlugin_ServiceEvent;
+        }
+
+        private void OpenALPRBackgroundPlugin_ServiceEvent(object sender, MessageEventArgs e)
+        {
+            try
+            {
+                this.UIThread(() => lblMessage.Text = e.Message);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.Error(null, ex);
             }
         }
 
@@ -168,6 +176,7 @@ namespace OpenALPRPlugin.Client
 
         public override void Close()
         {
+            OpenALPRBackgroundPlugin.ServiceEvent -= OpenALPRBackgroundPlugin_ServiceEvent;
             OpenALPRBackgroundPlugin.MyOwnBookmarksOnly = chkMyBookmarksOnly.Checked;
             OpenALPRBackgroundPlugin.SearchString = txtSearchFor.Text;
 
