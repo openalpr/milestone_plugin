@@ -1,4 +1,6 @@
-﻿using log4net;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using log4net;
 using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;

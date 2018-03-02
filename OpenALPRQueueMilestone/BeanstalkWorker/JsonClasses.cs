@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using System.Collections.Generic;
 
 namespace OpenALPRQueueConsumer.BeanstalkWorker
 {

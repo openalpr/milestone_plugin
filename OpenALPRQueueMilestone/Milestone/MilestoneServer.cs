@@ -1,4 +1,6 @@
-﻿using OpenALPRQueueConsumer.Utility;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using OpenALPRQueueConsumer.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;

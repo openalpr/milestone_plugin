@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace OpenALPRQueueConsumer.Utility

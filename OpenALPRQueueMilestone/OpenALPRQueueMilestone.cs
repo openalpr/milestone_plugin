@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using System;
 using System.Security.Permissions;
 using System.ServiceProcess;
 using System.Threading.Tasks;

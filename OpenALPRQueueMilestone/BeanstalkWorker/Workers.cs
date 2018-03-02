@@ -1,4 +1,6 @@
-﻿using OpenALPRQueueConsumer.Milestone;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using OpenALPRQueueConsumer.Milestone;
 using OpenALPRQueueConsumer.Utility;
 using System;
 using System.Collections.Generic;

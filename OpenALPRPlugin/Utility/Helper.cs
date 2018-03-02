@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;

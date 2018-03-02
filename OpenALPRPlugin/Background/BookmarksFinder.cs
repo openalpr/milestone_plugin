@@ -1,8 +1,6 @@
-﻿/*
-    Developed by Khayralla AL-Athari
-    email: khayralla_m@yahoo.com
-    Dec 2017
+﻿// Copyright OpenALPR Technology, Inc. 2018
 
+/*
     Note:
     Don't copy the VideoOS.Platform.dll to the MIPPlugins directory. 
     The reason is that the plug-in must use the version that included in the XProtect VMS.

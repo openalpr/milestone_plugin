@@ -1,8 +1,4 @@
-﻿/*
-    Developed by Khayralla AL-Athari
-    email: khayralla_m@yahoo.com
-    Dec 2017
- */
+﻿// Copyright OpenALPR Technology, Inc. 2018
 
 using OpenALPRQueueConsumer.NativeMethods;
 using OpenALPRQueueConsumer.Utility;

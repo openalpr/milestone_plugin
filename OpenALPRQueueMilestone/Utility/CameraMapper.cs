@@ -1,4 +1,6 @@
-﻿using OpenALPRQueueConsumer.BeanstalkWorker;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using OpenALPRQueueConsumer.BeanstalkWorker;
 using System;
 using System.Collections.Generic;
 using System.IO;

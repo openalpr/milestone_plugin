@@ -1,4 +1,6 @@
-﻿using System.ServiceProcess;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using System.ServiceProcess;
 namespace OpenALPRQueueConsumer
 {
     partial class ProjectInstaller

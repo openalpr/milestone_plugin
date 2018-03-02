@@ -1,4 +1,6 @@
-﻿using OpenALPRQueueConsumer.NativeMethods;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using OpenALPRQueueConsumer.NativeMethods;
 using System;
 using System.Security.Principal;
 
