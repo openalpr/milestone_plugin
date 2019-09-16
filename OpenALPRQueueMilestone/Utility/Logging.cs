@@ -1,4 +1,6 @@
-﻿using log4net;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using log4net;
 using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;
@@ -13,7 +15,7 @@ namespace OpenALPRQueueConsumer.Utility
 {
     internal class Logging
     {
-        internal ILog Log;
+        internal ILog Log { get; private set; }
         internal string LogPath;
 
         internal Logging(string logName, string subFolder = "")

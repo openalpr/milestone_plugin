@@ -1,4 +1,6 @@
-﻿namespace OpenALPRPlugin.Forms
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+namespace OpenALPRPlugin.Forms
 {
     partial class CameraPairControl
     {

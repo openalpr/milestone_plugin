@@ -1,4 +1,6 @@
-﻿using OpenALPRQueueConsumer.Utility;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using OpenALPRQueueConsumer.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,18 +70,18 @@ namespace OpenALPRQueueConsumer.Milestone
                     if (!connectedToMilestone && firstTimeMessage)
                     {
                         firstTimeMessage = false;
-                        Program.Logger.Log.Warn("Failed to connect to Milestone");
+                        Program.Log.Warn("Failed to connect to Milestone");
                     }
 
                     Thread.Sleep(1000);
                 }
 
                 if (connectedToMilestone)
-                    Program.Logger.Log.Info("Connected to Milestone");
+                    Program.Log.Info("Connected to Milestone");
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
             }
         }
 
@@ -92,7 +94,7 @@ namespace OpenALPRQueueConsumer.Milestone
             if (string.IsNullOrEmpty(ServerName))
             {
                 var msg = "Server address cannot be emnpty";
-                Program.Logger.Log.Warn(msg);
+                Program.Log.Warn(msg);
                 Console.WriteLine(msg);
                 return;
             }
@@ -120,7 +122,7 @@ namespace OpenALPRQueueConsumer.Milestone
                 }
                 catch (Exception ex)
                 {
-                    Program.Logger.Log.Error(ServerName, ex);
+                    Program.Log.Error(ServerName, ex);
                     return;
                 }
 
@@ -155,7 +157,7 @@ namespace OpenALPRQueueConsumer.Milestone
                 if (!SDKEnvironment.IsServerConnected(uri))
                 {
                     string msg = $"Failed to connect to {uri}";
-                    Program.Logger.Log.Warn(msg);
+                    Program.Log.Warn(msg);
                     return;
                 }
 
@@ -176,7 +178,7 @@ namespace OpenALPRQueueConsumer.Milestone
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error($"Internal error connecting to: {uri.DnsSafeHost}", ex);
+                Program.Log.Error($"Internal error connecting to: {uri.DnsSafeHost}", ex);
             }
 
             if (loginSettings != null)
@@ -188,7 +190,7 @@ namespace OpenALPRQueueConsumer.Milestone
                 MilestoneInfo();
                 var msg = $"Connected to Milestone server: {ServerName}";
                 Console.WriteLine(msg);
-                Program.Logger.Log.Info(msg);
+                Program.Log.Info(msg);
             }
             else
                 Console.WriteLine($"Failed to connect to {ServerName}");
@@ -204,7 +206,7 @@ namespace OpenALPRQueueConsumer.Milestone
             catch (Exception exception)
             {
                 if (exception.Message.Length != 0)
-                    Program.Logger.Log.Error(exception.Message);
+                    Program.Log.Error(exception.Message);
 
                 SDKEnvironment.RemoveServer(uri);
             }
@@ -217,7 +219,7 @@ namespace OpenALPRQueueConsumer.Milestone
             catch (Exception exception)
             {
                 if (exception.Message.Length != 0)
-                    Program.Logger.Log.Error(exception.Message);
+                    Program.Log.Error(exception.Message);
 
                 SDKEnvironment.RemoveServer(uri);
             }
@@ -229,14 +231,14 @@ namespace OpenALPRQueueConsumer.Milestone
         {
             try
             {
-                Program.Logger.Log.Info($"Version: {scs.GetVersion()}");
-                Program.Logger.Log.Info($"Server version: {scs.GetServerVersion()}");
-                Program.Logger.Log.Info($"Smart Client name: {scs.GetSmartClientVersion().DisplayName}");
-                Program.Logger.Log.Info($"Smart Client version: {scs.GetSmartClientVersion().Major.ToString()}.{scs.GetSmartClientVersion().Minor.ToString()}.{scs.GetSmartClientVersion().Revision.ToString()}");
+                Program.Log.Info($"Version: {scs.GetVersion()}");
+                Program.Log.Info($"Server version: {scs.GetServerVersion()}");
+                Program.Log.Info($"Smart Client name: {scs.GetSmartClientVersion().DisplayName}");
+                Program.Log.Info($"Smart Client version: {scs.GetSmartClientVersion().Major.ToString()}.{scs.GetSmartClientVersion().Minor.ToString()}.{scs.GetSmartClientVersion().Revision.ToString()}");
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
             }
         }
 
@@ -326,7 +328,7 @@ namespace OpenALPRQueueConsumer.Milestone
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
             }
 
             try
@@ -342,7 +344,7 @@ namespace OpenALPRQueueConsumer.Milestone
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
             }
         }
 

@@ -1,4 +1,6 @@
-﻿namespace OpenALPRPlugin.Client
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+namespace OpenALPRPlugin.Client
 {
     internal class OpenALPRmilestoneCameraName
     {

@@ -1,4 +1,6 @@
-﻿using OpenALPRQueueConsumer.BeanstalkWorker;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using OpenALPRQueueConsumer.BeanstalkWorker;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +28,7 @@ namespace OpenALPRQueueConsumer.Utility
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
                 Thread.Sleep(5000);
             }
 
@@ -86,7 +88,7 @@ namespace OpenALPRQueueConsumer.Utility
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
             }
         }
 

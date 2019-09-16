@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
@@ -15,7 +17,7 @@ namespace OpenALPRQueueConsumer.Utility
         {
             if (!Directory.Exists(path))
             {
-                Program.Logger.Log.Warn($"Path does not exists: {path}");
+                Program.Log.Warn($"Path does not exists: {path}");
                 return;
             }
 
@@ -57,11 +59,11 @@ namespace OpenALPRQueueConsumer.Utility
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(path, ex);
+                Program.Log.Error(path, ex);
             }
 
             if (!SetAcl(path))
-                Program.Logger.Log.Warn($"Failed to set acl for path: {path}");
+                Program.Log.Warn($"Failed to set acl for path: {path}");
         }
 
         private static bool SetAcl(string path)
@@ -107,7 +109,7 @@ namespace OpenALPRQueueConsumer.Utility
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(path, ex);
+                Program.Log.Error(path, ex);
             }
 
             return false;
@@ -121,7 +123,7 @@ namespace OpenALPRQueueConsumer.Utility
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(key, ex);
+                Program.Log.Error(key, ex);
             }
 
             return string.Empty;
@@ -144,7 +146,7 @@ namespace OpenALPRQueueConsumer.Utility
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
             }
         }
 
@@ -165,7 +167,7 @@ namespace OpenALPRQueueConsumer.Utility
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
                 return default(T);
             }
         }

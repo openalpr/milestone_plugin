@@ -1,13 +1,8 @@
-﻿/*
-    Developed by Khayralla AL-Athari
-    email: khayralla_m@yahoo.com
-    Dec 2017
- */
+﻿// Copyright OpenALPR Technology, Inc. 2018
 
-using OpenALPRQueueConsumer.NativeMethods;
+using log4net;
 using OpenALPRQueueConsumer.Utility;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.ServiceProcess;
 
@@ -17,7 +12,8 @@ namespace OpenALPRQueueConsumer
     {
         internal static string ProductName = "OpenALPRQueueMilestone";
         internal static string CompanyName = "OpenALPR";
-        internal static Logging Logger;
+        internal static ILog Log { get; private set; }
+        private static Logging Logger;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -27,7 +23,6 @@ namespace OpenALPRQueueConsumer
 
             try
             {
-                DebuggerPresent();
                 var VideoOS = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
                 
                 var dir = Path.Combine(VideoOS, @"VideoOS\MIPPlugins\OpenALPR");
@@ -37,7 +32,11 @@ namespace OpenALPRQueueConsumer
 
                 Logger = new Logging("Service");
                 if (Logger != null)
+                {
+                    Log = Logger.Log;
+
                     Console.WriteLine($"Log: {Logger.LogPath}");
+                }
 
                 servicesToRun = new OpenALPRQueueMilestone();
 
@@ -60,15 +59,6 @@ namespace OpenALPRQueueConsumer
                 if (servicesToRun != null)
                     servicesToRun.Stop();
             }
-        }
-
-        [Conditional("RELEASE")]
-        private static void DebuggerPresent()
-        {
-            bool isDebuggerPresent = false;
-            NativeMethod.CheckRemoteDebuggerPresent(Process.GetCurrentProcess().Handle, ref isDebuggerPresent);
-            if (isDebuggerPresent)
-                throw new InvalidOperationException($"Cannot run {ProductName} if Debugger is present.");
         }
     }
 }

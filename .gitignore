@@ -264,3 +264,6 @@ __pycache__/
 /Web/*
 /AutoBill/bin/*
 /AutoBill/obj/*
+
+*.zip
+*.swp

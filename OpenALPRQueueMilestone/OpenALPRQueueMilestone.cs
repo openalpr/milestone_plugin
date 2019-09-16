@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using System;
 using System.Security.Permissions;
 using System.ServiceProcess;
 using System.Threading.Tasks;
@@ -30,7 +32,7 @@ namespace OpenALPRQueueConsumer
         protected override void OnStart(string[] args)
         {
             ServiceStartInstance = new ServiceStarter();
-            Task.Run(() => ServiceStartInstance.OnStartService());
+            Task.Run(() => ServiceStartInstance.OnStartServiceAsync());
         }
 
         protected override bool OnPowerEvent(PowerBroadcastStatus powerStatus)
@@ -40,7 +42,7 @@ namespace OpenALPRQueueConsumer
 
         protected override void OnShutdown()
         {
-            Program.Logger.Log.Warn("OnShutdown");
+            Program.Log.Warn("OnShutdown");
             OnStop();
         }
 
@@ -59,11 +61,11 @@ namespace OpenALPRQueueConsumer
                 }
                 catch (Exception ex)
                 {
-                    Program.Logger.Log.Error(null, ex);
+                    Program.Log.Error(null, ex);
                 }
             }
 
-            Program.Logger.Close();
+            Program.Log.Logger.Repository.Shutdown();
         }
     }
 }

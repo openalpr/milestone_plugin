@@ -1,3 +1,5 @@
+// Copyright OpenALPR Technology, Inc. 2018
+
 using System;
 using System.Collections.Generic;
 using VideoOS.Platform;
@@ -14,9 +16,6 @@ namespace OpenALPRPlugin.Client
     public class OpenALPRViewItemManager : ViewItemManager
     {
         private Guid _someid;
-        private string _someName;
-        private List<Item> _configItems;
-
         private const string selectedGuid = "SelectedGUID";
         public OpenALPRViewItemManager()
             : base(nameof(OpenALPRViewItemManager))
@@ -31,9 +30,9 @@ namespace OpenALPRPlugin.Client
         public override void PropertiesLoaded()
         {
             string someid = GetProperty(selectedGuid);
-            _configItems = Configuration.Instance.GetItemConfigurations(OpenALPRPluginDefinition.OpenALPRPluginId, null, OpenALPRPluginDefinition.ExportPluginKind);
+            ConfigItems = Configuration.Instance.GetItemConfigurations(OpenALPRPluginDefinition.OpenALPRPluginId, null, OpenALPRPluginDefinition.ExportPluginKind);
 
-            if (someid != null && _configItems != null)
+            if (someid != null && ConfigItems != null)
                 SomeId = new Guid(someid);	// Set as last selected
         }
 
@@ -59,10 +58,7 @@ namespace OpenALPRPlugin.Client
 
         #endregion
 
-        public List<Item> ConfigItems
-        {
-            get { return _configItems; }
-        }
+        public List<Item> ConfigItems { get; private set; }
 
         public Guid SomeId
         {
@@ -71,9 +67,9 @@ namespace OpenALPRPlugin.Client
             {
                 _someid = value;
                 SetProperty(selectedGuid, _someid.ToString());
-                if (_configItems != null)
+                if (ConfigItems != null)
                 {
-                    foreach (Item item in _configItems)
+                    foreach (Item item in ConfigItems)
                     {
                         if (item.FQID.ObjectId == _someid)
                             SomeName = item.Name;
@@ -84,10 +80,6 @@ namespace OpenALPRPlugin.Client
             }
         }
 
-        public string SomeName
-        {
-            get { return _someName; }
-            set { _someName = value; }
-        }
+        public string SomeName { get; set; }
     }
 }
