@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using System;
 using System.Windows.Forms;
 using VideoOS.Platform;
 

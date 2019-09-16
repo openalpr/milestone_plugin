@@ -1,3 +1,5 @@
+// Copyright OpenALPR Technology, Inc. 2018
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;

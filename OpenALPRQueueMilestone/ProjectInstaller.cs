@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using System.Collections;
 using System.ComponentModel;
 using System.Configuration.Install;
 using System.ServiceProcess;

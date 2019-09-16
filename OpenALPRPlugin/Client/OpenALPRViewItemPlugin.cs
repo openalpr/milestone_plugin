@@ -1,3 +1,5 @@
+// Copyright OpenALPR Technology, Inc. 2018
+
 using OpenALPRPlugin.Utility;
 using System;
 using System.Drawing;

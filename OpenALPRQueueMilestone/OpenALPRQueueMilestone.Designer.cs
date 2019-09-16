@@ -1,4 +1,6 @@
-﻿namespace OpenALPRQueueConsumer
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+namespace OpenALPRQueueConsumer
 {
     partial class OpenALPRQueueMilestone
     {

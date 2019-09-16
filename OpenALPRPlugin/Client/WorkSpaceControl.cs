@@ -1,4 +1,6 @@
-﻿using OpenALPRPlugin.Background;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using OpenALPRPlugin.Background;
 using OpenALPRPlugin.Forms;
 using OpenALPRPlugin.Properties;
 using OpenALPRPlugin.Utility;

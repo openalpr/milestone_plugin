@@ -1,4 +1,6 @@
-﻿namespace OpenALPRQueueConsumer.BeanstalkWorker
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+namespace OpenALPRQueueConsumer.BeanstalkWorker
 {
     internal class OpenALPRmilestoneCameraName
     {

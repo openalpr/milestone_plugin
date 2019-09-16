@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿// Copyright OpenALPR Technology, Inc. 2018
+
+using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
 namespace OpenALPRPlugin.Forms
