@@ -59,6 +59,9 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="OpenALPR.WpfFormLibrary">
+      <HintPath>..\WpfFormLibrary\bin\Debug\OpenALPR.WpfFormLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -129,11 +132,6 @@
     <ProjectReference Include="..\Chatter\Chatter.csproj">
       <Project>{84bcf238-f124-48aa-a388-0050f66e36e3}</Project>
       <Name>Chatter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WpfFormLibrary\WpfFormLibrary.csproj">
-      <Project>{ec9652c9-aeec-48ea-bd5d-f00e3c80eabb}</Project>
-      <Name>WpfFormLibrary</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

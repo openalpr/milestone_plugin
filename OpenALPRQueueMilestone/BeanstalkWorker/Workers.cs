@@ -92,10 +92,12 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 using (var readStream = new StreamReader(receiveStream, Encoding.UTF8))
                 {
                     json = readStream.ReadToEnd();
+                    Program.Log.Info($"JSON: {json}");
                 }
 
                 if (json != null)
                 {
+                    Program.Log.Info($"JSON not NULL: {json}");
                     Console.WriteLine($"Recived request for {request.Url}");
                     ProcessJob(json);
                 }
