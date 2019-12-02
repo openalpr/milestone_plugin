@@ -28,7 +28,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -91,7 +91,6 @@
     <Reference Include="System.ServiceProcess" />
     <Reference Include="Turbocharged.Beanstalk">
       <HintPath>..\Solution build referenced files\Beanstalk\Turbocharged.Beanstalk.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="VideoOS.Platform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc60fba4a7969f89, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
