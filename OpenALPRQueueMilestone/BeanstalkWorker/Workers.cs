@@ -6,10 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Turbocharged.Beanstalk;
+using System.Threading;
 using VideoOS.Platform;
 using VideoOS.Platform.Data;
 using VideoOS.Platform.Messaging;
@@ -26,9 +26,10 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         private IDictionary<string, string> dicBlack;
         private DateTime lastAlertUpdateTime;
         private DateTime lastMappingUpdateTime;
-        private IDisposable worker = null;
+        private HttpListener listener;
         private IList<OpenALPRmilestoneCameraName> cameraList;
         private List<KeyValuePair<string, string>> openALPRList;
+        private bool listening;
 
         public Worker()
         {
@@ -44,37 +45,68 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             lastAlertUpdateTime = AlertListHelper.GetLastWriteTime();
         }
 
-        public async Task DoWork()
+        public void DoWork()
         {
-            var options = new WorkerOptions
+            var openALPRServerUrl = Helper.ReadConfigKey("OpenALPRServerUrl");
+            if (string.IsNullOrEmpty(openALPRServerUrl))
+                openALPRServerUrl = "http://localhost:48125/";
+
+            Program.Log.Info($"OpenALPR Server url used: {openALPRServerUrl}");
+            if (!HttpListener.IsSupported)
             {
-                Tubes = new List<string>(1) { "alprd" },
-                //TaskScheduler = TaskScheduler.Current,
-            };
+                Console.WriteLine("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
+                return;
+            }
 
-            var beanstalkAddress = Helper.ReadConfigKey("BeanstalkAddress");
-            if (string.IsNullOrEmpty(beanstalkAddress))
-                beanstalkAddress = "localhost:11300";
+            listener = new HttpListener();
 
-            Program.Logger.Log.Info($"Beanstalk address used: {beanstalkAddress}");
-
-            worker = await BeanstalkConnection.ConnectWorkerAsync(beanstalkAddress, options, async (iworker, job) =>
+            try
             {
-                bool done = true;
+                listener.Prefixes.Add(openALPRServerUrl);
+                listener.Start();
+            }
+            catch (Exception ex)
+            {
+                Program.Log.Error(null, ex);
+            }
 
-                if (job != null)
+            listening = true;
+            HttpListenerContext context = null;
+
+            while (!ServiceStarter.IsClosing)
+            {
+                try
                 {
-                    var json = Encoding.UTF8.GetString(job.Data, 0, job.Data.Length);
-                    done = ProcessJob(json);
+                    context = listener.GetContext();
+                }
+                catch (HttpListenerException)
+                {
+                    if (ServiceStarter.IsClosing)
+                        break;
+                }
+
+                var request = context.Request;
+                string json;
+
+                using (var receiveStream = request.InputStream)
+                using (var readStream = new StreamReader(receiveStream, Encoding.UTF8))
+                {
+                    json = readStream.ReadToEnd();
+                }
+
+                if (json != null)
+                {
+                    Console.WriteLine($"Recived request for {request.Url}");
+                    ProcessJob(json);
                 }
                 else
-                    Program.Logger.Log.Warn("Job received was null.");
+                {
+                    Program.Log.Warn("json received was null.");
+                }
+            }
 
-                if (done)
-                    await iworker.DeleteAsync();
-                else
-                    await iworker.BuryAsync(2);
-            });
+            listening = false;
+            Program.Log.Info("Stop listening.");
         }
 
         public bool Test(string filePath)
@@ -85,7 +117,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 if (!string.IsNullOrEmpty(json))
                     return ProcessJob(json);
                 else
-                    Program.Logger.Log.Info("Empty json data.");
+                    Program.Log.Info("Empty json data.");
             }
 
             return false;
@@ -107,12 +139,12 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                             if (!palteInfo.Is_parked)
                                 done = ProcessAlprGroupOrResults(palteInfo);
                             else
-                                Program.Logger.Log.Info($"{palteInfo.Best_plate_number} is parked, no Bookmark or Alert will be created.");
+                                Program.Log.Info($"{palteInfo.Best_plate_number} is parked, no Bookmark or Alert will be created.");
                         }
                         catch (Exception ex)
                         {
                             done = false;
-                            Program.Logger.Log.Error(null, ex);
+                            Program.Log.Error(null, ex);
                         }
                         break;
 
@@ -125,7 +157,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         catch (Exception ex)
                         {
                             done = false;
-                            Program.Logger.Log.Error(null, ex);
+                            Program.Log.Error(null, ex);
                         }
                         break;
 
@@ -190,7 +222,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     }
                 }
                 else
-                    Program.Logger.Log.Warn("Vehicle json data returned null object.");
+                    Program.Log.Warn("Vehicle json data returned null object.");
 
                 if (!string.IsNullOrEmpty(palteInfo.Best_plate_number) && palteInfo.Camera_id != 0)
                 {
@@ -204,7 +236,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         SendAlarm(bestPlateInfo, cameras[cameras.Count - 1].MilestoneName, bookmarkFQID); // Send Alert for the last Camera since we recieved the bookmarkFQID for the last camera used in AddNewBookmark.
                 }
                 else
-                    Program.Logger.Log.Warn("Best_plate_number is empty or Camera_id == 0");
+                    Program.Log.Warn("Best_plate_number is empty or Camera_id == 0");
             }
 
             return true;
@@ -217,17 +249,17 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             {
                 CameraMapper.LoadCameraList(cameraList);
                 lastMappingUpdateTime = temp;
-                Program.Logger.Log.Info("Reload camera mapping list");
+                Program.Log.Info("Reload camera mapping list");
             }
 
             var cameras = cameraList.Where(c => c.OpenALPRId == cameraId).ToList();
             if (cameras.Count == 0)
-                Program.Logger.Log.Warn($"{cameraId} not found in the local camera list");
+                Program.Log.Warn($"{cameraId} not found in the local camera list");
 
             return cameras;
         }
 
-        // Auto mapping happened when there is an ip address in videoStream.Url : rtsp://user:pass@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
+        // Auto mapping happened when there is an ip address in videoStream.Url : rtsp://mhill:cosmos@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
         private bool ProcessAlprHeartbeat(Heartbeats heartbeats)
         {
             if (heartbeats != null)
@@ -245,7 +277,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         }
 
                         var cameraId = videoStream.Camera_id;
-                        if (!string.IsNullOrEmpty(videoStream.Url) && AutoMapping) ////rtsp://user:pass@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
+                        if (!string.IsNullOrEmpty(videoStream.Url) && AutoMapping) ////rtsp://mhill:cosmos@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
                         {
                             var match = Regex.Match(videoStream.Url, @"\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b");
                             if (match.Success)
@@ -314,7 +346,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
             }
 
             return DateTime.Now;
@@ -332,7 +364,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
                     if (fqid == null)
                     {
-                        Program.Logger.Log.Info($"No mapping found for camera: {plateInfo.CameraId.ToString()}");
+                        Program.Log.Info($"No mapping found for camera: {plateInfo.CameraId.ToString()}");
                         continue; // As Matt suggest, this will remove this job from the queue
                     }
 
@@ -347,13 +379,13 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                                 $"Make={plateInfo.Make};MakeModel={plateInfo.MakeModel};BodyType={plateInfo.BodyType};Color={plateInfo.Color};BestRegion={plateInfo.BestRegion};Candidates={plateInfo.CandidatesPlate}");
 
                     if (bookmark == null)
-                        Program.Logger.Log.Warn($"Failed to create a Bookmark for Plate number: {plateInfo.BestPlateNumber}");
+                        Program.Log.Warn($"Failed to create a Bookmark for Plate number: {plateInfo.BestPlateNumber}");
                     else
-                        Program.Logger.Log.Info($"Created Bookmark for Plate number: {plateInfo.BestPlateNumber}");
+                        Program.Log.Info($"Created Bookmark for Plate number: {plateInfo.BestPlateNumber}");
                 }
                 catch (Exception ex)
                 {
-                    Program.Logger.Log.Error(null, ex);
+                    Program.Log.Error(null, ex);
                 }
             }
 
@@ -369,7 +401,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             {
                 AlertListHelper.LoadAlertList(dicBlack);
                 lastAlertUpdateTime = temp;
-                Program.Logger.Log.Info("Reload Alert list");
+                Program.Log.Info("Reload Alert list");
             }
 
             var plateFromAlertList = plateInfo.BestPlateNumber;
@@ -377,26 +409,26 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             var existsInAlertList = dicBlack.ContainsKey(plateInfo.BestPlateNumber);
             if (!existsInAlertList)
             {
-                Program.Logger.Log.Info($"{plateFromAlertList} not listed in the alert list.");
-                Program.Logger.Log.Info($"looking if any candidates listed in the alert list");
+                Program.Log.Info($"{plateFromAlertList} not listed in the alert list.");
+                Program.Log.Info($"looking if any candidates listed in the alert list");
 
                 existsInAlertList = plateInfo.CandidatesPlate.Split(',').Any(p => dicBlack.ContainsKey(p));
                 if (existsInAlertList)
                 {
                     plateFromAlertList = plateInfo.CandidatesPlate.Split(',').FirstOrDefault(p => dicBlack.ContainsKey(p));
-                    Program.Logger.Log.Info($"Candidate {plateFromAlertList} listed in the alert list");
+                    Program.Log.Info($"Candidate {plateFromAlertList} listed in the alert list");
                 }
                 else
-                    Program.Logger.Log.Info($"No any candidates plate number listed in the alert list");
+                    Program.Log.Info($"No any candidates plate number listed in the alert list");
             }
             else
-                Program.Logger.Log.Info($"{plateFromAlertList} found in the alert list");
+                Program.Log.Info($"{plateFromAlertList} found in the alert list");
 
             if (existsInAlertList)
             {
                 var descFromAlertList = dicBlack[plateFromAlertList];
 
-                Program.Logger.Log.Info($"Sending an alert for {plateInfo.BestPlateNumber}");
+                Program.Log.Info($"Sending an alert for {plateInfo.BestPlateNumber}");
 
                 var cameraName = MilestoneServer.GetCameraName(fqid.ObjectId);
 
@@ -515,15 +547,42 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 }
                 catch (Exception ex)
                 {
-                    Program.Logger.Log.Error(null, ex);
+                    Program.Log.Error(null, ex);
                 }
             }
         }
 
         public void Close()
         {
-            if (worker != null)
-                worker.Dispose();
+            try
+            {
+                if (listener != null)
+                {
+                    if (listener.IsListening)
+                    {
+                        listener.Stop();
+                        Console.WriteLine("Listener stopped");
+                    }
+                }
+            }
+            catch //(Exception ex)
+            {
+
+            }
+
+            int i = 0;
+            while (listening && i++ < 20)
+                Thread.Sleep(200);
+
+            try
+            {
+                if (listener != null)
+                    listener.Close();
+            }
+            catch //(Exception ex)
+            {
+
+            }
         }
     }
 }

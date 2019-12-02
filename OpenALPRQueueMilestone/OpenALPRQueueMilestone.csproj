@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>OpenALPRQueueConsumer</RootNamespace>
     <AssemblyName>OpenALPRQueueMilestone</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -26,9 +26,10 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -68,14 +69,11 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Solution build referenced files\log4net\1.2.15\log4net.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -89,22 +87,21 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.ServiceProcess" />
-    <Reference Include="Turbocharged.Beanstalk">
-      <HintPath>..\Solution build referenced files\Beanstalk\Turbocharged.Beanstalk.dll</HintPath>
-    </Reference>
     <Reference Include="VideoOS.Platform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc60fba4a7969f89, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.Platform.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\Program Files\Milestone\MIPSDK\Bin\VideoOS.Platform.dll</HintPath>
     </Reference>
     <Reference Include="VideoOS.Platform.SDK, Version=4.0.0.0, Culture=neutral, PublicKeyToken=bc60fba4a7969f89, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.Platform.SDK.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\Program Files\Milestone\MIPSDK\Bin\VideoOS.Platform.SDK.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BeanstalkWorker\HttpAsyncServer.cs" />
     <Compile Include="BeanstalkWorker\OpenALPRmilestoneCameraName.cs" />
+    <Compile Include="Chat\ChatServer.cs" />
+    <Compile Include="Chat\ChatService.cs" />
+    <Compile Include="Chat\Chatting.cs" />
     <Compile Include="OpenALPRQueueMilestone.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -161,6 +158,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Chatter\Chatter.csproj">
+      <Project>{84bcf238-f124-48aa-a388-0050f66e36e3}</Project>
+      <Name>Chatter</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
