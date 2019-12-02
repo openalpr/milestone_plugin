@@ -227,7 +227,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             return cameras;
         }
 
-        // Auto mapping happened when there is an ip address in videoStream.Url : rtsp://mhill:cosmos@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
+        // Auto mapping happened when there is an ip address in videoStream.Url : rtsp://user:pass@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
         private bool ProcessAlprHeartbeat(Heartbeats heartbeats)
         {
             if (heartbeats != null)
@@ -245,7 +245,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         }
 
                         var cameraId = videoStream.Camera_id;
-                        if (!string.IsNullOrEmpty(videoStream.Url) && AutoMapping) ////rtsp://mhill:cosmos@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
+                        if (!string.IsNullOrEmpty(videoStream.Url) && AutoMapping) ////rtsp://user:pass@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
                         {
                             var match = Regex.Match(videoStream.Url, @"\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b");
                             if (match.Success)
