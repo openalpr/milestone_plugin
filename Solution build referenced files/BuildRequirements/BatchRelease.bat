@@ -1,17 +1,13 @@
-
 SET DEST="C:\Program Files\VideoOS\MIPPlugins\OpenALPR"
 
-xcopy /y "plugin.def" %DEST%
+IF EXIST "%~dp0..\..\plugin.def" (
+	xcopy /y "%~dp0..\..\plugin.def" %DEST%
+)
 
-xcopy /y "OpenALPRPlugin.dll" %DEST%
-xcopy /y "OpenALPRPlugin.dll.config" %DEST%
+IF EXIST "OpenALPRPlugin.dll" (
+	xcopy /y "OpenALPRPlugin.dll" %DEST%
+)
 
-xcopy /y "OpenALPRQueueMilestone.exe" %DEST%
-xcopy /y "OpenALPRQueueMilestone.exe.config" %DEST%
-
-xcopy /y "OpenALPR.SystemTrayApp.exe" %DEST%
-xcopy /y "OpenALPR.WpfFormLibrary.dll" %DEST%
-xcopy /y "OpenALPR.SystemTrayApp.exe.config" %DEST%
-
-xcopy /y "OpenALPRQueueConsumer.Chatter.dll" %DEST%
-xcopy /y "OpenALPRQueueConsumer.Chatter.config" %DEST%
+IF EXIST "OpenALPRQueueMilestone.exe" (
+	xcopy /y "OpenALPRQueueMilestone.exe" %DEST%
+)
