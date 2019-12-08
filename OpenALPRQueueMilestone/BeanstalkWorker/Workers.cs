@@ -92,12 +92,11 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 using (var readStream = new StreamReader(receiveStream, Encoding.UTF8))
                 {
                     json = readStream.ReadToEnd();
-                    Program.Log.Info($"JSON: {json}");
                 }
 
                 if (json != null)
                 {
-                    Program.Log.Info($"JSON not NULL: {json}");
+                    Program.Log.Info($"JSON: {json}");
                     Console.WriteLine($"Recived request for {request.Url}");
                     ProcessJob(json);
                 }
@@ -254,7 +253,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 Program.Log.Info("Reload camera mapping list");
             }
 
-            var cameras = cameraList.Where(c => c.OpenALPRId == cameraId).ToList();
+            var cameras = cameraList.Where(c => c.MilestoneName == cameraId).ToList();
             if (cameras.Count == 0)
                 Program.Log.Warn($"{cameraId} not found in the local camera list");
 

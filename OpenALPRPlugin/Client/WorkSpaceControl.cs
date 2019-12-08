@@ -577,7 +577,7 @@ namespace OpenALPRPlugin.Client
                 Helper.SetDirectoryNetworkServiceAccessControl(mappingPath);
             }
 
-            return Path.Combine(mappingPath, "CameraMapping.txt");
+            return Path.Combine(mappingPath, "OpenALPRCameraName.txt");
         }
 
         private void BtnHelp_Click(object sender, EventArgs e)

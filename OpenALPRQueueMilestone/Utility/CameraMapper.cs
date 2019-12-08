@@ -104,7 +104,7 @@ namespace OpenALPRQueueConsumer.Utility
                 Helper.SetDirectoryNetworkServiceAccessControl(mappingPath);
             }
 
-            return Path.Combine(mappingPath, "CameraMapping.txt");
+            return Path.Combine(mappingPath, "OpenALPRCameraName.txt");
         }
     }
 }
