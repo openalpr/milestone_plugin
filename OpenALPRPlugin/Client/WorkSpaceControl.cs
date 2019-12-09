@@ -348,6 +348,12 @@ namespace OpenALPRPlugin.Client
                 AutoAccept = true
             };
 
+            Logger.Log.Info($"Camera: {Kind.Camera}");
+            foreach (Item item in Configuration.Instance.GetItemsByKind(Kind.Camera))
+            {
+                Logger.Log.Info($"Item ({item.FQID.ObjectIdString}): {item.Name}");
+            }
+
             form.Init(Configuration.Instance.GetItemsByKind(Kind.Camera));
            
             if (form.ShowDialog() == DialogResult.OK)

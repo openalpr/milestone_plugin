@@ -1,0 +1,12 @@
+# Edit this file to add alerts.
+# Each line represents one alert and a description separated by a comma.
+# For example (Do not use a "#" symbol for your alerts):
+# ABC123,Walter Smith's Truck
+Plate Number, Description
+CG9S0J,Car 0
+AE9X2K,Car 1
+AE1T3E,Car 2
+AB3W4S,Car 3
+TX688,Car 4
+DB3Y3W,Car 5
+
