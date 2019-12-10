@@ -82,6 +82,7 @@ namespace OpenALPRQueueConsumer.Milestone
             catch (Exception ex)
             {
                 Program.Log.Error(null, ex);
+                Program.Log.Error(null, ex.InnerException);
             }
         }
 
@@ -123,6 +124,7 @@ namespace OpenALPRQueueConsumer.Milestone
                 catch (Exception ex)
                 {
                     Program.Log.Error(ServerName, ex);
+                    Program.Log.Error(ServerName, ex.InnerException);
                     return;
                 }
 
@@ -206,7 +208,13 @@ namespace OpenALPRQueueConsumer.Milestone
             catch (Exception exception)
             {
                 if (exception.Message.Length != 0)
-                    Program.Log.Error(exception.Message);
+                {
+                    Program.Log.Info($"{Environment.NewLine}URI: {uri}{Environment.NewLine}Source: {exception.Source}{Environment.NewLine}Message: {exception.Message}{Environment.NewLine}Exception: {exception.ToString()}");
+                    if (exception.InnerException != null)
+                    {
+                        Program.Log.Info($"{Environment.NewLine}Inner Exception:{Environment.NewLine}Message: {exception.InnerException.Message}{Environment.NewLine}Source: {exception.InnerException.Source}{Environment.NewLine}");
+                    }
+                }
 
                 SDKEnvironment.RemoveServer(uri);
             }
@@ -219,7 +227,13 @@ namespace OpenALPRQueueConsumer.Milestone
             catch (Exception exception)
             {
                 if (exception.Message.Length != 0)
-                    Program.Log.Error(exception.Message);
+                {
+                    Program.Log.Info($"{Environment.NewLine}URI (true): {uri}{Environment.NewLine}Source: {exception.Source}{Environment.NewLine}Message: {exception.Message}{Environment.NewLine}Exception: {exception.ToString()}");
+                    if (exception.InnerException != null)
+                    {
+                        Program.Log.Info($"{Environment.NewLine}Inner Exception:{Environment.NewLine}Message: {exception.InnerException.Message}{Environment.NewLine}Source: {exception.InnerException.Source}{Environment.NewLine}");
+                    }
+                }
 
                 SDKEnvironment.RemoveServer(uri);
             }
@@ -238,6 +252,7 @@ namespace OpenALPRQueueConsumer.Milestone
             }
             catch (Exception ex)
             {
+                Program.Log.Error(null, ex.InnerException);
                 Program.Log.Error(null, ex);
             }
         }
@@ -275,6 +290,8 @@ namespace OpenALPRQueueConsumer.Milestone
 
         internal static FQID GetCameraByName(string name)
         {
+            IDictionary<Guid, Item> allCameras = AllCameras;
+            
             var item = AllCameras.FirstOrDefault(c => c.Value.Name == name);
             if (item.Value != null)
                 return item.Value.FQID;
