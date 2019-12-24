@@ -90,11 +90,16 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.ServiceProcess" />
-    <Reference Include="VideoOS.Platform">
+    <Reference Include="VideoOS.Platform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc60fba4a7969f89, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.Platform.dll</HintPath>
     </Reference>
-    <Reference Include="VideoOS.Platform.SDK">
+    <Reference Include="VideoOS.Platform.SDK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bc60fba4a7969f89, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Solution build referenced files\Milestone\MIPSDK_2017R3\VideoOS.Platform.SDK.dll</HintPath>
+    </Reference>
+    <Reference Include="VideoOS.Platform.SDK.UI">
+      <HintPath>..\Solution build referenced files\Milestone\MIPSDK_2019R3\VideoOS.Platform.SDK.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

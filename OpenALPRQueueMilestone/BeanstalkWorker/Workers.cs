@@ -361,7 +361,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             {
                 try
                 {
-                    var fqid = MilestoneServer.GetCameraByName(camera.MilestoneName);
+                    var fqid = MilestoneServer.GetCameraByName(camera.OpenALPRname);
 
                     if (fqid == null)
                     {
@@ -369,15 +369,15 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         continue; // As Matt suggest, this will remove this job from the queue
                     }
 
+                    DateTime timeBegin = plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore);     //subtracted 3 secondes from the start time to give more chances to capture the video
+                    DateTime timrTrigged = plateInfo.EpochStart;                                        //timeTrigged
+                    DateTime timeEnd = plateInfo.EpochEnd.AddSeconds(EpochEndSecondsAfter);             //added 3 secondes to give more chances to capture the video
+                    string reference = "openalpr";                                                      //so we can reterive openalpr bookmarks only in the plug-in
+                    string header = plateInfo.BestPlateNumber;
+                    string description = $"Make={plateInfo.Make};MakeModel={plateInfo.MakeModel};BodyType={plateInfo.BodyType};Color={plateInfo.Color};BestRegion={plateInfo.BestRegion};Candidates={plateInfo.CandidatesPlate}";
+
                     bookmark = null;
-                    bookmark = BookmarkService.Instance.BookmarkCreate(
-                                fqid,
-                                plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore),  //subtracted 3 secondes from the start time to give more chances to capture the video
-                                plateInfo.EpochStart,                                       //timeTrigged
-                                plateInfo.EpochEnd.AddSeconds(EpochEndSecondsAfter),        //added 3 secondes to give more chances to capture the video
-                                "openalpr",                                                 //so we can reterive openalpr bookmarks only in the plug-in
-                                plateInfo.BestPlateNumber,
-                                $"Make={plateInfo.Make};MakeModel={plateInfo.MakeModel};BodyType={plateInfo.BodyType};Color={plateInfo.Color};BestRegion={plateInfo.BestRegion};Candidates={plateInfo.CandidatesPlate}");
+                    bookmark = BookmarkService.Instance.BookmarkCreate(fqid, timeBegin, timrTrigged, timeEnd, reference, header, description);
 
                     if (bookmark == null)
                         Program.Log.Warn($"Failed to create a Bookmark for Plate number: {plateInfo.BestPlateNumber}");

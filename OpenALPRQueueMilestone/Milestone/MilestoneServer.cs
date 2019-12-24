@@ -9,6 +9,7 @@ using System.Threading;
 using VideoOS.Platform;
 using VideoOS.Platform.Login;
 using VideoOS.Platform.SDK.Proxy.Server;
+using VideoOS.Platform.Data;
 using SDKEnvironment = VideoOS.Platform.SDK.Environment;
 
 namespace OpenALPRQueueConsumer.Milestone
@@ -151,8 +152,11 @@ namespace OpenALPRQueueConsumer.Milestone
                 logged = Login(loginSettings.Uri);
             }
 
-            if (!logged)                
+            if (!logged)
+            {
+                Program.Log.Error("Doesn't logged in.");
                 return;
+            }
 
             try
             {
@@ -188,7 +192,7 @@ namespace OpenALPRQueueConsumer.Milestone
 
             if (connectedToMilestone)
             {
-                scs.Url = $"{ServerName}/ServerAPI/ServerCommandService.asmx";
+                scs.Url = $"{ServerName}ServerAPI/ServerCommandService.asmx";
                 MilestoneInfo();
                 var msg = $"Connected to Milestone server: {ServerName}";
                 Console.WriteLine(msg);
@@ -200,6 +204,13 @@ namespace OpenALPRQueueConsumer.Milestone
 
         private static bool Login(Uri uri, bool masterOnly = false)
         {
+            if (EnvironmentManager.Instance.MasterSite.ServerId.ServerType == VideoOS.Platform.ServerId.EnterpriseServerType)
+            {
+                Console.WriteLine("Bookmark is not supported on this product.");
+                Console.ReadKey();
+                return true;
+            }
+
             try
             {
                 SDKEnvironment.Login(uri);
