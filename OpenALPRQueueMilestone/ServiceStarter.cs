@@ -24,7 +24,7 @@ namespace OpenALPRQueueConsumer
         private Worker worker;
         private Task workerTask;
         internal static bool IsConnectedToMilestoneServer;
-        internal static string milestoneHostName = "192.168.1.95";
+        internal static string milestoneHostName = "localhost";
         internal static volatile bool IsClosing;
         private readonly object connectLock = new object();
         private const string MilestoneServerNameString = "MilestoneServerName";
@@ -111,7 +111,7 @@ namespace OpenALPRQueueConsumer
                 password = Helper.ReadConfigKey("MilestonePassword");
 
             if (string.IsNullOrEmpty(serverName))
-                serverName = "http://192.168.1.95:80/";
+                serverName = "http://localhost:80/";
 
             if (!serverName.StartsWith("http://"))
                 serverName = $"http://{serverName}";// $"http://{serverName}:80/";

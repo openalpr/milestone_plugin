@@ -357,15 +357,14 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         {
             Bookmark bookmark = null;
             VideoOS.Platform.SDK.Environment.Initialize();
-            VideoOS.Platform.SDK.UI.Environment.Initialize();
 
             foreach (var camera in cameras)
             {
                 try
                 {
                     FQID fqid = MilestoneServer.GetCameraByName(camera.OpenALPRname);
-                    BookmarkReference bookmarkReference = BookmarkService.Instance.BookmarkGetNewReference(fqid, true);
-                    Program.Log.Info($"Received: {bookmarkReference.Reference}");
+                    //BookmarkReference bookmarkReference = BookmarkService.Instance.BookmarkGetNewReference(fqid, true);
+                    //Program.Log.Info($"Received: {bookmarkReference.Reference}");
 
                     if (fqid == null)
                     {
