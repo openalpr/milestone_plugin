@@ -50,7 +50,7 @@ namespace OpenALPRQueueConsumer.Utility
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
             }
         }
 

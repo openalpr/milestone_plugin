@@ -1,11 +1,15 @@
 ﻿// Copyright OpenALPR Technology, Inc. 2018
 
 using OpenALPRQueueConsumer.BeanstalkWorker;
+using OpenALPRQueueConsumer.Chat;
+using OpenALPRQueueConsumer.Chatter;
+using OpenALPRQueueConsumer.Chatter.Proxy;
 using OpenALPRQueueConsumer.Milestone;
 using OpenALPRQueueConsumer.Utility;
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Net;
 using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
@@ -29,14 +33,24 @@ namespace OpenALPRQueueConsumer
         private const string EpochEndSecondsAfterString = "EpochEndSecondsAfter";
         private const string AddBookmarksString = "AddBookmarks";
         private const string AutoMappingString = "AutoMapping";
+        private readonly User currentPerson;
 
         public ServiceStarter()
         {
+            currentPerson = new User(User.AutoExporterServiceName);
+            ProxySingleton.Port = Helper.ReadConfigKey("ServicePort");
+            ProxySingleton.HostName = Dns.GetHostName();
+            Chatting.Initialize(currentPerson);
+            Chatting.UserEnter += ServerConnection_UserEnter;
+            Chatting.UserLeave += ServerConnection_UserLeave;
+            Chatting.InfoArrived += ServerConnection_MessageArrived;
+            Task.Run(() => Chatting.MonitorClientToServerQueue());
+            Chatting.WhisperGui(new Info { MsgId = MessageId.ConnectedToMilestoneServer, Bool = true });
         }
 
         #region Start Service
 
-        public void OnStartService()
+        public void OnStartServiceAsync()
         {
             try
             {
@@ -44,7 +58,7 @@ namespace OpenALPRQueueConsumer
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
                 OpenALPRQueueMilestone.ServiceInstance.Stop();
                 Environment.Exit(1);
             }
@@ -52,12 +66,12 @@ namespace OpenALPRQueueConsumer
 
         private void LocalStartService()
         {
-            Program.Logger.Log.Info("Start the service");
+            Program.Log.Info("Start the service");
 
             AppDomain.CurrentDomain.SetPrincipalPolicy(PrincipalPolicy.WindowsPrincipal);
             var appprincipal = Thread.CurrentPrincipal as WindowsPrincipal;
-            Program.Logger.Log.Info($"Is in administrators: {appprincipal.IsInRole("Administrators")}");
-            Program.Logger.Log.Info($"Windows identity: {WindowsIdentity.GetCurrent().Name}"); //Windows identity: NT AUTHORITY\SYSTEM  
+            Program.Log.Info($"Is in administrators: {appprincipal.IsInRole("Administrators")}");
+            Program.Log.Info($"Windows identity: {WindowsIdentity.GetCurrent().Name}"); //Windows identity: NT AUTHORITY\SYSTEM  
 
             LogSystemInfo();
             WriteExecutingAssemblyVersion();
@@ -74,8 +88,8 @@ namespace OpenALPRQueueConsumer
                 }
                 catch (Exception ex)
                 {
-                    Program.Logger.Log.Error(null, ex);
-                    Program.Logger.Log.Info($"Windows identity: {WindowsIdentity.GetCurrent().Name}"); //Windows identity: NT AUTHORITY\NETWORK SERVICE
+                    Program.Log.Error(null, ex);
+                    Program.Log.Info($"Windows identity: {WindowsIdentity.GetCurrent().Name}"); //Windows identity: NT AUTHORITY\NETWORK SERVICE
                 }
 #if !DEBUG
             }
@@ -156,12 +170,12 @@ namespace OpenALPRQueueConsumer
 
         private static void LogSystemInfo()
         {
-            Program.Logger.Log.Info($"OS platform: {Environment.OSVersion.Platform.ToString()}");
-            Program.Logger.Log.Info($"OS version: {Environment.OSVersion.Version.ToString()}");
-            Program.Logger.Log.Info($"Service pack version: {Environment.OSVersion.ServicePack.ToString()}");
-            Program.Logger.Log.Info($"Version string: {Environment.OSVersion.VersionString.ToString()}");
-            Program.Logger.Log.Info($"Processor count: {Environment.ProcessorCount.ToString(CultureInfo.InvariantCulture)}");
-            Program.Logger.Log.Info($"CLR version: {Environment.Version.ToString()}");
+            Program.Log.Info($"OS platform: {Environment.OSVersion.Platform.ToString()}");
+            Program.Log.Info($"OS version: {Environment.OSVersion.Version.ToString()}");
+            Program.Log.Info($"Service pack version: {Environment.OSVersion.ServicePack.ToString()}");
+            Program.Log.Info($"Version string: {Environment.OSVersion.VersionString.ToString()}");
+            Program.Log.Info($"Processor count: {Environment.ProcessorCount.ToString(CultureInfo.InvariantCulture)}");
+            Program.Log.Info($"CLR version: {Environment.Version.ToString()}");
         }
 
         private static void WriteExecutingAssemblyVersion()
@@ -178,13 +192,13 @@ namespace OpenALPRQueueConsumer
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
             }
 
             if (FileVersion != null)
             {
                 var version = $"{Program.ProductName} service version: {FileVersion.FileVersion}";
-                Program.Logger.Log.Info(version);
+                Program.Log.Info(version);
             }
 
             string bit = "The future is now!";
@@ -193,18 +207,55 @@ namespace OpenALPRQueueConsumer
             else if (IntPtr.Size == 8)
                 bit = "64-bit";
 
-            Program.Logger.Log.Info(bit);
+            Program.Log.Info(bit);
         }
 
         #endregion Start Service
+
+        #region Chat connection
+
+        private void ServerConnection_UserEnter(object sender, ChatEventArgs e)
+        {
+            if (e != null && e.User != null && !string.IsNullOrEmpty(e.User.Name))
+            {
+                if (e.User.Name != User.AutoExporterServiceName)
+                {
+                    var msg = $"New Client: {e.User.Name}";
+                    Console.WriteLine(msg);
+                    Program.Log.Info(msg);
+                }
+
+                //var info = new Info { MsgId = MessageId.Init, Message1 = CodecList };
+                //Chatting.Whisper(e.User.Name, info);
+            }
+        }
+
+        private void ServerConnection_UserLeave(object sender, ChatEventArgs e)
+        {
+            Program.Log.Info($"Client left: {e.User.Name}");
+        }
+
+        private void ServerConnection_MessageArrived(object sender, ChatEventArgs e)
+        {
+            switch (e.Message.MessageInfo.MsgId)
+            {
+                case MessageId.ConnectedToMilestoneToServer:
+                    Chatting.WhisperGui(new Info { MsgId = MessageId.ConnectedToMilestoneServer, Bool = IsConnectedToMilestoneServer });
+                    break;
+            }
+        }
+
+        #endregion Chat connection
+
 
         #region OnStop
 
         public void OnStop()
         {
+            Chatting.WhisperGui(new Info { MsgId = MessageId.ConnectedToMilestoneServer, Bool = false });
             IsClosing = true;
-            Program.Logger.Log.Debug("On stop");
-            Program.Logger.Log.Info($"Stopping {Program.ProductName} service");
+            Program.Log.Debug("On stop");
+            Program.Log.Info($"Stopping {Program.ProductName} service");
 
             if (worker != null)
                 worker.Close();
@@ -217,6 +268,18 @@ namespace OpenALPRQueueConsumer
 
             if (milestoneServer != null)
                 milestoneServer.Close();
+
+            try
+            {
+                Chatting.UserEnter -= ServerConnection_UserEnter;
+                Chatting.UserLeave -= ServerConnection_UserLeave;
+                Chatting.InfoArrived -= ServerConnection_MessageArrived;
+                Chatting.Close();
+            }
+            catch (Exception ex)
+            {
+                Program.Log.Error("OnStop", ex);
+            }
         }
 
         #endregion OnStop

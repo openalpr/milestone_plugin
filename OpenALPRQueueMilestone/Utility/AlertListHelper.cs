@@ -26,7 +26,7 @@ namespace OpenALPRQueueConsumer.Utility
             }
             catch (Exception ex)
             {
-                Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
                 Thread.Sleep(5000);
             }
 
@@ -46,7 +46,7 @@ namespace OpenALPRQueueConsumer.Utility
                 }
                 catch (Exception ex)
                 {
-                    Program.Logger.Log.Error(null, ex);
+                    Program.Log.Error(null, ex);
                     Thread.Sleep(5000);
                 }
             }
@@ -107,7 +107,7 @@ namespace OpenALPRQueueConsumer.Utility
             }
             else
             {
-                Program.Logger.Log.Warn($"Path does not exists: {blackFilePath}");
+                Program.Log.Warn($"Path does not exists: {blackFilePath}");
             }
         }
 

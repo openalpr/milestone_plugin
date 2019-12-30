@@ -17,10 +17,10 @@ namespace OpenALPRPlugin.Background
 {
     internal class BookmarksFinder
     {
-        private string optSearchStr;
-        private string[] optUsers;
-        private Item[] items;
-        private Guid[] Kinds;
+        private readonly string optSearchStr;
+        private readonly string[] optUsers;
+        private readonly Item[] items;
+        private readonly Guid[] kinds;
 
         internal BookmarksFinder(Item[] items, Guid[] Kinds, bool myOwnBookmarks, string optSearchStr)
         {
@@ -28,7 +28,7 @@ namespace OpenALPRPlugin.Background
                 throw new ArgumentNullException(nameof(items), "items cannot be null or empty.");
 
             this.items = items;
-            this.Kinds = Kinds;
+            this.kinds = Kinds;
 
             this.optSearchStr = optSearchStr;
             optUsers = myOwnBookmarks ? new string[] { $@"{Environment.MachineName}\{Environment.UserName}" } : null;
@@ -66,7 +66,7 @@ namespace OpenALPRPlugin.Background
                     startTime,                      //Start time of the search interval. Mandatory
                     period,                         //Period of time to search within (in microseconds). Mandatory
                     bookmarksCount + 1,             //Maximum number of bookmarks to be returned in the result. Mandatory
-                    Kinds,                          //The Kinds to be searched for. Null => all kinds
+                    kinds,                          //The Kinds to be searched for. Null => all kinds
                     new FQID[] { items[0].FQID },   //Array of Item identifications to search. Null => Any
                     optUsers,                       //Array of User names (the users that created the bookmark). Null => Ignored
                     searchStr));                    //Search string. To appear in either of the fields 'Reference', 'Header', 'Description'. Null => Ignored
@@ -103,7 +103,7 @@ namespace OpenALPRPlugin.Background
                                     bookmarkFQID,
                                     period,
                                     bookmarksCount +1,
-                                    Kinds,
+                                    kinds,
                                     new FQID[] { items[0].FQID },
                                     optUsers,
                                     searchStr));

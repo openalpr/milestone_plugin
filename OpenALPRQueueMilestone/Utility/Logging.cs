@@ -15,7 +15,7 @@ namespace OpenALPRQueueConsumer.Utility
 {
     internal class Logging
     {
-        internal ILog Log;
+        internal ILog Log { get; private set; }
         internal string LogPath;
 
         internal Logging(string logName, string subFolder = "")
