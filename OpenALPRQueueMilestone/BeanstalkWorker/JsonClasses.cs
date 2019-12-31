@@ -125,6 +125,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         public double Travel_direction { get; set; }
         public bool Is_parked { get; set; }
         public Vehicle Vehicle { get; set; }
+        public IList<Coordinate> Coordinates { get; set; }// = new List<Coordinate>();
     }
 
     public class VideoStream

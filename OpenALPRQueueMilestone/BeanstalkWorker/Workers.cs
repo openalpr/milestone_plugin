@@ -138,7 +138,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         try
                         {
                             if (!palteInfo.Is_parked)
-                                done = ProcessAlprGroupOrResults(palteInfo);
+                                done = ProcessAlprGroupOrResults_New(palteInfo);
                             else
                                 Program.Log.Info($"{palteInfo.Best_plate_number} is parked, no Bookmark or Alert will be created.");
                         }
@@ -242,6 +242,29 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
             return true;
         }
+
+        private bool ProcessAlprGroupOrResults_New(OpenALPRData palteInfo)
+        {
+            if (palteInfo != null)
+            {
+                if (!string.IsNullOrEmpty(palteInfo.Best_plate_number) && palteInfo.Camera_id != 0)
+                {
+                    FQID bookmarkFQID = null;
+                    var cameras = GetCameraFromMapping(palteInfo.Camera_id.ToString());
+
+                    if (AddBookmarks)
+                        bookmarkFQID = AddNewBookmark_New(palteInfo, cameras);
+
+                    if (cameras.Count != 0)
+                        SendAlarm_New(palteInfo, cameras[cameras.Count - 1].MilestoneName, bookmarkFQID); // Send Alert for the last Camera since we recieved the bookmarkFQID for the last camera used in AddNewBookmark.
+                }
+                else
+                    Program.Log.Warn("Best_plate_number is empty or Camera_id == 0");
+            }
+
+            return true;
+        }
+
 
         private IList<OpenALPRmilestoneCameraName> GetCameraFromMapping(string cameraId)
         {
@@ -356,15 +379,12 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         private FQID AddNewBookmark(PlateInfo plateInfo, IList<OpenALPRmilestoneCameraName> cameras)
         {
             Bookmark bookmark = null;
-            VideoOS.Platform.SDK.Environment.Initialize();
 
             foreach (var camera in cameras)
             {
                 try
                 {
-                    FQID fqid = MilestoneServer.GetCameraByName(camera.OpenALPRname);
-                    //BookmarkReference bookmarkReference = BookmarkService.Instance.BookmarkGetNewReference(fqid, true);
-                    //Program.Log.Info($"Received: {bookmarkReference.Reference}");
+                    var fqid = MilestoneServer.GetCameraByName(camera.MilestoneName);
 
                     if (fqid == null)
                     {
@@ -372,16 +392,58 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         continue; // As Matt suggest, this will remove this job from the queue
                     }
 
+                    bookmark = null;
+                    bookmark = BookmarkService.Instance.BookmarkCreate(
+                                fqid,
+                                plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore),  //subtracted 3 secondes from the start time to give more chances to capture the video
+                                plateInfo.EpochStart,                                       //timeTrigged
+                                plateInfo.EpochEnd.AddSeconds(EpochEndSecondsAfter),        //added 3 secondes to give more chances to capture the video
+                                "openalpr",                                                 //so we can reterive openalpr bookmarks only in the plug-in
+                                plateInfo.BestPlateNumber,
+                                $"Make={plateInfo.Make};MakeModel={plateInfo.MakeModel};BodyType={plateInfo.BodyType};Color={plateInfo.Color};BestRegion={plateInfo.BestRegion};Candidates={plateInfo.CandidatesPlate}");
+
+
+                    if (bookmark == null)
+                        Program.Log.Warn($"Failed to create a Bookmark for Plate number: {plateInfo.BestPlateNumber}");
+                    else
+                        Program.Log.Info($"Created Bookmark for Plate number: {plateInfo.BestPlateNumber}");
+                }
+                catch (Exception ex)
+                {
+                    Program.Log.Error(null, ex);
+                }
+            }
+
+            return bookmark?.BookmarkFQID; // bookmark for the last camera used.
+        }
+
+        private FQID AddNewBookmark_New(OpenALPRData plateInfo, IList<OpenALPRmilestoneCameraName> cameras)
+        {
+            Bookmark bookmark = null;
+            VideoOS.Platform.SDK.Environment.Initialize();
+
+            foreach (var camera in cameras)
+            {
+                try
+                {
+                    FQID fqid = MilestoneServer.GetCameraByName(camera.OpenALPRname);
+
+                    if (fqid == null)
+                    {
+                        Program.Log.Info($"No mapping found for camera: {plateInfo.Camera_id.ToString()}");
+                        continue;
+                    }
+
                     StringBuilder reference = new StringBuilder();
                     StringBuilder header = new StringBuilder();
                     StringBuilder description = new StringBuilder();
 
-                    DateTime timeBegin = plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore);     //subtracted 3 secondes from the start time to give more chances to capture the video
-                    DateTime timrTrigged = plateInfo.EpochStart;                                        //timeTrigged
-                    DateTime timeEnd = plateInfo.EpochEnd.AddSeconds(EpochEndSecondsAfter);             //added 3 secondes to give more chances to capture the video
-                    reference.AppendFormat("openalpr");                                                 //so we can reterive openalpr bookmarks only in the plug-in
-                    header.AppendFormat(plateInfo.BestPlateNumber);
-                    description.AppendFormat($"Make={plateInfo.Make};MakeModel={plateInfo.MakeModel};BodyType={plateInfo.BodyType};Color={plateInfo.Color};BestRegion={plateInfo.BestRegion};Candidates={plateInfo.CandidatesPlate}");
+                    DateTime timeBegin = Epoch2LocalDateTime(plateInfo.Epoch_start).AddSeconds(-EpochStartSecondsBefore);
+                    DateTime timrTrigged = Epoch2LocalDateTime(plateInfo.Epoch_start);                                   
+                    DateTime timeEnd = Epoch2LocalDateTime(plateInfo.Epoch_end).AddSeconds(EpochEndSecondsAfter);        
+                    reference.AppendFormat("openalpr");                                                                  
+                    header.AppendFormat(plateInfo.Best_plate_number);
+                    description.AppendFormat($"Make={plateInfo.Vehicle.Make};MakeModel={plateInfo.Vehicle.Make_model};BodyType={plateInfo.Vehicle.Body_type};Color={plateInfo.Vehicle.Color};BestRegion={plateInfo.Best_plate.Region};Candidates={plateInfo.Candidates.FirstOrDefault().Plate}");
 
                     bookmark = null;
 
@@ -395,20 +457,13 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                                             reference.ToString(),
                                             header.ToString(),
                                             description.ToString());
-                        Program.Log.Info($"Created Bookmark for Plate number: {plateInfo.BestPlateNumber}");
+                        Program.Log.Info($"Created Bookmark for Plate number: {plateInfo.Best_plate_number}");
                     }
                     catch (Exception ex)
                     {
-                        Program.Log.Warn($"Failed to create a Bookmark for Plate number: {plateInfo.BestPlateNumber}{Environment.NewLine}");
+                        Program.Log.Warn($"Failed to create a Bookmark for Plate number: {plateInfo.Best_plate_number}{Environment.NewLine}");
                         Program.Log.Warn($"Bookmark Failed Message: {ex.Message}");
                     }
-
-                    //bookmark = BookmarkService.Instance.BookmarkCreate(fqid, timeBegin, timrTrigged, timeEnd, reference, header, description);
-
-                    //if (bookmark == null)
-                    //    Program.Log.Warn($"Failed to create a Bookmark for Plate number: {plateInfo.BestPlateNumber}");
-                    //else
-                    //    Program.Log.Info($"Created Bookmark for Plate number: {plateInfo.BestPlateNumber}");
                 }
                 catch (Exception ex)
                 {
@@ -416,8 +471,9 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 }
             }
 
-            return bookmark?.BookmarkFQID; // bookmark for the last camera used.
+            return bookmark?.BookmarkFQID;
         }
+
 
         private void SendAlarm(PlateInfo plateInfo, string milestoneCameraName, FQID bookmarkFQID)//, string plateFromAlertList, string descFromAlertList)
         {
@@ -462,6 +518,94 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 var eventSource = new EventSource()
                 {
                     FQID = fqid,
+                    Name = cameraName
+                };
+
+                var eventHeader = new EventHeader()
+                {
+                    ID = Guid.NewGuid(),
+                    Class = "Analytics",
+                    Type = null,
+                    Timestamp = plateInfo.EpochStart,
+                    Message = "OpenALPR Alarm",
+                    Name = plateInfo.BestPlateNumber,
+                    Source = eventSource,
+                    Priority = 2,
+                    PriorityName = "Medium",
+                    MessageId = Guid.Empty,
+                    CustomTag = plateFromAlertList,// the value we got from the config file
+                    ExpireTimestamp = DateTime.Now.AddDays(EventExpireAfterDays),
+                    Version = null
+                };
+
+                var alarm = new Alarm()
+                {
+                    EventHeader = eventHeader,
+                    StateName = "In progress",
+                    State = 4,
+                    AssignedTo = null,
+                    Count = 0,
+                    Description = descFromAlertList,
+                    EndTime = plateInfo.EpochStart.AddSeconds(EpochEndSecondsAfter),
+                    ReferenceList = new ReferenceList { new Reference { FQID = bookmarkFQID } },
+                    StartTime = plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore),
+                    Vendor = new Vendor { CustomData = plateInfo.ToString() }
+                };
+
+                try
+                {
+                    using (var impersonation = new Impersonation(BuiltinUser.NetworkService))
+                        EnvironmentManager.Instance.SendMessage(new Message(MessageId.Server.NewAlarmCommand) { Data = alarm });
+                }
+                catch (Exception ex)
+                {
+                    Program.Log.Error(null, ex);
+                }
+            }
+        }
+
+        private void SendAlarm_New(OpenALPRData plateInfo, string milestoneCameraName, FQID bookmarkFQID)//, string plateFromAlertList, string descFromAlertList)
+        {
+            var fqid = MilestoneServer.GetCameraByName(milestoneCameraName);
+
+            var temp = AlertListHelper.GetLastWriteTime();
+            if (temp != lastAlertUpdateTime)
+            {
+                AlertListHelper.LoadAlertList(dicBlack);
+                lastAlertUpdateTime = temp;
+                Program.Log.Info("Reload Alert list");
+            }
+
+            var plateFromAlertList = plateInfo.Best_plate_number;
+
+            var existsInAlertList = dicBlack.ContainsKey(plateInfo.Best_plate_number);
+            if (!existsInAlertList)
+            {
+                Program.Log.Info($"{plateFromAlertList} not listed in the alert list.");
+                Program.Log.Info($"looking if any candidates listed in the alert list");
+
+                if (plateInfo.Candidates.Count > 0)
+                {
+                    plateFromAlertList = plateInfo.Candidates.FirstOrDefault().Plate;
+                    Program.Log.Info($"Candidate {plateFromAlertList} listed in the alert list");
+                }
+                else
+                    Program.Log.Info($"No any candidates plate number listed in the alert list");
+            }
+            else
+                Program.Log.Info($"{plateFromAlertList} found in the alert list");
+
+            if (existsInAlertList)
+            {
+                var descFromAlertList = dicBlack[plateFromAlertList];
+
+                Program.Log.Info($"Sending an alert for {plateInfo.Best_plate_number}");
+
+                var cameraName = MilestoneServer.GetCameraName(fqid.ObjectId);
+
+                var eventSource = new EventSource()
+                {
+                    FQID = fqid,
                     Name = cameraName,
                     //Description = "",
                     //ExtensionData = 
@@ -479,13 +623,13 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     Type = null,
 
                     //The time of the event.
-                    Timestamp = plateInfo.EpochStart,
+                    Timestamp = Epoch2LocalDateTime(plateInfo.Epoch_start),
 
                     //The event message. This is the field that will be matched with the AlarmDefinition message when sending this event to the Event Server. 
                     Message = "OpenALPR Alarm",
 
                     //The event name.
-                    Name = plateInfo.BestPlateNumber,
+                    Name = plateInfo.Best_plate_number,
 
                     //The source of the event. This can represent e.g. a camera, a microphone, a user-defined event, etc.
                     Source = eventSource,
@@ -540,7 +684,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     Description = descFromAlertList,
 
                     //The end time of the alarm, if it takes plate over a period of time.
-                    EndTime = plateInfo.EpochStart.AddSeconds(EpochEndSecondsAfter),
+                    EndTime = Epoch2LocalDateTime(plateInfo.Epoch_start).AddSeconds(EpochEndSecondsAfter),
 
                     //  ExtensionData = 
 
@@ -560,7 +704,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     //SnapshotList = null,// new SnapshotList(),
 
                     //The start time of the alarm, if it takes plate over a period of time.
-                    StartTime = plateInfo.EpochStart.AddSeconds(-EpochStartSecondsBefore),
+                    StartTime = Epoch2LocalDateTime(plateInfo.Epoch_start).AddSeconds(-EpochStartSecondsBefore),
 
                     //The Vendor, containing information about the analytics vendor including any custom data.
                     Vendor = new Vendor { CustomData = plateInfo.ToString() } // save json data

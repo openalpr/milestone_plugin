@@ -1,7 +1,9 @@
 ﻿// Copyright OpenALPR Technology, Inc. 2018
 
+//using OpenALPRQueueConsumer.BeanstalkWorker;
 using OpenALPRQueueConsumer.Utility;
 using System;
+//using System.Collections.Generic;
 
 namespace OpenALPRQueueConsumer.Milestone
 {
@@ -18,6 +20,8 @@ namespace OpenALPRQueueConsumer.Milestone
         public string MakeModel;
         public string Color;
         public string CandidatesPlate;
+        //public IList<Coordinate> Coordinates = new List<Coordinate>();
+        //public double Travel_direction;
 
         public override string ToString()
         {
