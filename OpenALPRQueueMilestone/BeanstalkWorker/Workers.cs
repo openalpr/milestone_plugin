@@ -256,7 +256,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         bookmarkFQID = AddNewBookmark_New(palteInfo, cameras);
 
                     if (cameras.Count != 0)
-                        SendAlarm_New(palteInfo, cameras[cameras.Count - 1].MilestoneName, bookmarkFQID); // Send Alert for the last Camera since we recieved the bookmarkFQID for the last camera used in AddNewBookmark.
+                        SendAlarm_New(palteInfo, cameras[cameras.Count - 1].OpenALPRname, bookmarkFQID); // Send Alert for the last Camera since we recieved the bookmarkFQID for the last camera used in AddNewBookmark.
                 }
                 else
                     Program.Log.Warn("Best_plate_number is empty or Camera_id == 0");
@@ -443,7 +443,33 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     DateTime timeEnd = Epoch2LocalDateTime(plateInfo.Epoch_end).AddSeconds(EpochEndSecondsAfter);        
                     reference.AppendFormat("openalpr");                                                                  
                     header.AppendFormat(plateInfo.Best_plate_number);
-                    description.AppendFormat($"Make={plateInfo.Vehicle.Make};MakeModel={plateInfo.Vehicle.Make_model};BodyType={plateInfo.Vehicle.Body_type};Color={plateInfo.Vehicle.Color};BestRegion={plateInfo.Best_plate.Region};Candidates={plateInfo.Candidates.FirstOrDefault().Plate}");
+
+                    string candidates = string.Join(",", plateInfo.Candidates.GroupBy(candidate => candidate.Plate)
+                                            .Select(grp => grp.First())
+                                            .Select(p => p.Plate)
+                                            .ToList());
+
+                    string coordinates = string.Empty;
+
+                    foreach(Coordinate coordinate in plateInfo.Best_plate.Coordinates)
+                    {
+                        coordinates += $"(X={coordinate.X},Y={coordinate.Y}),";
+                    }
+
+                    coordinates = coordinates.Substring(0, coordinates.Length - 1);
+
+                    string desc = string.Format(@"Make={0};BodyType={1};Color={2};BestRegion={3};Candidates={4};TravelDirection={5};PlateNumber={6};Coordinates=({7});Timestamp={8}",
+                        plateInfo.Vehicle.Make.OrderByDescending(m => m.Confidence).FirstOrDefault().Name,
+                        plateInfo.Vehicle.Body_type.OrderByDescending(m => m.Confidence).FirstOrDefault().Name,
+                        plateInfo.Vehicle.Color.OrderBy(c => c.Confidence).FirstOrDefault().Name,
+                        plateInfo.Best_region,
+                        candidates,
+                        plateInfo.Travel_direction,
+                        plateInfo.Best_plate_number,
+                        coordinates,
+                        timrTrigged);
+
+                    description.AppendFormat(desc);
 
                     bookmark = null;
 
