@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using OpenALPRPlugin.Utility;
 
 namespace OpenALPRQueueConsumer.Utility
 {
@@ -58,7 +59,11 @@ namespace OpenALPRQueueConsumer.Utility
         {
             var filePath = GetFilePath();
             if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
-                return File.ReadAllLines(filePath);
+            {
+                string[] cameras = File.ReadAllLines(filePath);
+                Logger.Log.Info($"GetCameraMapping 4: {string.Join(",", cameras)}");
+                return cameras;
+            }
 
             return new string[0];
         }

@@ -568,7 +568,11 @@ namespace OpenALPRPlugin.Client
         {
             var filePath = CameraMappingFile();
             if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
-                return File.ReadAllLines(filePath);
+            {
+                string[] cameras = File.ReadAllLines(filePath);
+                Logger.Log.Info($"GetCameraMapping 1: {string.Join(",", cameras)}");
+                return cameras;
+            }
 
             return new string[0];
         }
