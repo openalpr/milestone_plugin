@@ -68,7 +68,7 @@ namespace OpenALPRQueueConsumer.Utility
             if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
             {
                 string[] cameras = File.ReadAllLines(filePath);
-                Logger.Log.Info($"GetCameraMapping 3: {string.Join(",", cameras)}");
+                //Logger.Log.Info($"GetCameraMapping 3: {string.Join(",", cameras)}");
                 return cameras;
             }
 
@@ -109,7 +109,7 @@ namespace OpenALPRQueueConsumer.Utility
                 Helper.SetDirectoryNetworkServiceAccessControl(mappingPath);
             }
 
-            return Path.Combine(mappingPath, "OpenALPRCameraName.txt");
+            return Path.Combine(mappingPath, "CameraMapping.txt");
         }
     }
 }

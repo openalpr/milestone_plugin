@@ -98,7 +98,7 @@ namespace OpenALPRPlugin.Client
             this.hdrHeader,
             this.hdrDescription});
             this.lsvBookmarks.FullRowSelect = true;
-            this.lsvBookmarks.Location = new System.Drawing.Point(13, 185);
+            this.lsvBookmarks.Location = new System.Drawing.Point(24, 190);
             this.lsvBookmarks.MultiSelect = false;
             this.lsvBookmarks.Name = "lsvBookmarks";
             this.lsvBookmarks.Size = new System.Drawing.Size(935, 585);
@@ -320,7 +320,7 @@ namespace OpenALPRPlugin.Client
             this.Controls.Add(this.btnSearch);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Name = "WorkSpaceControl";
-            this.Size = new System.Drawing.Size(929, 811);
+            this.Size = new System.Drawing.Size(912, 794);
             this.Load += new System.EventHandler(this.BookmarkViewItemManager_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).EndInit();
             this.ResumeLayout(false);

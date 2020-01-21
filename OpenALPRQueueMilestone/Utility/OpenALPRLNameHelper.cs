@@ -61,7 +61,7 @@ namespace OpenALPRQueueConsumer.Utility
             if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
             {
                 string[] cameras = File.ReadAllLines(filePath);
-                Logger.Log.Info($"GetCameraMapping 4: {string.Join(",", cameras)}");
+                //Logger.Log.Info($"GetCameraMapping 4: {string.Join(",", cameras)}");
                 return cameras;
             }
 
