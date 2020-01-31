@@ -23,7 +23,7 @@
 ;Interface Configuration
 
   !define MUI_HEADERIMAGE
-  !define MUI_HEADERIMAGE_BITMAP "C:\Openalpr\OpenALPRMilestone\OpenALPRPlugin\Resources\logo_bluegray.png" ; optional
+  !define MUI_HEADERIMAGE_BITMAP "C:\Users\Administrator\Documents\Visual Studio 2019\Projects\milestone_plugin\OpenALPRPlugin\Resources\logo_bluegray.png" ; optional
   !define MUI_ABORTWARNING
   
 ;--------------------------------
@@ -88,10 +88,10 @@ Section "Files (required)"
   File "..\build\VideoOS.Platform.dll"
   File "..\build\VideoOS.Platform.Primitives.dll"
   File "..\build\VideoOS.Platform.SDK.dll"
-  File "..\build\VideoOS.Platform.xml"
-  File "..\build\VideoOS.Platform.SDK.xml"
+  ;File "..\build\VideoOS.Platform.xml"
+  ;File "..\build\VideoOS.Platform.SDK.xml"
   File "..\build\Autofac.dll"
-  File "..\build\Autofac.xml"
+  ;File "..\build\Autofac.xml"
   
   SetOutPath "$INSTDIR\Service\ar-SA"
   File "..\build\ar-SA\VideoOS.Platform.resources.dll"
@@ -237,10 +237,10 @@ Section "Files (required)"
   File "..\build\VideoOS.Platform.dll"
   File "..\build\VideoOS.Platform.Primitives.dll"
   File "..\build\VideoOS.Platform.SDK.dll"
-  File "..\build\VideoOS.Platform.xml"
-  File "..\build\VideoOS.Platform.SDK.xml"
+  ;File "..\build\VideoOS.Platform.xml"
+  ;File "..\build\VideoOS.Platform.SDK.xml"
   File "..\build\Autofac.dll"
-  File "..\build\Autofac.xml"
+  ;File "..\build\Autofac.xml"
   
   SetOutPath "$INSTDIR\ar-SA"
   File "..\build\ar-SA\VideoOS.Platform.resources.dll"
@@ -478,8 +478,8 @@ Section "Uninstall"
   Delete $INSTDIR\Service\VideoOS.Platform.dll
   Delete $INSTDIR\Service\VideoOS.Platform.Primitives.dll
   Delete $INSTDIR\Service\VideoOS.Platform.SDK.dll
-  Delete $INSTDIR\Service\VideoOS.Platform.xml
-  Delete $INSTDIR\Service\VideoOS.Platform.SDK.xml
+  ;Delete $INSTDIR\Service\VideoOS.Platform.xml
+  ;Delete $INSTDIR\Service\VideoOS.Platform.SDK.xml
   
   Delete $INSTDIR\OpenALPRPlugin.dll
   Delete $INSTDIR\OpenALPRPlugin.dll.config

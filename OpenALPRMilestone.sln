@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenALPRPlugin", "OpenALPRPlugin\OpenALPRPlugin.csproj", "{CF183AD2-9BDC-46FE-8569-F1CA289F76B7}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemTrayApp", "SystemTrayApp\SystemTrayApp.csproj", "{D60E24F0-FC47-4490-ACD6-3157C26AFF39}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatter", "Chatter\Chatter.csproj", "{84BCF238-F124-48AA-A388-0050F66E36E3}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "OpenALPRMilestoneSetup", "OpenALPRMilestoneSetup\OpenALPRMilestoneSetup.vdproj", "{E8D186A1-EF96-4FC2-87FF-4139000497A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,12 @@ Global
 		{84BCF238-F124-48AA-A388-0050F66E36E3}.Release|x64.Build.0 = Release|x64
 		{84BCF238-F124-48AA-A388-0050F66E36E3}.Release|x86.ActiveCfg = Release|x86
 		{84BCF238-F124-48AA-A388-0050F66E36E3}.Release|x86.Build.0 = Release|x86
+		{E8D186A1-EF96-4FC2-87FF-4139000497A3}.Debug|Any CPU.ActiveCfg = Debug
+		{E8D186A1-EF96-4FC2-87FF-4139000497A3}.Debug|x64.ActiveCfg = Debug
+		{E8D186A1-EF96-4FC2-87FF-4139000497A3}.Debug|x86.ActiveCfg = Debug
+		{E8D186A1-EF96-4FC2-87FF-4139000497A3}.Release|Any CPU.ActiveCfg = Release
+		{E8D186A1-EF96-4FC2-87FF-4139000497A3}.Release|x64.ActiveCfg = Release
+		{E8D186A1-EF96-4FC2-87FF-4139000497A3}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
