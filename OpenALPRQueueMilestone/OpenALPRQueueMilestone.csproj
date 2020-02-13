@@ -182,7 +182,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Debug  call "$(TargetDir)BatchDebug.bat"
-if $(ConfigurationName) == Release call "$(TargetDir)BatchRelease.bat"</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Debug  call "$(SolutionDir)Solution build referenced files\BuildRequirements\BatchDebug.bat"
+if $(ConfigurationName) == Release call "$(SolutionDir)Solution build referenced files\BuildRequirements\BatchRelease.bat"</PostBuildEvent>
   </PropertyGroup>
 </Project>
