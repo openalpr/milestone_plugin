@@ -217,6 +217,7 @@ Section "Files (required)"
   SetOutPath $INSTDIR
   
   ; Put file there
+  File "..\build\service_access.ps1"
   File "..\build\OpenALPRPlugin.dll"
   File "..\build\OpenALPRPlugin.dll.config"
   
@@ -481,6 +482,7 @@ Section "Uninstall"
   ;Delete $INSTDIR\Service\VideoOS.Platform.xml
   ;Delete $INSTDIR\Service\VideoOS.Platform.SDK.xml
   
+  Delete $INSTDIR\service_access.ps1
   Delete $INSTDIR\OpenALPRPlugin.dll
   Delete $INSTDIR\OpenALPRPlugin.dll.config
   Delete $INSTDIR\plugin.def
