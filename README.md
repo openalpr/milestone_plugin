@@ -25,12 +25,13 @@ In order to use the bookmarks feature (to search plates within Milestone) you mu
 Basic Setup
 --------------
 
-* Download and install the OpenALPR On-Premises Agent on the same machine that is running Milestone XProtect
-  - Request a license code here: https://license.openalpr.com/evalrequest/
-* Setup the OpenALPR software to use the data destination "Local Queue"
+* Download and install the OpenALPR On-Premises Agent
+  - Sign up for an account (for licensing purposes) here: https://cloud.openalpr.com
+* Setup the OpenALPR software to use the data destination "Other HTTP Server"
+  - Configure the agent to point to http://[xprotectserver]:48125/
 * Add your LPR camera to OpenALPR
   - Once this is complete, you should see the license plates being read in the user interface as vehicles drive past the camera
-* Install the OpenALPR Milestone Plugin using the installer
+* Install the OpenALPR Milestone Plugin using the installer on the system running Milestone XProtect
 * Open Milestone XProtect and click on the "OpenALPR" tab
 * Click on the Camera Mapping, and ensure that the OpenALPR camera is properly associated with the milestone camera.  If not, you can click the drop-down to manually associate the two cameras
 * As new plates arrive you will be able to search them in Milestone.
