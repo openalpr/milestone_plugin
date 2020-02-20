@@ -12,6 +12,10 @@ namespace OpenALPRPlugin.Forms
         internal string EndTime;
         internal string Header;
         internal string Description;
+        internal string Plate;
+        internal string Vehicle;
+        internal string Timestamp;
+        internal string SiteName;
         internal bool saved;
 
         public EditBookmark()
@@ -26,6 +30,10 @@ namespace OpenALPRPlugin.Forms
             txtEndTime.Text = EndTime;
             txtHeader.Text = Header;
             txtDescription.Text = Description;
+            txtPlate.Text = Plate;
+            txtVehicle.Text = Vehicle;
+            txtTimestamp.Text = Timestamp;
+            txtSiteName.Text = SiteName;
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -39,6 +47,10 @@ namespace OpenALPRPlugin.Forms
             EndTime = txtEndTime.Text;
             Header = txtHeader.Text;
             Description = txtDescription.Text;
+            Plate = txtPlate.Text;
+            Vehicle = txtVehicle.Text;
+            Timestamp = txtTimestamp.Text;
+            SiteName = txtSiteName.Text;
 
             saved = true;
             Hide();

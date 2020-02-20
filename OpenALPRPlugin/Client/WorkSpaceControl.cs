@@ -390,6 +390,10 @@ namespace OpenALPRPlugin.Client
                         edit.EndTime = item.SubItems[2].Text;
                         edit.Header = item.SubItems[3].Text;
                         edit.Description = item.SubItems[4].Text;
+                        edit.Plate = item.SubItems[5].Text;
+                        edit.Vehicle = item.SubItems[6].Text;
+                        edit.Timestamp = item.SubItems[7].Text;
+                        edit.SiteName = item.SubItems[8].Text;
 
                         edit.ShowDialog(this);
                         if (edit.saved)
@@ -398,6 +402,10 @@ namespace OpenALPRPlugin.Client
                             {
                                 item.SubItems[3].Text = edit.Header;
                                 item.SubItems[4].Text = edit.Description;
+                                item.SubItems[5].Text = edit.Plate;
+                                item.SubItems[6].Text = edit.Vehicle;
+                                item.SubItems[7].Text = edit.Timestamp;
+                                item.SubItems[8].Text = edit.SiteName;
                             }
                         }
                     }

@@ -42,6 +42,10 @@ namespace OpenALPRPlugin.Client
             this.hdrTimeEnd = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.hdrHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.hdrDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.hdrPlate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.hdrVehicle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.hdrTimestamp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.hdrSiteName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.datStartTime = new System.Windows.Forms.DateTimePicker();
             this.lblMessage = new System.Windows.Forms.Label();
             this.txtCameraName = new System.Windows.Forms.TextBox();
@@ -85,7 +89,7 @@ namespace OpenALPRPlugin.Client
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 107);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(101, 13);
+            this.label1.Size = new System.Drawing.Size(117, 15);
             this.label1.TabIndex = 0;
             this.label1.Text = "Start searching from";
             // 
@@ -96,10 +100,13 @@ namespace OpenALPRPlugin.Client
             this.hdrTimeBegin,
             this.hdrTimeEnd,
             this.hdrHeader,
-            this.hdrDescription});
+            this.hdrDescription,
+            this.hdrPlate,
+            this.hdrVehicle,
+            this.hdrTimestamp,
+            this.hdrSiteName});
             this.lsvBookmarks.FullRowSelect = true;
             this.lsvBookmarks.Location = new System.Drawing.Point(24, 190);
-            this.lsvBookmarks.MultiSelect = false;
             this.lsvBookmarks.Name = "lsvBookmarks";
             this.lsvBookmarks.Size = new System.Drawing.Size(935, 585);
             this.lsvBookmarks.TabIndex = 9;
@@ -125,12 +132,32 @@ namespace OpenALPRPlugin.Client
             // hdrHeader
             // 
             this.hdrHeader.Text = "Header";
-            this.hdrHeader.Width = 120;
+            this.hdrHeader.Width = 135;
             // 
             // hdrDescription
             // 
             this.hdrDescription.Text = "Description";
-            this.hdrDescription.Width = 595;
+            this.hdrDescription.Width = 135;
+            // 
+            // hdrPlate
+            // 
+            this.hdrPlate.Text = "Plate";
+            this.hdrPlate.Width = 129;
+            // 
+            // hdrVehicle
+            // 
+            this.hdrVehicle.Text = "Vehicle";
+            this.hdrVehicle.Width = 129;
+            // 
+            // hdrTimestamp
+            // 
+            this.hdrTimestamp.Text = "Timestamp";
+            this.hdrTimestamp.Width = 129;
+            // 
+            // hdrSiteName
+            // 
+            this.hdrSiteName.Text = "Site name";
+            this.hdrSiteName.Width = 129;
             // 
             // datStartTime
             // 
@@ -171,7 +198,7 @@ namespace OpenALPRPlugin.Client
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(13, 135);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 13);
+            this.label2.Size = new System.Drawing.Size(89, 15);
             this.label2.TabIndex = 2;
             this.label2.Text = "Search up until";
             // 
@@ -205,7 +232,7 @@ namespace OpenALPRPlugin.Client
             this.chkMyBookmarksOnly.AutoSize = true;
             this.chkMyBookmarksOnly.Location = new System.Drawing.Point(397, 131);
             this.chkMyBookmarksOnly.Name = "chkMyBookmarksOnly";
-            this.chkMyBookmarksOnly.Size = new System.Drawing.Size(118, 17);
+            this.chkMyBookmarksOnly.Size = new System.Drawing.Size(135, 19);
             this.chkMyBookmarksOnly.TabIndex = 6;
             this.chkMyBookmarksOnly.Text = "My Bookmarks only";
             this.chkMyBookmarksOnly.UseVisualStyleBackColor = true;
@@ -320,7 +347,7 @@ namespace OpenALPRPlugin.Client
             this.Controls.Add(this.btnSearch);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Name = "WorkSpaceControl";
-            this.Size = new System.Drawing.Size(912, 794);
+            this.Size = new System.Drawing.Size(870, 752);
             this.Load += new System.EventHandler(this.BookmarkViewItemManager_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).EndInit();
             this.ResumeLayout(false);
@@ -356,5 +383,9 @@ namespace OpenALPRPlugin.Client
         private Label lblMainMessage;
         private Panel panel1;
         private Label lblVersion;
+        private ColumnHeader hdrPlate;
+        private ColumnHeader hdrVehicle;
+        private ColumnHeader hdrTimestamp;
+        private ColumnHeader hdrSiteName;
     }
 }
