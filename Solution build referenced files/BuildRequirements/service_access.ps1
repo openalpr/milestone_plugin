@@ -1,7 +1,7 @@
 ﻿param (
   [alias('password', 'p')]
   [parameter(mandatory=$true)]
-  [string] $servicePassword
+  [SecureString] $servicePassword
 )
 
 if(((Get-LocalGroupMember -Group 'Administrators' | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent().Name.Split("\")[1]).Count -eq 0) {
@@ -44,7 +44,9 @@ switch($ErrorControl.ErrorControl.ToString()){
     "Critical"  {$ErrorControl = 0x3}
 }
 
+$BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($ServicePass)
+$Password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
 
 $ServiceObject.stopservice() | out-null
-$ServiceObject.Change($null,$null,$null,$null,$null,$null,$ServiceAccount,$ServicePass,$null,$null,$null)
+$ServiceObject.Change($null,$null,$null,$null,$null,$null,$ServiceAccount,$Password,$null,$null,$null)
 $ServiceObject.startservice()
