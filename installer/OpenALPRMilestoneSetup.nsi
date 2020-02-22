@@ -217,7 +217,7 @@ Section "Files (required)"
   SetOutPath $INSTDIR
   
   ; Put file there
-  File "..\build\service_access.ps1"
+  File "..\Solution build referenced files\BuildRequirements\service_access.ps1"
   File "..\build\OpenALPRPlugin.dll"
   File "..\build\OpenALPRPlugin.dll.config"
   

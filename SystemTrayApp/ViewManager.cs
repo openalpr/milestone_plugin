@@ -1,11 +1,13 @@
 ﻿using OpenALPR.SystemTrayApp.Utility;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Management.Automation;
 using System.Reflection;
 using System.ServiceProcess;
 using System.Windows.Forms;
@@ -35,6 +37,7 @@ namespace SystemTrayApp
 
         private ToolStripMenuItem startServiceMenuItem;
         private ToolStripMenuItem stopServiceMenuItem;
+        private ToolStripMenuItem serviceAccessMenuItem;
         private ToolStripMenuItem exitMenuItem;
         private bool disposed;
 
@@ -139,7 +142,25 @@ namespace SystemTrayApp
             else
                 serviceManager.Start();
         }
-        
+
+        private void RunServiceAccessScript_Click(object sender, EventArgs e)
+        {
+            if (serviceManager.Status == ServiceControllerStatus.Running)
+                serviceManager.Stop();
+
+            string file = $"{Application.StartupPath}\\service_access.ps1";
+
+            ProcessStartInfo startInfo = new ProcessStartInfo()
+            {
+                FileName = "C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe",
+                Arguments = $"-NoProfile -ExecutionPolicy Unrestricted -File \"{file}\"",
+                UseShellExecute = true,
+                Verb = "runas"
+            };
+
+            Process.Start(startInfo);
+        }
+
         private ToolStripMenuItem ToolStripMenuItemWithHandler(string displayText, string tooltipText, Image image, EventHandler eventHandler)
         {
             var item = new ToolStripMenuItem(displayText, image);
@@ -319,6 +340,9 @@ namespace SystemTrayApp
                 notifyIcon.ContextMenuStrip.Items.Add(startServiceMenuItem);
                 stopServiceMenuItem = ToolStripMenuItemWithHandler("Stop OpenALPRMilestone service", "Stops the service", Resources.Stop, StartStopReaderItem_Click);
                 notifyIcon.ContextMenuStrip.Items.Add(stopServiceMenuItem);
+                notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
+                serviceAccessMenuItem = ToolStripMenuItemWithHandler("Run service access script", "Run service access script", Resources.powershell, RunServiceAccessScript_Click);
+                notifyIcon.ContextMenuStrip.Items.Add(serviceAccessMenuItem);
                 notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
 
                 notifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("OpenALPRMilestone service s&tatus", "Shows the service status dialog", Resources.QuestionMark, ShowStatusItem_Click));

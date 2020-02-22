@@ -67,6 +67,9 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.PowerShell.5.1.ReferenceAssemblies.1.0.0\lib\net461\System.Management.Automation.dll</HintPath>
+    </Reference>
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web.Extensions" />
@@ -136,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\folder.png" />
+    <Content Include="Resources\powershell.png" />
     <Content Include="Resources\shutter32x32 - gray.png" />
     <None Include="Resources\shutter32x32BlueIcon.ico" />
     <None Include="Resources\shutter32x32 - GrayIcon.ico" />
