@@ -4,16 +4,103 @@
   [SecureString] $servicePassword
 )
 
-if(((Get-LocalGroupMember -Group 'Administrators' | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent().Name.Split("\")[1]).Count -eq 0) {
-   Add-LocalGroupMember -Group 'Administrators' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose
+try {
+    if(((Get-LocalGroupMember -Group 'Administrators' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
+       Add-LocalGroupMember -Group 'Administrators' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
+    }
+}
+catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
+	#Write-Output "Error to add current user to Administrators role"
 }
 
-$ServiceAccount = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
-$ServicePass    = $servicePassword
-$Computer       = [System.Net.Dns]::GetHostName()
-$ServiceName    = "OpenALPRMilestone"
+try {
+    if(((Get-LocalGroupMember -Group 'Администраторы' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
+       Add-LocalGroupMember -Group 'Администраторы' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
+    }
+}
+catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
+	#Write-Output "Error to add current user to Administrators role"
+}
 
-$ServiceObject  = Get-WmiObject -ComputerName "$Computer" -Query "SELECT * FROM Win32_Service WHERE Name = '$ServiceName'"
+try {
+    if(((Get-LocalGroupMember -Group 'Administrateurs' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
+       Add-LocalGroupMember -Group 'Administrateurs' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
+    }
+}
+catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
+	#Write-Output "Error to add current user to Administrators role"
+}
+
+try {
+    if(((Get-LocalGroupMember -Group 'Administratrices' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
+       Add-LocalGroupMember -Group 'Administratrices' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
+    }
+}
+catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
+	#Write-Output "Error to add current user to Administrators role"
+}
+
+try {
+    if(((Get-LocalGroupMember -Group 'Administratorer' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
+       Add-LocalGroupMember -Group 'Administratorer' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
+    }
+}
+catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
+	#Write-Output "Error to add current user to Administrators role"
+}
+
+try {
+    if(((Get-LocalGroupMember -Group 'Administratorinnen' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
+       Add-LocalGroupMember -Group 'Administratorinnen' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
+    }
+}
+catch {#[Microsoft.PowerShell.Commands.GroupExistsException] { 
+	#Write-Output "Error to add current user to Administrators role"
+}
+
+try {
+    if(((Get-LocalGroupMember -Group 'Administratoren' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
+       Add-LocalGroupMember -Group 'Administratoren' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
+    }
+}
+catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
+	#Write-Output "Error to add current user to Administrators role"
+}
+
+try {
+    if(((Get-LocalGroupMember -Group 'Administradoras' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
+       Add-LocalGroupMember -Group 'Administradoras' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
+    }
+}
+catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
+	#Write-Output "Error to add current user to Administrators role"
+}
+
+try {
+    if(((Get-LocalGroupMember -Group 'Administradores' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
+       Add-LocalGroupMember -Group 'Administradores' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
+    }
+}
+catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
+	#Write-Output "Error to add current user to Administrators role"
+}
+
+try {
+    if(((Get-LocalGroupMember -Group 'Administrators' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
+       Add-LocalGroupMember -Group 'Administrators' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
+    }
+}
+catch {#{#[Microsoft.PowerShell.Commands.MemberExistsException] {
+	#Write-Output "Error to add current user to Administrators role" 
+}
+
+$ServiceAccount  = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+$ServicePass     = $servicePassword
+$Computer        = [System.Net.Dns]::GetHostName()
+$ServiceName     = "OpenALPRMilestone"
+$DisplayLanguage = GET-WinSystemLocale | select Name
+
+$ServiceObject   = Get-WmiObject -ComputerName "$Computer" -Query "SELECT * FROM Win32_Service WHERE Name = '$ServiceName'"
 
 $DisplayName = $($ServiceObject | select DisplayName)
 $PathName = $($ServiceObject | select PathName)
