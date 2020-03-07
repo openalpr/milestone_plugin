@@ -67,6 +67,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.PowerShell.5.1.ReferenceAssemblies.1.0.0\lib\net461\System.Management.Automation.dll</HintPath>
     </Reference>
@@ -77,10 +78,17 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Chat\Chatting.cs" />
+    <Compile Include="PowershellScript.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PowershellScript.Designer.cs">
+      <DependentUpon>PowershellScript.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -96,6 +104,9 @@
     <Compile Include="Utility\Logging.cs" />
     <Compile Include="ViewManager.cs" />
     <Compile Include="WindowsService .cs" />
+    <EmbeddedResource Include="PowershellScript.resx">
+      <DependentUpon>PowershellScript.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -139,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\folder.png" />
+    <Content Include="Resources\powershell.ico" />
     <Content Include="Resources\powershell.png" />
     <Content Include="Resources\shutter32x32 - gray.png" />
     <None Include="Resources\shutter32x32BlueIcon.ico" />
