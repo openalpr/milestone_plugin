@@ -154,13 +154,13 @@ namespace SystemTrayApp
             if (serviceManager.Status == ServiceControllerStatus.Running)
                 serviceManager.Stop();
 
-            string file = $"{Application.StartupPath}\\test.ps1";
-            //string file = $"{Application.StartupPath}\\service_access.ps1";
+            //string file = $"{Application.StartupPath}\\test.ps1";
+            string file = $"{Application.StartupPath}\\service_access.ps1";
 
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
                 FileName = "C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe",
-                Arguments = $"-NoProfile -ExecutionPolicy Unrestricted -File \"{file}\" -servicePassword \"{securePassword}\"",
+                Arguments = $"-NoProfile -ExecutionPolicy Unrestricted -File \"{file}\" -UserName {username} -ServicePassword \"{password}\"",
                 UseShellExecute = true,
                 Verb = "runas"
             };

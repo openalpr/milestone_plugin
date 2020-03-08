@@ -28,7 +28,7 @@ namespace SystemTrayApp
 
             using (ViewManager manager = new ViewManager(serviceManager))
             {
-                manager.RunPowershellScrip("admin", "test");
+                manager.RunPowershellScrip(txtLogin.Text, txtPassword.Text);
                 this.Close();
             }
         }
