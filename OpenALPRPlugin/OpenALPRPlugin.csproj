@@ -145,6 +145,7 @@
     <Content Include="plugin.def" />
     <None Include="Resources\logo_bluegray.png" />
     <None Include="Resources\logo_white_512x93.png" />
+    <Content Include="Resources\powershell.ico" />
     <Content Include="Resources\Server.png" />
   </ItemGroup>
   <ItemGroup />

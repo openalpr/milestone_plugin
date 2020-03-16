@@ -141,8 +141,8 @@ namespace OpenALPRQueueConsumer.Milestone
 
             if (!logged)
             {
-                SDKEnvironment.AddServer(uri, nc);
                 uri = new Uri($"http://{Configuration.Instance.ServerFQID.ServerId.ServerHostname}:{Configuration.Instance.ServerFQID.ServerId.Serverport}/");
+                SDKEnvironment.AddServer(uri, nc);
                 logged = Login(uri);
             }
 

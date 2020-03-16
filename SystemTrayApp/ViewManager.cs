@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Reflection;
+using System.Security;
 using System.ServiceProcess;
 using System.Windows.Forms;
 using System.Windows.Interop;
@@ -20,7 +21,7 @@ using WpfFormLibrary.ViewModel;
 
 namespace SystemTrayApp
 {
-    public class ViewManager:IDisposable
+    public class ViewManager : IDisposable
     {
         // This allows code to be run on a GUI thread
         private System.Windows.Window hiddenWindow;
@@ -28,7 +29,7 @@ namespace SystemTrayApp
         private IContainer components;
         // The Windows system tray class
         private NotifyIcon notifyIcon;
-        private IServiceManager serviceManager;
+        public IServiceManager serviceManager;
 
         private AboutView aboutView;
         private AboutViewModel aboutViewModel;
@@ -143,17 +144,23 @@ namespace SystemTrayApp
                 serviceManager.Start();
         }
 
-        private void RunServiceAccessScript_Click(object sender, EventArgs e)
+        public void RunPowershellScrip(string username, string password)
         {
+            SecureString securePassword = Helper.ConvertToSecureString(password);
+
+            PSCredential cred = new PSCredential(username, securePassword);
+
+
             if (serviceManager.Status == ServiceControllerStatus.Running)
                 serviceManager.Stop();
 
+            //string file = $"{Application.StartupPath}\\test.ps1";
             string file = $"{Application.StartupPath}\\service_access.ps1";
 
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
                 FileName = "C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe",
-                Arguments = $"-NoProfile -ExecutionPolicy Unrestricted -File \"{file}\"",
+                Arguments = $"-NoProfile -ExecutionPolicy Unrestricted -File \"{file}\" -UserName {username} -ServicePassword \"{password}\"",
                 UseShellExecute = true,
                 Verb = "runas"
             };
@@ -177,6 +184,14 @@ namespace SystemTrayApp
             };
 
             Process.Start(startInfo);
+        }
+
+        private void RunServiceAccessScript_Click(object sender, EventArgs e)
+        {
+            using (PowershellScript powershellScript = new PowershellScript())
+            {
+                powershellScript.ShowDialog();
+            }
         }
 
         private ToolStripMenuItem ToolStripMenuItemWithHandler(string displayText, string tooltipText, Image image, EventHandler eventHandler)

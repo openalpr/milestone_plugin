@@ -1,7 +1,9 @@
 ﻿param (
+  [parameter(mandatory=$true)]
+  [String] $UserName,
   [alias('password', 'p')]
   [parameter(mandatory=$true)]
-  [SecureString] $servicePassword
+  [SecureString] $ServicePassword
 )
 
 try {
@@ -95,7 +97,7 @@ catch {#{#[Microsoft.PowerShell.Commands.MemberExistsException] {
 }
 
 $ServiceAccount  = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
-$ServicePass     = $servicePassword
+$ServicePass     = $ServicePassword
 $Computer        = [System.Net.Dns]::GetHostName()
 $ServiceName     = "OpenALPRMilestone"
 $DisplayLanguage = GET-WinSystemLocale | select Name
@@ -135,5 +137,5 @@ $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($ServicePas
 $Password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
 
 $ServiceObject.stopservice() | out-null
-$ServiceObject.Change($null,$null,$null,$null,$null,$null,$ServiceAccount,$Password,$null,$null,$null)
+$ServiceObject.Change($null,$null,$null,$null,$null,$null,$Computer + "\" + $UserName,$Password,$null,$null,$null)
 $ServiceObject.startservice()
