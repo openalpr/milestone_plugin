@@ -161,6 +161,24 @@ namespace SystemTrayApp
             Process.Start(startInfo);
         }
 
+        private void RunRestartRecordingServerScript_Click(object sender, EventArgs e)
+        {
+            if (serviceManager.Status == ServiceControllerStatus.Running)
+                serviceManager.Stop();
+
+            string file = $"{Application.StartupPath}\\recording_server.ps1";
+
+            ProcessStartInfo startInfo = new ProcessStartInfo()
+            {
+                FileName = "C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe",
+                Arguments = $"-NoProfile -ExecutionPolicy Unrestricted -File \"{file}\"",
+                UseShellExecute = true,
+                Verb = "runas"
+            };
+
+            Process.Start(startInfo);
+        }
+
         private ToolStripMenuItem ToolStripMenuItemWithHandler(string displayText, string tooltipText, Image image, EventHandler eventHandler)
         {
             var item = new ToolStripMenuItem(displayText, image);
@@ -342,6 +360,8 @@ namespace SystemTrayApp
                 notifyIcon.ContextMenuStrip.Items.Add(stopServiceMenuItem);
                 notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
                 serviceAccessMenuItem = ToolStripMenuItemWithHandler("Run service access script", "Run service access script", Resources.powershell, RunServiceAccessScript_Click);
+                notifyIcon.ContextMenuStrip.Items.Add(serviceAccessMenuItem);
+                serviceAccessMenuItem = ToolStripMenuItemWithHandler("Restart Xprotect Recording Server", "Restart Xprotect Recording Server", Resources.Recorder, RunRestartRecordingServerScript_Click);
                 notifyIcon.ContextMenuStrip.Items.Add(serviceAccessMenuItem);
                 notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
 

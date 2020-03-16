@@ -140,6 +140,7 @@
   <ItemGroup>
     <Content Include="Resources\folder.png" />
     <Content Include="Resources\powershell.png" />
+    <Content Include="Resources\Recorder.png" />
     <Content Include="Resources\shutter32x32 - gray.png" />
     <None Include="Resources\shutter32x32BlueIcon.ico" />
     <None Include="Resources\shutter32x32 - GrayIcon.ico" />

@@ -183,6 +183,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(SolutionDir)Solution build referenced files\BuildRequirements\service_access.ps1" "$(SolutionDir)\build"
+xcopy "$(SolutionDir)Solution build referenced files\BuildRequirements\recording_server.ps1" "$(SolutionDir)\build"
 if $(ConfigurationName) == Debug  call "$(SolutionDir)Solution build referenced files\BuildRequirements\BatchDebug.bat"
 if $(ConfigurationName) == Release call "$(SolutionDir)Solution build referenced files\BuildRequirements\BatchRelease.bat"</PostBuildEvent>
   </PropertyGroup>

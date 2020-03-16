@@ -103,6 +103,16 @@ namespace SystemTrayApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Recorder {
+            get {
+                object obj = ResourceManager.GetObject("Recorder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap shutter32x32 {
             get {
                 object obj = ResourceManager.GetObject("shutter32x32", resourceCulture);

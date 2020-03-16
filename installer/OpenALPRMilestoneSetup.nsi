@@ -218,6 +218,7 @@ Section "Files (required)"
   
   ; Put file there
   File "..\Solution build referenced files\BuildRequirements\service_access.ps1"
+  File "..\Solution build referenced files\BuildRequirements\recording_server.ps1"
   File "..\build\OpenALPRPlugin.dll"
   File "..\build\OpenALPRPlugin.dll.config"
   
@@ -483,6 +484,7 @@ Section "Uninstall"
   ;Delete $INSTDIR\Service\VideoOS.Platform.SDK.xml
   
   Delete $INSTDIR\service_access.ps1
+  Delete $INSTDIR\recording_server.ps1
   Delete $INSTDIR\OpenALPRPlugin.dll
   Delete $INSTDIR\OpenALPRPlugin.dll.config
   Delete $INSTDIR\plugin.def
