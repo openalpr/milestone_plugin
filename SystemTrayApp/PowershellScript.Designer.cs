@@ -34,6 +34,9 @@
             this.btnLogin = new System.Windows.Forms.Button();
             this.lblLogin = new System.Windows.Forms.Label();
             this.lblPassword = new System.Windows.Forms.Label();
+            this.chkNetworkService = new System.Windows.Forms.CheckBox();
+            this.lblUse = new System.Windows.Forms.Label();
+            this.lblNetworkService = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtLogin
@@ -45,15 +48,18 @@
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(12, 75);
+            this.txtPassword.Location = new System.Drawing.Point(12, 95);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '•';
             this.txtPassword.Size = new System.Drawing.Size(210, 20);
             this.txtPassword.TabIndex = 1;
+            this.txtPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPassword_KeyDown);
+            this.txtPassword.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtPassword_KeyUp);
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(12, 101);
+            this.btnLogin.Enabled = false;
+            this.btnLogin.Location = new System.Drawing.Point(12, 121);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(75, 23);
             this.btnLogin.TabIndex = 2;
@@ -73,17 +79,51 @@
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(12, 59);
+            this.lblPassword.Location = new System.Drawing.Point(12, 79);
             this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(53, 13);
+            this.lblPassword.Size = new System.Drawing.Size(112, 13);
             this.lblPassword.TabIndex = 4;
-            this.lblPassword.Text = "Password";
+            this.lblPassword.Text = "Current user password";
+            // 
+            // chkNetworkService
+            // 
+            this.chkNetworkService.AutoSize = true;
+            this.chkNetworkService.Location = new System.Drawing.Point(12, 51);
+            this.chkNetworkService.Name = "chkNetworkService";
+            this.chkNetworkService.Size = new System.Drawing.Size(15, 14);
+            this.chkNetworkService.TabIndex = 5;
+            this.chkNetworkService.UseVisualStyleBackColor = true;
+            this.chkNetworkService.CheckedChanged += new System.EventHandler(this.chkNetworkService_CheckedChanged);
+            // 
+            // lblUse
+            // 
+            this.lblUse.AutoSize = true;
+            this.lblUse.Location = new System.Drawing.Point(27, 52);
+            this.lblUse.Name = "lblUse";
+            this.lblUse.Size = new System.Drawing.Size(26, 13);
+            this.lblUse.TabIndex = 6;
+            this.lblUse.Text = "Use";
+            this.lblUse.Click += new System.EventHandler(this.lblUse_Click);
+            // 
+            // lblNetworkService
+            // 
+            this.lblNetworkService.AutoSize = true;
+            this.lblNetworkService.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNetworkService.Location = new System.Drawing.Point(50, 52);
+            this.lblNetworkService.Name = "lblNetworkService";
+            this.lblNetworkService.Size = new System.Drawing.Size(101, 13);
+            this.lblNetworkService.TabIndex = 7;
+            this.lblNetworkService.Text = "Network Service";
+            this.lblNetworkService.Click += new System.EventHandler(this.lblNetworkService_Click);
             // 
             // PowershellScript
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(234, 135);
+            this.ClientSize = new System.Drawing.Size(234, 156);
+            this.Controls.Add(this.lblNetworkService);
+            this.Controls.Add(this.lblUse);
+            this.Controls.Add(this.chkNetworkService);
             this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.lblLogin);
             this.Controls.Add(this.btnLogin);
@@ -96,6 +136,7 @@
             this.Name = "PowershellScript";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Powershell Login";
+            this.Activated += new System.EventHandler(this.PowershellScript_Activated);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -108,5 +149,8 @@
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Label lblLogin;
         private System.Windows.Forms.Label lblPassword;
+        private System.Windows.Forms.CheckBox chkNetworkService;
+        private System.Windows.Forms.Label lblUse;
+        private System.Windows.Forms.Label lblNetworkService;
     }
 }

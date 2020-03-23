@@ -4,7 +4,7 @@ $RecordingServiceObject = Get-Service $RecordingServiceName
 $OneTimeStopped = $false
 $OneTimeStarted = $false
 
-Remove-Item -Path "C:\ProgramData\Milestone\XProtect Recording Server\DriverCache\NativeDrivers\_cache" -Force
+Remove-Item -Path "$($env:ALLUSERSPROFILE)\Milestone\XProtect Recording Server\DriverCache\NativeDrivers\_cache" -Force
 
 while ($OneTimeStarted -eq $false)
 {

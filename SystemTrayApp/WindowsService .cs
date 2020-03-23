@@ -13,9 +13,9 @@ namespace SystemTrayApp
             if (string.IsNullOrEmpty(serviceName))
                 throw new ArgumentNullException(serviceName, $"{nameof(serviceName)} cannot be a null reference");
 
-            var result = ServiceControllerStatus.Stopped;
+            ServiceControllerStatus result = ServiceControllerStatus.Stopped;
 
-            var service = ServiceController.GetServices().FirstOrDefault(p => p.ServiceName == serviceName);
+            ServiceController service = ServiceController.GetServices().FirstOrDefault(p => p.ServiceName == serviceName);
 
             if (service != null)
             {
@@ -25,7 +25,7 @@ namespace SystemTrayApp
                     {
                         service.Start(new string[0]);
                         service.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromMinutes(1));
-                        
+
                     }
                     catch (Exception ex)
                     {
@@ -50,9 +50,9 @@ namespace SystemTrayApp
             if (string.IsNullOrEmpty(serviceName))
                 throw new ArgumentNullException(serviceName, $"{nameof(serviceName)} cannot be a null reference");
 
-            var result = ServiceControllerStatus.Running;
+            ServiceControllerStatus result = ServiceControllerStatus.Running;
 
-            var service = ServiceController.GetServices().FirstOrDefault(p => p.ServiceName == serviceName);
+            ServiceController service = ServiceController.GetServices().FirstOrDefault(p => p.ServiceName == serviceName);
 
             if (service != null)
             {
@@ -63,7 +63,7 @@ namespace SystemTrayApp
                         try
                         {
                             service.Stop();
-                            service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromMinutes (1));
+                            service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromMinutes(1));
                             service.Refresh();
 
                             result = service.Status;
@@ -91,7 +91,7 @@ namespace SystemTrayApp
             if (string.IsNullOrEmpty(serviceName))
                 throw new ArgumentNullException(nameof(serviceName), $"{nameof(serviceName)} cannot be a null reference");
 
-            var service = ServiceController.GetServices().FirstOrDefault(p => p.ServiceName == serviceName);
+            ServiceController service = ServiceController.GetServices().FirstOrDefault(p => p.ServiceName == serviceName);
 
             try
             {

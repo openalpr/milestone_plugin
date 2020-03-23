@@ -160,7 +160,7 @@ namespace SystemTrayApp
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
                 FileName = "C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe",
-                Arguments = $"-NoProfile -ExecutionPolicy Unrestricted -File \"{file}\" -UserName {username} -ServicePassword \"{password}\"",
+                Arguments = $"-NoProfile -ExecutionPolicy Unrestricted -File \"{file}\" -UserName \"{username}\" -ServicePassword \"{password}\"",
                 UseShellExecute = true,
                 Verb = "runas"
             };
