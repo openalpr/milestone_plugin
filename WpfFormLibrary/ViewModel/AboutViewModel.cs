@@ -29,7 +29,7 @@ namespace WpfFormLibrary.ViewModel
 
         public void AddVersionInfo(string name, string version)
         {
-            foreach (var item in ComponentVersions)
+            foreach (ComponentVersionInfo item in ComponentVersions)
             {
                 if (item.Name == name)
                 {
@@ -39,7 +39,7 @@ namespace WpfFormLibrary.ViewModel
                 }
             }
 
-            var info = new ComponentVersionInfo
+            ComponentVersionInfo info = new ComponentVersionInfo
             {
                 Name = name,
                 Version = version

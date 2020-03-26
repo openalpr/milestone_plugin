@@ -142,12 +142,12 @@ namespace OpenALPRPlugin.Background
         {
             try
             {
-                var bookmarkFetched = await Task.Run(() => BookmarkService.Instance.BookmarkGet(bookmarkFQID));
+                Bookmark bookmarkFetched = await Task.Run(() => BookmarkService.Instance.BookmarkGet(bookmarkFQID));
                 if (bookmarkFetched != null)
                 {
                     bookmarkFetched.Header = newHeader;
                     bookmarkFetched.Description = newDescription;
-                    var bookmarkUpdated = await Task.Run(() => BookmarkService.Instance.BookmarkUpdate(bookmarkFetched));
+                    Bookmark bookmarkUpdated = await Task.Run(() => BookmarkService.Instance.BookmarkUpdate(bookmarkFetched));
                     return bookmarkUpdated != null && bookmarkUpdated.BookmarkFQID == bookmarkFQID;
                 }
             }

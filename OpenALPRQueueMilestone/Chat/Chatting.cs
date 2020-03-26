@@ -93,7 +93,7 @@ namespace OpenALPRQueueConsumer.Chat
 
                 if (users.Count != 0)
                 {
-                    var user = users.SingleOrDefault(u => u.Name.ToUpperInvariant() == name.ToUpperInvariant());
+                    User user = users.SingleOrDefault(u => u.Name.ToUpperInvariant() == name.ToUpperInvariant());
                     if (user != null)
                         SayMessage(user, new Message(info), true);
                 }
@@ -106,8 +106,8 @@ namespace OpenALPRQueueConsumer.Chat
             {
                 if (users.Count != 0)
                 {
-                    var selected = users.Where(u => u.Name.ToUpperInvariant().EndsWith (User.ManagmentClientPluginName.ToUpperInvariant()));
-                    foreach (var u in selected)
+                    IEnumerable<User> selected = users.Where(u => u.Name.ToUpperInvariant().EndsWith (User.ManagmentClientPluginName.ToUpperInvariant()));
+                    foreach (User u in selected)
                     {
                         if (u.Name != except)
                             SayMessage(u, new Message(info), true);
@@ -157,7 +157,7 @@ namespace OpenALPRQueueConsumer.Chat
 
         private static void AddNewUser(User user)
         {
-            var reciver = users.SingleOrDefault(u => u.Name.ToUpperInvariant() == user.Name.ToUpperInvariant());
+            User reciver = users.SingleOrDefault(u => u.Name.ToUpperInvariant() == user.Name.ToUpperInvariant());
             if (reciver == null)
                 users.Add(user);
             
@@ -166,7 +166,7 @@ namespace OpenALPRQueueConsumer.Chat
 
         private static void RemoveUser(User user)
         {
-            var reciver = users.SingleOrDefault(u => u.Name.ToUpperInvariant() == user.Name.ToUpperInvariant());
+            User reciver = users.SingleOrDefault(u => u.Name.ToUpperInvariant() == user.Name.ToUpperInvariant());
             if (reciver != null)
                 users.Remove(user);
 

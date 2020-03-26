@@ -45,8 +45,8 @@ namespace OpenALPRPlugin.Forms
 
         private void SetUpApplicationEventListeners()
         {
-            var imageClear = new Bitmap(320, 240);
-            var g = Graphics.FromImage(imageClear);
+            Bitmap imageClear = new Bitmap(320, 240);
+            Graphics g = Graphics.FromImage(imageClear);
             g.FillRectangle(Brushes.Black, 0, 0, 320, 240);
             g.Dispose();
             SetImage(imageClear);
@@ -59,21 +59,21 @@ namespace OpenALPRPlugin.Forms
             if (selectedCamera != null)
             {
                 _stop = true;
-                //var thread = new Thread( new //new ThreadStart(ShowReplay));
-                var thread = new Thread(() => ShowReplay(selectedCamera, start, end));
+                //Thread thread = new Thread( new //new ThreadStart(ShowReplay));
+                Thread thread = new Thread(() => ShowReplay(selectedCamera, start, end));
                 thread.Start();
             }
         }
 
         private void ShowReplay(Item camera, DateTime startDate, DateTime endDate)
         {
-            var imageClear = new Bitmap(320, 240);
-            var g = Graphics.FromImage(imageClear);
+            Bitmap imageClear = new Bitmap(320, 240);
+            Graphics g = Graphics.FromImage(imageClear);
             g.FillRectangle(Brushes.Black, 0, 0, 320, 240);
             g.Dispose();
             SetImage( imageClear );
 
-            var source = new JPEGVideoSource(camera);
+            JPEGVideoSource source = new JPEGVideoSource(camera);
             source.Init();
             List<object> resultList = source.Get(startDate, new TimeSpan(endDate.Ticks), 150);
 
@@ -92,8 +92,8 @@ namespace OpenALPRPlugin.Forms
                 int avgInterval = 3000 / resultList.Count;
                 foreach (JPEGData jpeg in resultList)
                 {
-                    var ms = new MemoryStream(jpeg.Bytes);
-                    var image = new Bitmap(ms);
+                    MemoryStream ms = new MemoryStream(jpeg.Bytes);
+                    Bitmap image = new Bitmap(ms);
                     SetImage(image);
                     ms.Close();
                     Thread.Sleep(avgInterval);

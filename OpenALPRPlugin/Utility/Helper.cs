@@ -35,12 +35,12 @@ namespace OpenALPRPlugin.Utility
             //Name: NT Authority
             //Description: Network Service
             const string sddlForm = "S-1-5-20";
-            var sid = string.Empty;
+            string sid = string.Empty;
 
             try
             {
-                var dirInfo = new DirectoryInfo(path);
-                var dirSecurity = dirInfo.GetAccessControl();
+                DirectoryInfo dirInfo = new DirectoryInfo(path);
+                DirectorySecurity dirSecurity = dirInfo.GetAccessControl();
                 foreach (AuthorizationRule r in dirSecurity.GetAccessRules(true, true, typeof(SecurityIdentifier)))
                 {
                     if (r.IdentityReference.ToString() == sddlForm)
@@ -52,9 +52,9 @@ namespace OpenALPRPlugin.Utility
 
                 if (sid.Length == 0)
                 {
-                    var networkService = new SecurityIdentifier(WellKnownSidType.NetworkServiceSid, null); // or new SecurityIdentifier(sddlForm);
-                    var networkServiceIdentity = networkService.Translate(typeof(SecurityIdentifier));
-                    var accessRule = new FileSystemAccessRule(networkServiceIdentity,
+                    SecurityIdentifier networkService = new SecurityIdentifier(WellKnownSidType.NetworkServiceSid, null); // or new SecurityIdentifier(sddlForm);
+                    IdentityReference networkServiceIdentity = networkService.Translate(typeof(SecurityIdentifier));
+                    FileSystemAccessRule accessRule = new FileSystemAccessRule(networkServiceIdentity,
                          fileSystemRights: FileSystemRights.FullControl,
                          inheritanceFlags: InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
                          propagationFlags: PropagationFlags.NoPropagateInherit,
@@ -80,16 +80,16 @@ namespace OpenALPRPlugin.Utility
             const string Users = "Users";
             try
             {
-                var Rights = FileSystemRights.FullControl;
+                FileSystemRights Rights = FileSystemRights.FullControl;
 
                 // *** Add Access Rule to the actual directory itself
-                var AccessRule = new FileSystemAccessRule(Users, Rights,
+                FileSystemAccessRule AccessRule = new FileSystemAccessRule(Users, Rights,
                                             InheritanceFlags.None,
                                             PropagationFlags.NoPropagateInherit,
                                             AccessControlType.Allow);
 
-                var Info = new DirectoryInfo(path);
-                var Security = Info.GetAccessControl(AccessControlSections.Access);
+                DirectoryInfo Info = new DirectoryInfo(path);
+                DirectorySecurity Security = Info.GetAccessControl(AccessControlSections.Access);
 
                 Security.ModifyAccessRule(AccessControlModification.Set, AccessRule, out bool Result);
 
@@ -97,7 +97,7 @@ namespace OpenALPRPlugin.Utility
                     return false;
 
                 // *** Always allow objects to inherit on a directory
-                var iFlags = InheritanceFlags.ObjectInherit;
+                InheritanceFlags iFlags = InheritanceFlags.ObjectInherit;
                 iFlags = InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit;
 
                 // *** Add Access rule for the inheritance
@@ -143,7 +143,7 @@ namespace OpenALPRPlugin.Utility
             {
                 if (typeof(T) == typeof(Guid))
                 {
-                    var guid = new Guid(value);
+                    Guid guid = new Guid(value);
                     return (T)Convert.ChangeType(guid, typeof(T), CultureInfo.InvariantCulture);
                 }
 

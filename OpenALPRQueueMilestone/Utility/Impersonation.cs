@@ -75,8 +75,8 @@ namespace OpenALPRQueueConsumer.Utility
                     break;
             }
 
-            var userToken = IntPtr.Zero;
-            var userTokenDuplication = IntPtr.Zero;
+            IntPtr userToken = IntPtr.Zero;
+            IntPtr userTokenDuplication = IntPtr.Zero;
 
             // Logon with user and get token.
             bool loggedOn = NativeMethod.LogonUser(username, domain, password, logonType, LogonProvider.Default, out userToken);
@@ -89,7 +89,7 @@ namespace OpenALPRQueueConsumer.Utility
                     if (NativeMethod.DuplicateToken(userToken, 2, ref userTokenDuplication))
                     {
                         // Create windows identity from the token and impersonate the user.
-                        var identity = new WindowsIdentity(userTokenDuplication);
+                        WindowsIdentity identity = new WindowsIdentity(userTokenDuplication);
                         _impersonationContext = identity.Impersonate();
                     }
                     //else

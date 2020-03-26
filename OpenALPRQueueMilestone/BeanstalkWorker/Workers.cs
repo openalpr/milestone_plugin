@@ -47,7 +47,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
         public void DoWork()
         {
-            var openALPRServerUrl = Helper.ReadConfigKey("OpenALPRServerUrl");
+            string openALPRServerUrl = Helper.ReadConfigKey("OpenALPRServerUrl");
             if (string.IsNullOrEmpty(openALPRServerUrl))
                 openALPRServerUrl = "http://localhost:48125/";
 
@@ -85,13 +85,15 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         break;
                 }
 
-                var request = context.Request;
+                HttpListenerRequest request = context.Request;
                 string json;
 
-                using (var receiveStream = request.InputStream)
-                using (var readStream = new StreamReader(receiveStream, Encoding.UTF8))
+                using (Stream receiveStream = request.InputStream)
                 {
-                    json = readStream.ReadToEnd();
+                    using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
+                    {
+                        json = readStream.ReadToEnd();
+                    }
                 }
 
                 if (json != null)
@@ -114,7 +116,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         {
             if (File.Exists(filePath))
             {
-                var json = File.ReadAllText(filePath);
+                string json = File.ReadAllText(filePath);
                 if (!string.IsNullOrEmpty(json))
                     return ProcessJob(json);
                 else
@@ -127,7 +129,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         private bool ProcessJob(string json)
         {
             bool done = true;
-            var palteInfo = JsonHelper.ToClass<OpenALPRData>(json);
+            OpenALPRData palteInfo = JsonHelper.ToClass<OpenALPRData>(json);
 
             if (palteInfo != null)
             {
@@ -150,7 +152,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         break;
 
                     case "heartbeat":
-                        var heartbeats = JsonHelper.ToClass<Heartbeats>(json);
+                        Heartbeats heartbeats = JsonHelper.ToClass<Heartbeats>(json);
                         try
                         {
                             done = ProcessAlprHeartbeat(heartbeats);
@@ -175,12 +177,12 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         {
             if (palteInfo != null)
             {
-                var candidates = palteInfo.Candidates.GroupBy(candidate => candidate.Plate)
+                List<string> candidates = palteInfo.Candidates.GroupBy(candidate => candidate.Plate)
                    .Select(grp => grp.First())
                    .Select(p => p.Plate)
                    .ToList();
 
-                var bestPlateInfo = new PlateInfo
+                PlateInfo bestPlateInfo = new PlateInfo
                 {
                     DataType = palteInfo.Data_type,
                     CameraId = palteInfo.Camera_id,
@@ -196,28 +198,28 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 {
                     if (palteInfo.Vehicle.Make != null)
                     {
-                        var make = palteInfo.Vehicle.Make.OrderByDescending(m => m.Confidence).FirstOrDefault();
+                        Make make = palteInfo.Vehicle.Make.OrderByDescending(m => m.Confidence).FirstOrDefault();
                         if (make != null)
                             bestPlateInfo.Make = make.Name;
                     }
 
                     if (palteInfo.Vehicle.Body_type != null)
                     {
-                        var body_type = palteInfo.Vehicle.Body_type.OrderByDescending(m => m.Confidence).FirstOrDefault();
+                        BodyType body_type = palteInfo.Vehicle.Body_type.OrderByDescending(m => m.Confidence).FirstOrDefault();
                         if (body_type != null)
                             bestPlateInfo.BodyType = body_type.Name;
                     }
 
                     if (palteInfo.Vehicle.Make_model != null)
                     {
-                        var makeModel = palteInfo.Vehicle.Make_model.OrderByDescending(m => m.Confidence).FirstOrDefault();
+                        MakeModel makeModel = palteInfo.Vehicle.Make_model.OrderByDescending(m => m.Confidence).FirstOrDefault();
                         if (makeModel != null)
                             bestPlateInfo.MakeModel = makeModel.Name;
                     }
 
                     if (palteInfo.Vehicle.Color != null)
                     {
-                        var color = palteInfo.Vehicle.Color.OrderBy(c => c.Confidence).FirstOrDefault();
+                        Color color = palteInfo.Vehicle.Color.OrderBy(c => c.Confidence).FirstOrDefault();
                         if (color != null)
                             bestPlateInfo.Color = color.Name;
                     }
@@ -228,7 +230,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 if (!string.IsNullOrEmpty(palteInfo.Best_plate_number) && palteInfo.Camera_id != 0)
                 {
                     FQID bookmarkFQID = null;
-                    var cameras = GetCameraFromMapping(bestPlateInfo.CameraId.ToString());
+                    IList<OpenALPRmilestoneCameraName> cameras = GetCameraFromMapping(bestPlateInfo.CameraId.ToString());
 
                     if (AddBookmarks)
                         bookmarkFQID = AddNewBookmark(bestPlateInfo, cameras);
@@ -250,7 +252,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 if (!string.IsNullOrEmpty(palteInfo.Best_plate_number) && palteInfo.Camera_id != 0)
                 {
                     FQID bookmarkFQID = null;
-                    var cameras = GetCameraFromMapping(palteInfo.Camera_id.ToString());
+                    IList<OpenALPRmilestoneCameraName> cameras = GetCameraFromMapping(palteInfo.Camera_id.ToString());
 
                     if (AddBookmarks)
                         bookmarkFQID = AddNewBookmark_New(palteInfo, cameras);
@@ -268,7 +270,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
         private IList<OpenALPRmilestoneCameraName> GetCameraFromMapping(string cameraId)
         {
-            var temp = CameraMapper.GetLastWriteTime();
+            DateTime temp = CameraMapper.GetLastWriteTime();
             if (temp != lastMappingUpdateTime)
             {
                 CameraMapper.LoadCameraList(cameraList);
@@ -276,7 +278,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 Program.Log.Info("Reload camera mapping list");
             }
 
-            var cameras = cameraList.Where(c => c.MilestoneName == cameraId).ToList();
+            List<OpenALPRmilestoneCameraName> cameras = cameraList.Where(c => c.MilestoneName == cameraId).ToList();
             if (cameras.Count == 0)
                 Program.Log.Warn($"{cameraId} not found in the local camera list");
 
@@ -290,32 +292,32 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             {
                 for (int i = 0; i < heartbeats.Video_streams.Count; i++)
                 {
-                    var videoStream = heartbeats.Video_streams[i];
+                    VideoStream videoStream = heartbeats.Video_streams[i];
                     if (videoStream != null)
                     {
-                        var kv = new KeyValuePair<string, string>(videoStream.Camera_id.ToString(), videoStream.Camera_name);
+                        KeyValuePair<string, string> kv = new KeyValuePair<string, string>(videoStream.Camera_id.ToString(), videoStream.Camera_name);
                         if (!openALPRList.Contains(kv))
                         {
                             openALPRList.Add(kv);
                             OpenALPRLNameHelper.SaveCameraNameList(openALPRList);
                         }
 
-                        var cameraId = videoStream.Camera_id;
+                        long cameraId = videoStream.Camera_id;
                         if (!string.IsNullOrEmpty(videoStream.Url) && AutoMapping) ////rtsp://mhill:cosmos@192.168.0.152/onvif-media / media.amp ? profile = balanced_h264 & sessiontimeout = 60 & streamtype = unicast
                         {
-                            var match = Regex.Match(videoStream.Url, @"\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b");
+                            Match match = Regex.Match(videoStream.Url, @"\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b");
                             if (match.Success)
                             {
                                 // 1st case (No Camera_id found): AXIS M1054 Network Camera (192.168.0.36) - Camera 1|TestCamera|
-                                var exists = cameraList.Any(m => m.OpenALPRId == videoStream.Camera_id.ToString());
+                                bool exists = cameraList.Any(m => m.OpenALPRId == videoStream.Camera_id.ToString());
 
                                 if (!exists)
                                 {
                                     exists = cameraList.Any(m => m.OpenALPRname == videoStream.Camera_name);
                                     if (exists)
                                     {
-                                        var cameras = cameraList.Where(m => m.OpenALPRname == videoStream.Camera_name);
-                                        foreach (var camera in cameras)
+                                        IEnumerable<OpenALPRmilestoneCameraName> cameras = cameraList.Where(m => m.OpenALPRname == videoStream.Camera_name);
+                                        foreach (OpenALPRmilestoneCameraName camera in cameras)
                                         {
                                             camera.OpenALPRId = videoStream.Camera_id.ToString();
                                         }
@@ -327,14 +329,14 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                                 // 2nd case (No Camera_id No Camera_Name found): AXIS M1054 Network Camera (192.168.0.36) - Camera 1
                                 if (!exists)
                                 {
-                                    var milestoneCamera = MilestoneServer.GetCameraItem(match.Captures[0].Value);
+                                    Item milestoneCamera = MilestoneServer.GetCameraItem(match.Captures[0].Value);
                                     if (milestoneCamera != null)
                                     {
                                         exists = cameraList.Any(m => m.MilestoneName == milestoneCamera.Name);
                                         if (exists)
                                         {
-                                            var cameras = cameraList.Where(m => m.MilestoneName == milestoneCamera.Name);
-                                            foreach (var camera in cameras)
+                                            IEnumerable<OpenALPRmilestoneCameraName> cameras = cameraList.Where(m => m.MilestoneName == milestoneCamera.Name);
+                                            foreach (OpenALPRmilestoneCameraName camera in cameras)
                                             {
                                                 camera.OpenALPRId = videoStream.Camera_id.ToString();
                                                 camera.OpenALPRname = videoStream.Camera_name;
@@ -343,7 +345,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                                         }
                                         else
                                         {
-                                            var camera = new OpenALPRmilestoneCameraName
+                                            OpenALPRmilestoneCameraName camera = new OpenALPRmilestoneCameraName
                                             {
                                                 MilestoneName = milestoneCamera.Name,
                                                 OpenALPRId = videoStream.Camera_id.ToString(),
@@ -380,11 +382,11 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         {
             Bookmark bookmark = null;
 
-            foreach (var camera in cameras)
+            foreach (OpenALPRmilestoneCameraName camera in cameras)
             {
                 try
                 {
-                    var fqid = MilestoneServer.GetCameraByName(camera.MilestoneName);
+                    FQID fqid = MilestoneServer.GetCameraByName(camera.MilestoneName);
 
                     if (fqid == null)
                     {
@@ -422,7 +424,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             Bookmark bookmark = null;
             VideoOS.Platform.SDK.Environment.Initialize();
 
-            foreach (var camera in cameras)
+            foreach (OpenALPRmilestoneCameraName camera in cameras)
             {
                 try
                 {
@@ -503,9 +505,9 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
         private void SendAlarm(PlateInfo plateInfo, string milestoneCameraName, FQID bookmarkFQID)//, string plateFromAlertList, string descFromAlertList)
         {
-            var fqid = MilestoneServer.GetCameraByName(milestoneCameraName);
+            FQID fqid = MilestoneServer.GetCameraByName(milestoneCameraName);
 
-            var temp = AlertListHelper.GetLastWriteTime();
+            DateTime temp = AlertListHelper.GetLastWriteTime();
             if (temp != lastAlertUpdateTime)
             {
                 AlertListHelper.LoadAlertList(dicBlack);
@@ -513,9 +515,9 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 Program.Log.Info("Reload Alert list");
             }
 
-            var plateFromAlertList = plateInfo.BestPlateNumber;
+            string plateFromAlertList = plateInfo.BestPlateNumber;
 
-            var existsInAlertList = dicBlack.ContainsKey(plateInfo.BestPlateNumber);
+            bool existsInAlertList = dicBlack.ContainsKey(plateInfo.BestPlateNumber);
             if (!existsInAlertList)
             {
                 Program.Log.Info($"{plateFromAlertList} not listed in the alert list.");
@@ -535,19 +537,19 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
             if (existsInAlertList)
             {
-                var descFromAlertList = dicBlack[plateFromAlertList];
+                string descFromAlertList = dicBlack[plateFromAlertList];
 
                 Program.Log.Info($"Sending an alert for {plateInfo.BestPlateNumber}");
 
-                var cameraName = MilestoneServer.GetCameraName(fqid.ObjectId);
+                string cameraName = MilestoneServer.GetCameraName(fqid.ObjectId);
 
-                var eventSource = new EventSource()
+                EventSource eventSource = new EventSource()
                 {
                     FQID = fqid,
                     Name = cameraName
                 };
 
-                var eventHeader = new EventHeader()
+                EventHeader eventHeader = new EventHeader()
                 {
                     ID = Guid.NewGuid(),
                     Class = "Analytics",
@@ -564,7 +566,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     Version = null
                 };
 
-                var alarm = new Alarm()
+                Alarm alarm = new Alarm()
                 {
                     EventHeader = eventHeader,
                     StateName = "In progress",
@@ -580,7 +582,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
                 try
                 {
-                    using (var impersonation = new Impersonation(BuiltinUser.NetworkService))
+                    using (Impersonation impersonation = new Impersonation(BuiltinUser.NetworkService))
                         EnvironmentManager.Instance.SendMessage(new Message(MessageId.Server.NewAlarmCommand) { Data = alarm });
                 }
                 catch (Exception ex)
@@ -592,9 +594,9 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
         private void SendAlarm_New(OpenALPRData plateInfo, string milestoneCameraName, FQID bookmarkFQID)//, string plateFromAlertList, string descFromAlertList)
         {
-            var fqid = MilestoneServer.GetCameraByName(milestoneCameraName);
+            FQID fqid = MilestoneServer.GetCameraByName(milestoneCameraName);
 
-            var temp = AlertListHelper.GetLastWriteTime();
+            DateTime temp = AlertListHelper.GetLastWriteTime();
             if (temp != lastAlertUpdateTime)
             {
                 AlertListHelper.LoadAlertList(dicBlack);
@@ -602,9 +604,9 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 Program.Log.Info("Reload Alert list");
             }
 
-            var plateFromAlertList = plateInfo.Best_plate_number;
+            string plateFromAlertList = plateInfo.Best_plate_number;
 
-            var existsInAlertList = dicBlack.ContainsKey(plateInfo.Best_plate_number);
+            bool existsInAlertList = dicBlack.ContainsKey(plateInfo.Best_plate_number);
             if (!existsInAlertList)
             {
                 Program.Log.Info($"{plateFromAlertList} not listed in the alert list.");
@@ -623,13 +625,13 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
             if (existsInAlertList)
             {
-                var descFromAlertList = dicBlack[plateFromAlertList];
+                string descFromAlertList = dicBlack[plateFromAlertList];
 
                 Program.Log.Info($"Sending an alert for {plateInfo.Best_plate_number}");
 
-                var cameraName = MilestoneServer.GetCameraName(fqid.ObjectId);
+                string cameraName = MilestoneServer.GetCameraName(fqid.ObjectId);
 
-                var eventSource = new EventSource()
+                EventSource eventSource = new EventSource()
                 {
                     FQID = fqid,
                     Name = cameraName,
@@ -637,7 +639,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     //ExtensionData = 
                 };
 
-                var eventHeader = new EventHeader()
+                EventHeader eventHeader = new EventHeader()
                 {
                     //The unique ID of the event.
                     ID = Guid.NewGuid(),
@@ -681,7 +683,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     Version = null
                 };
 
-                var alarm = new Alarm()
+                Alarm alarm = new Alarm()
                 {
                     //The EventHeader, containing information common for all Milestone events.
                     EventHeader = eventHeader,
@@ -739,7 +741,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 // Send the Alarm directly to the EventServer, to store in the Alarm database. No rule is being activated.
                 try
                 {
-                    using (var impersonation = new Impersonation(BuiltinUser.NetworkService))
+                    using (Impersonation impersonation = new Impersonation(BuiltinUser.NetworkService))
                         EnvironmentManager.Instance.SendMessage(new Message(MessageId.Server.NewAlarmCommand) { Data = alarm });
                 }
                 catch (Exception ex)

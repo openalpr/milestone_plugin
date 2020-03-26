@@ -30,7 +30,7 @@ namespace OpenALPRPlugin.Background
             Logger.Log.Info($"Init {nameof(OpenALPRBackgroundPlugin)}");
 
             LogSystemInfo();
-            var versionString = EnvironmentManager.Instance.EnvironmentProduct;//Milestone XProtect Smart Client9.0c
+            string versionString = EnvironmentManager.Instance.EnvironmentProduct;//Milestone XProtect Smart Client9.0c
             versionString = versionString.Replace("Milestone XProtect Smart Client", string.Empty);
             versionString = versionString.Substring(0, versionString.Length - 1);
             float.TryParse(versionString, out float version);
@@ -67,7 +67,7 @@ namespace OpenALPRPlugin.Background
         {
             try
             {
-                var service = new ServiceController("OpenALPRMilestone");
+                ServiceController service = new ServiceController("OpenALPRMilestone");
 
                 if (service != null)
                 {
@@ -90,7 +90,7 @@ namespace OpenALPRPlugin.Background
 
         private void FindCamerasCount()
         {
-            var cameraItems = new List<Item>();
+            List<Item> cameraItems = new List<Item>();
             FindAllCameras(Configuration.Instance.GetItemsByKind(Kind.Camera), cameraItems);
             CamerasCount = cameraItems.Count;
         }
@@ -99,7 +99,7 @@ namespace OpenALPRPlugin.Background
         {
             for (int i = 0; i < searchItems.Count; i++)
             {
-                var searchItem = searchItems[i];
+                Item searchItem = searchItems[i];
                 if (searchItem.FQID.Kind == Kind.Camera && searchItem.FQID.FolderType == FolderType.No)
                 {
                     bool cameraAlreadyFound = false;

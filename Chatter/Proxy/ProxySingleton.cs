@@ -45,7 +45,7 @@ namespace OpenALPRQueueConsumer.Chatter.Proxy
 
         private void Receive(User sender, Message message, CallBackType callbackType)
         {
-            var e = new ProxyCallBackEventArgs
+            ProxyCallBackEventArgs e = new ProxyCallBackEventArgs
             {
                 ProxyMessage = message,
                 ProxyCallbackType = callbackType,
@@ -70,7 +70,7 @@ namespace OpenALPRQueueConsumer.Chatter.Proxy
             if (user.Name == User.AutoExporterServiceName)
                 IsConnected = false;
 
-            var e = new ProxyCallBackEventArgs
+            ProxyCallBackEventArgs e = new ProxyCallBackEventArgs
             {
                 ProxyUser = user,
                 ProxyCallbackType = callbackType
@@ -83,19 +83,19 @@ namespace OpenALPRQueueConsumer.Chatter.Proxy
 
         public void Connect(User p)
         {
-            var OptionalReliableSession = new OptionalReliableSession
+            OptionalReliableSession OptionalReliableSession = new OptionalReliableSession
             {
                 Enabled = true,
                 InactivityTimeout = TimeSpan.MaxValue,
                 Ordered = true
             };
 
-            var netTcpSecurity = new NetTcpSecurity
+            NetTcpSecurity netTcpSecurity = new NetTcpSecurity
             {
                 Mode = SecurityMode.None
             };
 
-            var readerQuotas = new XmlDictionaryReaderQuotas
+            XmlDictionaryReaderQuotas readerQuotas = new XmlDictionaryReaderQuotas
             {
                 MaxDepth = 32 * 2,
                 MaxStringContentLength = 8192 * 2,
@@ -104,7 +104,7 @@ namespace OpenALPRQueueConsumer.Chatter.Proxy
                 MaxNameTableCharCount = 16384 * 2
             };
 
-            var netTcpBinding = new NetTcpBinding
+            NetTcpBinding netTcpBinding = new NetTcpBinding
             {
                 Name = "DuplexBinding",
                 ReceiveTimeout = TimeSpan.FromMinutes (10 * 2),
@@ -126,7 +126,7 @@ namespace OpenALPRQueueConsumer.Chatter.Proxy
                 Namespace = "http://tempuri.org/"
             };
 
-            var site = new InstanceContext(this);
+            InstanceContext site = new InstanceContext(this);
 
             proxy = new ChatProxy(site, netTcpBinding, new EndpointAddress(Uri));
             IAsyncResult iar = proxy.BeginJoin(p, new AsyncCallback(OnEndJoin), null);
@@ -163,7 +163,7 @@ namespace OpenALPRQueueConsumer.Chatter.Proxy
                 ExitChatSession();
             else
             {
-                var e = new ProxyEventArgs { list = list };
+                ProxyEventArgs e = new ProxyEventArgs { list = list };
                 OnProxyEvent(e);
             }
         }

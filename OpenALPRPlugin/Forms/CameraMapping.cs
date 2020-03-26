@@ -25,7 +25,7 @@ namespace OpenALPRPlugin.Forms
 
         private void CameraMapping_Load(object sender, EventArgs e)
         {
-            var namesList = new List<KeyValuePair<string, string>>();
+            List<KeyValuePair<string, string>> namesList = new List<KeyValuePair<string, string>>();
             OpenALPRLNameHelper.FillCameraNameList(namesList);
 
             if (namesList.Count != 0)
@@ -34,21 +34,21 @@ namespace OpenALPRPlugin.Forms
                 namesList.Insert(0, new KeyValuePair<string, string>("-1", "No ALPR mapping"));
             }
 
-            var cameraItems = new List<Item>();
+            List<Item> cameraItems = new List<Item>();
             OpenALPRBackgroundPlugin.FindAllCameras(Configuration.Instance.GetItemsByKind(Kind.Camera), cameraItems);
             for (int i = 0; i < cameraItems.Count; i++)
             {
-                var cameraPairControl = new CameraPairControl();
+                CameraPairControl cameraPairControl = new CameraPairControl();
 
                 cameraPairControl.cboName.DataSource = new BindingSource(namesList, null);
                 cameraPairControl.cboName.DisplayMember = "Value";
                 cameraPairControl.cboName.ValueMember = "Key";
 
                 cameraPairControl.TxtMilestoneCameraName.Text = cameraItems[i].Name;
-                var mapping = CameraList.FirstOrDefault(m => m.MilestoneName == cameraItems[i].Name);
+                OpenALPRmilestoneCameraName mapping = CameraList.FirstOrDefault(m => m.MilestoneName == cameraItems[i].Name);
                 if (mapping != null)
                 {
-                    var index = namesList.FindIndex(a => a.Key == mapping.OpenALPRId);
+                    int index = namesList.FindIndex(a => a.Key == mapping.OpenALPRId);
                     if (index > -1)
                         cameraPairControl.cboName.SelectedIndex = index;
                 }
@@ -66,10 +66,10 @@ namespace OpenALPRPlugin.Forms
         {
             for (int i = 0; i < flowLayoutPanel1.Controls.Count; i++)
             {
-                var cameraPairControl = flowLayoutPanel1.Controls[i] as CameraPairControl;
+                CameraPairControl cameraPairControl = flowLayoutPanel1.Controls[i] as CameraPairControl;
                 if (cameraPairControl != null)
                 {
-                    var currentMilestoneCameraName = cameraPairControl.TxtMilestoneCameraName.Text;
+                    string currentMilestoneCameraName = cameraPairControl.TxtMilestoneCameraName.Text;
 
                     string currentALPRCameraId = string.Empty;
                     string currentALPRCameraName = string.Empty;
@@ -85,7 +85,7 @@ namespace OpenALPRPlugin.Forms
 
                     if (!string.IsNullOrEmpty(currentMilestoneCameraName))
                     {
-                        var mapping = CameraList.FirstOrDefault(m => m.MilestoneName == currentMilestoneCameraName);
+                        OpenALPRmilestoneCameraName mapping = CameraList.FirstOrDefault(m => m.MilestoneName == currentMilestoneCameraName);
                         if (mapping == null)
                             CameraList.Add(new OpenALPRmilestoneCameraName { MilestoneName = currentMilestoneCameraName, OpenALPRname = currentALPRCameraName, OpenALPRId = currentALPRCameraId });
                         else

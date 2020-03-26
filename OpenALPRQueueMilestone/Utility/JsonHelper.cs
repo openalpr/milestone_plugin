@@ -20,7 +20,7 @@ namespace OpenALPRQueueConsumer.Utility
 
         public static T ToClass<T>(string data, JsonSerializerSettings jsonSettings = null)
         {
-            var response = default(T);
+            T response = default(T);
 
             if (!string.IsNullOrEmpty(data))
                 response = jsonSettings == null

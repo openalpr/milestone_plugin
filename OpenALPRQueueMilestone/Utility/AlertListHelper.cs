@@ -13,10 +13,10 @@ namespace OpenALPRQueueConsumer.Utility
         {
             try
             {
-                var path = GetFilePath();
+                string path = GetFilePath();
 
-                var lastWriteTime = File.GetLastWriteTime(path);
-                var creationTime = File.GetCreationTime(path);
+                DateTime lastWriteTime = File.GetLastWriteTime(path);
+                DateTime creationTime = File.GetCreationTime(path);
 
                 if (lastWriteTime > creationTime)
                     return lastWriteTime;
@@ -35,7 +35,7 @@ namespace OpenALPRQueueConsumer.Utility
 
         public static void LoadAlertList(IDictionary<string, string> dicBlack)
         {
-            var path = GetFilePath();
+            string path = GetFilePath();
 
             for (int i = 0; i < 5; i++)
             {
@@ -64,20 +64,20 @@ namespace OpenALPRQueueConsumer.Utility
             {
                 dicBlack.Clear();
 
-                var lines = File.ReadAllLines(blackFilePath);
+                string[] lines = File.ReadAllLines(blackFilePath);
                 if (lines != null && lines.Length != 0)
                 {
                     for (int i = 0; i < lines.Length; i++)
                     {
-                        var line = lines[i];
+                        string line = lines[i];
                         if (line != null)
                             line = line.Trim();
 
                         if (!string.IsNullOrEmpty(line) && !line.StartsWith("#") && !line.StartsWith("Plate Number"))
                         {
-                            var key = string.Empty;
+                            string key = string.Empty;
 
-                            var values = line.Split(new char[] { ',' });
+                            string[] values = line.Split(new char[] { ',' });
                             if (values.Length != 0)
                                 key = values[0].Trim();
 
@@ -94,7 +94,7 @@ namespace OpenALPRQueueConsumer.Utility
 
                             if (key.Length != 0 && !dicBlack.ContainsKey(key))
                             {
-                                var value = string.Empty;
+                                string value = string.Empty;
 
                                 if (values.Length > 1)
                                     value = values[1].Trim();
@@ -115,7 +115,7 @@ namespace OpenALPRQueueConsumer.Utility
         {
             const string PlugName = "OpenALPR";
 
-            var mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Mapping");
+            string mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Mapping");
 
             if (!Directory.Exists(mappingPath))
             {

@@ -23,7 +23,7 @@ namespace SystemTrayApp
         {
             get
             {
-                var statusFlags = new List<KeyValuePair<string, string>>();
+                List<KeyValuePair<string, string>> statusFlags = new List<KeyValuePair<string, string>>();
                 statusFlags.Add(new KeyValuePair<string, string>("Milestone XProtect Recording Server ", WindowsService.GetServiceStatus("Milestone XProtect Recording Server").ToString()));
                 statusFlags.Add(new KeyValuePair<string, string>("Milestone XProtect Management Server ", WindowsService.GetServiceStatus("Milestone XProtect Management Server").ToString()));
                 statusFlags.Add(new KeyValuePair<string, string>("Milestone Event Server Service ", WindowsService.GetServiceStatus("MilestoneEventServerService").ToString()));

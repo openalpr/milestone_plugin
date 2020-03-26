@@ -53,7 +53,7 @@ namespace OpenALPRPlugin
         /// </summary>
         static OpenALPRPluginDefinition()
         {
-            var assembly = Assembly.GetExecutingAssembly();
+            Assembly assembly = Assembly.GetExecutingAssembly();
             string name = assembly.GetName().Name;
             Logger.Initialize(name);
 
@@ -63,18 +63,18 @@ namespace OpenALPRPlugin
                 fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
 #else
             
-            var path = @"C:\Program Files\VideoOS\MIPPlugins\OpenALPR\OpenALPRPlugin.dll";
+            string path = @"C:\Program Files\VideoOS\MIPPlugins\OpenALPR\OpenALPRPlugin.dll";
 
             fileVersion = File.Exists(path) ?
                 FileVersionInfo.GetVersionInfo(path) :
                 FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule.FileName);
 #endif
 
-            var pluginStream = assembly.GetManifestResourceStream($"{name}.Resources.logo_bluegray.png");//OpenALPRPlugin
+            Stream pluginStream = assembly.GetManifestResourceStream($"{name}.Resources.logo_bluegray.png");//OpenALPRPlugin
             if (pluginStream != null)
                 _treeNodeImage = Image.FromStream(pluginStream);
 
-            var configStream = assembly.GetManifestResourceStream($"{name}.Server.png");
+            Stream configStream = assembly.GetManifestResourceStream($"{name}.Server.png");
             if (configStream != null)
                 _topTreeNodeImage = Image.FromStream(configStream);
         }

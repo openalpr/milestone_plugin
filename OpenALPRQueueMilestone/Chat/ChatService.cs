@@ -83,7 +83,7 @@ namespace OpenALPRQueueConsumer.Chat
             if (userAdded)
             {
                 callback = OperationContext.Current.GetCallbackChannel<IChatCallback>();
-                var e = new ChatEventArgs()
+                ChatEventArgs e = new ChatEventArgs()
                 {
                     CallbackType = CallBackType.UserEnter,
                     User = user
@@ -106,7 +106,7 @@ namespace OpenALPRQueueConsumer.Chat
 
         public void Say(Message msg)
         {
-            var e = new ChatEventArgs
+            ChatEventArgs e = new ChatEventArgs
             {
                 CallbackType = CallBackType.Receive,
                 User = user,
@@ -118,7 +118,7 @@ namespace OpenALPRQueueConsumer.Chat
 
         public void Whisper(string to, Message msg)
         {
-            var e = new ChatEventArgs
+            ChatEventArgs e = new ChatEventArgs
             {
                 CallbackType = CallBackType.ReceiveWhisper,
                 User = user,
@@ -167,7 +167,7 @@ namespace OpenALPRQueueConsumer.Chat
             if(chatterToRemove != null)
                 ChatEvent -= chatterToRemove;
 
-            var e = new ChatEventArgs
+            ChatEventArgs e = new ChatEventArgs
             {
                 CallbackType = CallBackType.UserLeave,
                 User = user
@@ -240,7 +240,7 @@ namespace OpenALPRQueueConsumer.Chat
             {
                 //get the standard System.Runtime.Remoting.Messaging.AsyncResult,and then
                 //cast it to the correct delegate type, and do an end invoke
-                var asres = ar as AsyncResult;
+                AsyncResult asres = ar as AsyncResult;
                 d = asres.AsyncDelegate as EventHandler<ChatEventArgs>;
                 d.EndInvoke(ar);
                 if(asres.CompletedSynchronously )

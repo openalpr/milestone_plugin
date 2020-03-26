@@ -115,7 +115,7 @@ namespace SystemTrayApp.Chat
 
         private void AddNewUser(User user)
         {
-            var reciver = users.SingleOrDefault(u => u.Name.ToUpperInvariant() == user.Name.ToUpperInvariant());
+            User reciver = users.SingleOrDefault(u => u.Name.ToUpperInvariant() == user.Name.ToUpperInvariant());
             if (reciver == null)
                 users.Add(user);
 
@@ -124,7 +124,7 @@ namespace SystemTrayApp.Chat
 
         private void RemoveUser(User user)
         {
-            var reciver = users.SingleOrDefault(u => u.Name.ToUpperInvariant() == user.Name.ToUpperInvariant());
+            User reciver = users.SingleOrDefault(u => u.Name.ToUpperInvariant() == user.Name.ToUpperInvariant());
             if (reciver != null)
                 users.Remove(user);
 

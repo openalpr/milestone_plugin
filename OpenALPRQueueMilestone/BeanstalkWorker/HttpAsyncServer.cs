@@ -23,7 +23,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         private void Work()
         {
             listener = new HttpListener();
-            foreach (var prefix in listenedAddresses)
+            foreach (string prefix in listenedAddresses)
                 listener.Prefixes.Add(prefix);
 
             listener.Start();
@@ -32,7 +32,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             {
                 try
                 {
-                    var context = listener.GetContext();
+                    HttpListenerContext context = listener.GetContext();
                     string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
                     byte[] buffer = Encoding.UTF8.GetBytes(responseString);
 

@@ -53,7 +53,7 @@ namespace OpenALPRQueueConsumer.Milestone
         // Create the OnPropertyChanged method to raise the event
         protected static void OnPropertyChanged(string name)
         {
-            using (var impersonation = new Impersonation(BuiltinUser.NetworkService))
+            using (Impersonation impersonation = new Impersonation(BuiltinUser.NetworkService))
             {
                 Logout();
                 LoginUsingCurrentCredentials(ServerName, milestoneUserName, milestonePassword);
@@ -64,7 +64,7 @@ namespace OpenALPRQueueConsumer.Milestone
         {
             try
             {
-                var firstTimeMessage = true;
+                bool firstTimeMessage = true;
                 while (!connectedToMilestone && !ServiceStarter.IsClosing)
                 {
                     PrepareToLogin(serverName, userName, password);
@@ -95,7 +95,7 @@ namespace OpenALPRQueueConsumer.Milestone
 
             if (string.IsNullOrEmpty(ServerName))
             {
-                var msg = "Server address cannot be emnpty";
+                string msg = "Server address cannot be emnpty";
                 Program.Log.Warn(msg);
                 Console.WriteLine(msg);
                 return;
@@ -104,7 +104,7 @@ namespace OpenALPRQueueConsumer.Milestone
             Uri uri = null;
             CredentialCache cc = null;
             NetworkCredential nc = null;
-            var logged = false;
+            bool logged = false;
 
             if (!string.IsNullOrEmpty(milestoneUserName))
             {
@@ -177,7 +177,7 @@ namespace OpenALPRQueueConsumer.Milestone
                     scs.Credentials = nc;
 
                 connectedToMilestone = true;
-                var items = Configuration.Instance.GetItems();
+                List<Item> items = Configuration.Instance.GetItems();
                 EnumerateElementChildren(items, AllCameras);
                 ProductCode = EnvironmentManager.Instance.SystemLicense.ProductCode;
                 ServerId = Configuration.Instance.ServerFQID.ServerId.Id;
@@ -194,7 +194,7 @@ namespace OpenALPRQueueConsumer.Milestone
             {
                 scs.Url = $"{ServerName}ServerAPI/ServerCommandService.asmx";
                 MilestoneInfo();
-                var msg = $"Connected to Milestone server: {ServerName}";
+                string msg = $"Connected to Milestone server: {ServerName}";
                 Console.WriteLine(msg);
                 Program.Log.Info(msg);
             }
@@ -271,9 +271,9 @@ namespace OpenALPRQueueConsumer.Milestone
         internal static Item[] GetCameras(Guid[] objectsId)
         {
             IList<Item> list = new List<Item>(objectsId.Length);
-            foreach (var objectId in objectsId)
+            foreach (Guid objectId in objectsId)
             {
-                var item = AllCameras.FirstOrDefault(c => c.Key == objectId);
+                KeyValuePair<Guid, Item> item = AllCameras.FirstOrDefault(c => c.Key == objectId);
                 if (item.Key != Guid.Empty)
                     list.Add(item.Value);
             }
@@ -283,7 +283,7 @@ namespace OpenALPRQueueConsumer.Milestone
 
         internal static string GetCameraName(Guid objectId)
         {
-            var item = AllCameras.FirstOrDefault(c => c.Key == objectId);
+            KeyValuePair<Guid, Item> item = AllCameras.FirstOrDefault(c => c.Key == objectId);
             if (item.Key == objectId)
                 return item.Value.Name;
 
@@ -292,7 +292,7 @@ namespace OpenALPRQueueConsumer.Milestone
 
         internal static Item GetCameraItem(string ip)
         {
-            var item = AllCameras.FirstOrDefault(c => c.Value.Name.Contains(ip));
+            KeyValuePair<Guid, Item> item = AllCameras.FirstOrDefault(c => c.Value.Name.Contains(ip));
             if (item.Value != null)
                 return item.Value;
 
@@ -302,8 +302,8 @@ namespace OpenALPRQueueConsumer.Milestone
         internal static FQID GetCameraByName(string name)
         {
             IDictionary<Guid, Item> allCameras = AllCameras;
-            
-            var item = AllCameras.FirstOrDefault(c => c.Value.Name == name);
+
+            KeyValuePair<Guid, Item> item = AllCameras.FirstOrDefault(c => c.Value.Name == name);
             if (item.Value != null)
                 return item.Value.FQID;
 
@@ -312,7 +312,7 @@ namespace OpenALPRQueueConsumer.Milestone
 
         private static void EnumerateElementChildren(List<Item> items, IDictionary<Guid, Item> dicFoundConfigItems)
         {
-            foreach (var item in items ?? new List<Item>())
+            foreach (Item item in items ?? new List<Item>())
             {
                 if (item.FQID.Kind == Kind.Camera && item.FQID.FolderType == FolderType.No)
                 {

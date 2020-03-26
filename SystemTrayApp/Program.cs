@@ -23,7 +23,7 @@ namespace SystemTrayApp
         [STAThread]
         static void Main()
         {
-            var SystemTrayIconLogger = new Logging("SystemTrayApp");
+            Logging SystemTrayIconLogger = new Logging("SystemTrayApp");
             if (SystemTrayIconLogger != null)
                 Console.WriteLine($"Log: {SystemTrayIconLogger.LogPath}");
 
@@ -32,7 +32,7 @@ namespace SystemTrayApp
             // Use the assembly GUID as the name of the mutex which we use to detect if an application instance is already running
             bool createdNew = false;
             string mutexName = Assembly.GetExecutingAssembly().GetType().GUID.ToString();
-            using (var mutex = new Mutex(false, mutexName, out createdNew))
+            using (Mutex mutex = new Mutex(false, mutexName, out createdNew))
             {
                 if (!createdNew)
                 {
@@ -43,7 +43,7 @@ namespace SystemTrayApp
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                var applicationContext = new STAApplicationContext();
+                STAApplicationContext applicationContext = new STAApplicationContext();
                 try
                 {
                     Application.Run(applicationContext);
@@ -61,7 +61,7 @@ namespace SystemTrayApp
 
         private static void CreateFolders()
         {
-            var mainPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), CompanyName);
+            string mainPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), CompanyName);
 
             try
             {
@@ -93,7 +93,7 @@ namespace SystemTrayApp
 
             try
             {
-                var path = Path.Combine(mainPath, "Log");
+                string path = Path.Combine(mainPath, "Log");
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
@@ -107,7 +107,7 @@ namespace SystemTrayApp
 
             try
             {
-                var path = Path.Combine(mainPath, "Jobs");
+                string path = Path.Combine(mainPath, "Jobs");
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
@@ -133,12 +133,12 @@ namespace SystemTrayApp
             //Name: NT Authority
             //Description: Network Service
             const string sddlForm = "S-1-5-20";
-            var sid = string.Empty;
+            string sid = string.Empty;
 
             try
             {
-                var dirInfo = new DirectoryInfo(path);
-                var dirSecurity = dirInfo.GetAccessControl();
+                DirectoryInfo dirInfo = new DirectoryInfo(path);
+                DirectorySecurity dirSecurity = dirInfo.GetAccessControl();
                 foreach (AuthorizationRule r in dirSecurity.GetAccessRules(true, true, typeof(SecurityIdentifier)))
                 {
                     if (r.IdentityReference.ToString() == sddlForm)
@@ -150,9 +150,9 @@ namespace SystemTrayApp
 
                 if (sid.Length == 0)
                 {
-                    var networkService = new SecurityIdentifier(WellKnownSidType.NetworkServiceSid, null);
-                    var networkServiceIdentity = networkService.Translate(typeof(SecurityIdentifier));
-                    var accessRule = new FileSystemAccessRule(networkServiceIdentity,
+                    SecurityIdentifier networkService = new SecurityIdentifier(WellKnownSidType.NetworkServiceSid, null);
+                    IdentityReference networkServiceIdentity = networkService.Translate(typeof(SecurityIdentifier));
+                    FileSystemAccessRule accessRule = new FileSystemAccessRule(networkServiceIdentity,
                          fileSystemRights: FileSystemRights.FullControl,
                          inheritanceFlags: InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
                          propagationFlags: PropagationFlags.NoPropagateInherit,
@@ -179,16 +179,16 @@ namespace SystemTrayApp
 
             try
             {
-                var Rights = FileSystemRights.FullControl;
+                FileSystemRights Rights = FileSystemRights.FullControl;
 
                 // *** Add Access Rule to the actual directory itself
-                var AccessRule = new FileSystemAccessRule(Users, Rights,
+                FileSystemAccessRule AccessRule = new FileSystemAccessRule(Users, Rights,
                                             InheritanceFlags.None,
                                             PropagationFlags.NoPropagateInherit,
                                             AccessControlType.Allow);
 
-                var Info = new DirectoryInfo(path);
-                var Security = Info.GetAccessControl(AccessControlSections.Access);
+                DirectoryInfo Info = new DirectoryInfo(path);
+                DirectorySecurity Security = Info.GetAccessControl(AccessControlSections.Access);
 
                 Security.ModifyAccessRule(AccessControlModification.Set, AccessRule, out bool Result);
 
@@ -196,7 +196,7 @@ namespace SystemTrayApp
                     return false;
 
                 // *** Always allow objects to inherit on a directory
-                var iFlags = InheritanceFlags.ObjectInherit;
+                InheritanceFlags iFlags = InheritanceFlags.ObjectInherit;
                 iFlags = InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit;
 
                 // *** Add Access rule for the inheritance

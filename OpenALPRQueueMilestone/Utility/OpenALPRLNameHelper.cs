@@ -11,15 +11,15 @@ namespace OpenALPRQueueConsumer.Utility
     {
         public static void LoadCameraNameList(List<KeyValuePair<string, string>> list)
         {
-            var lines = GetCameraMapping();
+            string[] lines = GetCameraMapping();
             for (int i = 0; i < lines.Length; i++)
             {
-                var line = lines[i];
+                string line = lines[i];
                 if (!string.IsNullOrEmpty(line))
                 {
-                    var entries = line.Split(new char[] { '|' });
-                    var cameraId = string.Empty;
-                    var cameraName = string.Empty;
+                    string[] entries = line.Split(new char[] { '|' });
+                    string cameraId = string.Empty;
+                    string cameraName = string.Empty;
 
                     if (entries.Length != 0)
                         cameraId = entries[0].Trim();
@@ -37,10 +37,10 @@ namespace OpenALPRQueueConsumer.Utility
         {
             try
             {
-                var filePath = GetFilePath();
+                string filePath = GetFilePath();
                 if (!string.IsNullOrEmpty(filePath))
                 {
-                    using (var outputFile = new StreamWriter(filePath, false))
+                    using (StreamWriter outputFile = new StreamWriter(filePath, false))
                     {
                         for (int i = 0; i < list.Count; i++)
                         {
@@ -57,7 +57,7 @@ namespace OpenALPRQueueConsumer.Utility
 
         internal static string[] GetCameraMapping()
         {
-            var filePath = GetFilePath();
+            string filePath = GetFilePath();
             if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
             {
                 string[] cameras = File.ReadAllLines(filePath);
@@ -72,7 +72,7 @@ namespace OpenALPRQueueConsumer.Utility
         {
             const string PlugName = "OpenALPR";
 
-            var mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Mapping");
+            string mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Mapping");
 
             if (!Directory.Exists(mappingPath))
             {

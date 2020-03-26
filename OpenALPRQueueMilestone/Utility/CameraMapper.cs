@@ -15,11 +15,11 @@ namespace OpenALPRQueueConsumer.Utility
         {
             try
             {
-                var path = GetFilePath();
+                string path = GetFilePath();
                 if (File.Exists(path))
                 {
-                    var lastWriteTime = File.GetLastWriteTime(path);
-                    var creationTime = File.GetCreationTime(path);
+                    DateTime lastWriteTime = File.GetLastWriteTime(path);
+                    DateTime creationTime = File.GetCreationTime(path);
 
                     if (lastWriteTime > creationTime)
                         return lastWriteTime;
@@ -40,16 +40,16 @@ namespace OpenALPRQueueConsumer.Utility
         internal static void LoadCameraList(IList<OpenALPRmilestoneCameraName> cameraList)
         {
             cameraList.Clear();
-            var lines = GetCameraMapping();
+            string[] lines = GetCameraMapping();
             for (int i = 0; i < lines.Length; i++)
             {
-                var line = lines[i];
+                string line = lines[i];
                 if (!string.IsNullOrEmpty(line))
                 {
-                    var entry = line.Split(new char[] { '|' });
+                    string[] entry = line.Split(new char[] { '|' });
                     if (entry.Length != 0)
                     {
-                        var camera = new OpenALPRmilestoneCameraName { MilestoneName = entry[0] };
+                        OpenALPRmilestoneCameraName camera = new OpenALPRmilestoneCameraName { MilestoneName = entry[0] };
                         if (entry.Length > 1)
                             camera.OpenALPRname = entry[1];
 
@@ -64,7 +64,7 @@ namespace OpenALPRQueueConsumer.Utility
 
         internal static string[] GetCameraMapping()
         {
-            var filePath = GetFilePath();
+            string filePath = GetFilePath();
             if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
             {
                 string[] cameras = File.ReadAllLines(filePath);
@@ -79,10 +79,10 @@ namespace OpenALPRQueueConsumer.Utility
         {
             try
             {
-                var filePath = GetFilePath();
+                string filePath = GetFilePath();
                 if (!string.IsNullOrEmpty(filePath))
                 {
-                    using (var outputFile = new StreamWriter(filePath, false))
+                    using (StreamWriter outputFile = new StreamWriter(filePath, false))
                     {
                         for (int i = 0; i < cameraList.Count; i++)
                         {
@@ -101,7 +101,7 @@ namespace OpenALPRQueueConsumer.Utility
         {
             const string PlugName = "OpenALPR";
 
-            var mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Mapping");
+            string mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Mapping");
 
             if (!Directory.Exists(mappingPath))
             {

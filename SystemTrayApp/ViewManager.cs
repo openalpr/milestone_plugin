@@ -73,7 +73,7 @@ namespace SystemTrayApp
         {
             get
             {
-                var icon = serviceManager.Status == ServiceControllerStatus.Running ? Resources.shutter32x32BlueIcon : Resources.shutter32x32___GrayIcon;
+                Icon icon = serviceManager.Status == ServiceControllerStatus.Running ? Resources.shutter32x32BlueIcon : Resources.shutter32x32___GrayIcon;
                 return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, System.Windows.Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             }
         }
@@ -129,8 +129,8 @@ namespace SystemTrayApp
         {
             if ((statusViewModel != null) && (serviceManager != null))
             {
-                var flags = serviceManager.StatusFlags;
-                var statusItems = flags.Select(n => new KeyValuePair<string, string>(n.Key, n.Value.ToString())).ToList();
+                List<KeyValuePair<string, string>> flags = serviceManager.StatusFlags;
+                List<KeyValuePair<string, string>> statusItems = flags.Select(n => new KeyValuePair<string, string>(n.Key, n.Value.ToString())).ToList();
                 statusItems.Insert(0, new KeyValuePair<string, string>("OpenALPRMilestone Service ", serviceManager.Status.ToString()));
                 statusViewModel.SetStatusFlags(statusItems);
             }
@@ -196,7 +196,7 @@ namespace SystemTrayApp
 
         private ToolStripMenuItem ToolStripMenuItemWithHandler(string displayText, string tooltipText, Image image, EventHandler eventHandler)
         {
-            var item = new ToolStripMenuItem(displayText, image);
+            ToolStripMenuItem item = new ToolStripMenuItem(displayText, image);
             if (eventHandler != null)
                 item.Click += eventHandler;
 
@@ -260,7 +260,7 @@ namespace SystemTrayApp
 
             try
             {
-                var mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Mapping");
+                string mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Mapping");
 
                 if (!Directory.Exists(mappingPath))
                 {
@@ -268,11 +268,11 @@ namespace SystemTrayApp
                     Helper.SetDirectoryNetworkServiceAccessControl(mappingPath);
                 }
 
-                var filePath = Path.Combine(mappingPath, "AlertList.txt");
+                string filePath = Path.Combine(mappingPath, "AlertList.txt");
 
                 if (!File.Exists(filePath))
                 {
-                    using (var outputFile = new StreamWriter(filePath, false))
+                    using (StreamWriter outputFile = new StreamWriter(filePath, false))
                     {
                         outputFile.WriteLine("# Edit this file to add alerts.");
                         outputFile.WriteLine("# Each line represents one alert and a description separated by a comma.");
@@ -316,7 +316,7 @@ namespace SystemTrayApp
         private void ExitItem_Click(object sender, EventArgs e)
         {
             string msg = $"Are you sure you wish to exit ?";
-            var result = MessageBox.Show(msg, "OpenALPRMilestone", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+            DialogResult result = MessageBox.Show(msg, "OpenALPRMilestone", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
             if (result == DialogResult.Yes)
                 Application.Exit();
         }

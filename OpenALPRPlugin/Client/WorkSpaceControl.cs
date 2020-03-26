@@ -42,7 +42,7 @@ namespace OpenALPRPlugin.Client
             lsvBookmarks.BackColor = ClientControl.Instance.Theme.BackgroundColor;
             lsvBookmarks.ForeColor = ClientControl.Instance.Theme.TextColor;
 
-            var fullDateTimePattern = CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern;
+            string fullDateTimePattern = CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern;
 
             datStartTime.CustomFormat = fullDateTimePattern;
             datEndTime.CustomFormat = fullDateTimePattern;
@@ -55,10 +55,10 @@ namespace OpenALPRPlugin.Client
             if (OpenALPRBackgroundPlugin.Bookmarks != null)
                 AddToListView(OpenALPRBackgroundPlugin.Bookmarks);
 
-            var savedCameraId = Settings1.Default.usedFQID;
+            Guid savedCameraId = Settings1.Default.usedFQID;
             if (savedCameraId != Guid.Empty)
             {
-                var camera = Configuration.Instance.GetItem(EnvironmentManager.Instance.MasterSite.ServerId, savedCameraId, Kind.Camera);
+                Item camera = Configuration.Instance.GetItem(EnvironmentManager.Instance.MasterSite.ServerId, savedCameraId, Kind.Camera);
                 if (camera != null)
                 {
                     txtCameraName.Text = camera.Name;
@@ -109,7 +109,7 @@ namespace OpenALPRPlugin.Client
 
         private static MenuItem CreateMenuItem(string text, EventHandler eventHandler)
         {
-            var item = new MenuItem(text, eventHandler)
+            MenuItem item = new MenuItem(text, eventHandler)
             {
                 Name = text
             };
@@ -191,7 +191,7 @@ namespace OpenALPRPlugin.Client
             {
                 for (int i = cmBookmarks.MenuItems.Count - 1; i >= 0; i--)
                 {
-                    var item = cmBookmarks.MenuItems[i];
+                    MenuItem item = cmBookmarks.MenuItems[i];
                     if (item != null)
                     {
                         try
@@ -231,13 +231,13 @@ namespace OpenALPRPlugin.Client
 
         private async Task Search()
         {
-            var searchString = txtSearchFor.Text.Trim() == string.Empty ? null : txtSearchFor.Text;
+            string searchString = txtSearchFor.Text.Trim() == string.Empty ? null : txtSearchFor.Text;
             try
             {
-                var startTime = datStartTime.Value.ToUniversalTime();
+                DateTime startTime = datStartTime.Value.ToUniversalTime();
                 startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
 
-                var endTime = datEndTime.Value.ToUniversalTime();
+                DateTime endTime = datEndTime.Value.ToUniversalTime();
                 endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
 
                 await Search(startTime, endTime, chkMyBookmarksOnly.Checked, searchString);
@@ -253,11 +253,11 @@ namespace OpenALPRPlugin.Client
             lsvBookmarks.Items.Clear();
             lblMessage.Text = $"Total Bookmarks found:";
 
-            var items = new Item[] { selectedCameraItem };
-            var kinds = new Guid[] { Kind.Camera, Kind.Microphone, Kind.Speaker };
+            Item[] items = new Item[] { selectedCameraItem };
+            Guid[] kinds = new Guid[] { Kind.Camera, Kind.Microphone, Kind.Speaker };
 
-            var searcher = new BookmarksFinder(items, kinds, myOwnBookmarksOnly, searchString);
-            var bookmarks = await searcher.Search(startLocalTime, endLocalTime, bookmarksCount);
+            BookmarksFinder searcher = new BookmarksFinder(items, kinds, myOwnBookmarksOnly, searchString);
+            Bookmark[] bookmarks = await searcher.Search(startLocalTime, endLocalTime, bookmarksCount);
 
             AddToListView(bookmarks);
             OpenALPRBackgroundPlugin.Bookmarks = bookmarks;
@@ -265,11 +265,11 @@ namespace OpenALPRPlugin.Client
 
         private void AddToListView(Bookmark[] bookmarks)
         {
-            var limit = bookmarks.Length > bookmarksCount ? bookmarksCount : bookmarks.Length;
+            int limit = bookmarks.Length > bookmarksCount ? bookmarksCount : bookmarks.Length;
 
             for (int i = 0; i < limit; i++)
             {
-                var bookmark = bookmarks[i];
+                Bookmark bookmark = bookmarks[i];
 
                 string[] row = new string[]
                                     {
@@ -279,7 +279,7 @@ namespace OpenALPRPlugin.Client
                                         bookmark.Header,
                                         bookmark.Description
                                     };
-                var listViewItem = new ListViewItem(row)
+                ListViewItem listViewItem = new ListViewItem(row)
                 {
                     Tag = bookmark.BookmarkFQID
                 };
@@ -290,7 +290,7 @@ namespace OpenALPRPlugin.Client
                     break;
             }
 
-            var plus = bookmarks.Length > bookmarksCount ? "+" : string.Empty;
+            string plus = bookmarks.Length > bookmarksCount ? "+" : string.Empty;
             
             btnNext.Enabled = bookmarks.Length > bookmarksCount;
             lblMessage.Text = $"Total Bookmarks found: {limit.ToString()}{plus}";
@@ -300,19 +300,19 @@ namespace OpenALPRPlugin.Client
         {
             if (lsvBookmarks.Items.Count != 0)
             {
-                var lsvItem = lsvBookmarks.Items[lsvBookmarks.Items.Count - 1];
+                ListViewItem lsvItem = lsvBookmarks.Items[lsvBookmarks.Items.Count - 1];
                 if (lsvItem != null && lsvItem.Tag != null)
                 {
-                    var bookmarkFQID = lsvItem.Tag as FQID;
-                    var searchString = txtSearchFor.Text.Trim() == string.Empty ? null : txtSearchFor.Text;
+                    FQID bookmarkFQID = lsvItem.Tag as FQID;
+                    string searchString = txtSearchFor.Text.Trim() == string.Empty ? null : txtSearchFor.Text;
                     try
                     {
-                        var startTime = DateTime.Now;
+                        DateTime startTime = DateTime.Now;
                         DateTime.TryParse(lsvItem.SubItems[1].Text, out startTime);
                         startTime = startTime.ToUniversalTime();
                         startTime = DateTime.SpecifyKind(startTime, DateTimeKind.Utc);
 
-                        var endTime = datEndTime.Value.ToUniversalTime();
+                        DateTime endTime = datEndTime.Value.ToUniversalTime();
                         endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
 
                         await Next(bookmarkFQID, startTime, endTime, chkMyBookmarksOnly.Checked, searchString);
@@ -330,11 +330,11 @@ namespace OpenALPRPlugin.Client
             lsvBookmarks.Items.Clear();
             lblMessage.Text = $"Total Bookmarks found:";
 
-            var items = new Item[] { selectedCameraItem };
-            var kinds = new Guid[] { Kind.Camera, Kind.Microphone, Kind.Speaker };
+            Item[] items = new Item[] { selectedCameraItem };
+            Guid[] kinds = new Guid[] { Kind.Camera, Kind.Microphone, Kind.Speaker };
 
-            var searcher = new BookmarksFinder(items, kinds, myOwnBookmarksOnly, searchString);
-            var bookmarks = await searcher.Next(bookmarkFQID, startTime, endTime, bookmarksCount);
+            BookmarksFinder searcher = new BookmarksFinder(items, kinds, myOwnBookmarksOnly, searchString);
+            Bookmark[] bookmarks = await searcher.Next(bookmarkFQID, startTime, endTime, bookmarksCount);
 
             AddToListView(bookmarks);
             OpenALPRBackgroundPlugin.Bookmarks = bookmarks;
@@ -342,7 +342,7 @@ namespace OpenALPRPlugin.Client
 
         private void ButtonCameraSelect_Click(object sender, EventArgs e)
         {
-            var form = new ItemPickerForm
+            ItemPickerForm form = new ItemPickerForm
             {
                 CategoryFilter = Category.VideoIn,
                 AutoAccept = true
@@ -381,10 +381,10 @@ namespace OpenALPRPlugin.Client
         {
             if (lsvBookmarks.SelectedItems.Count != 0)
             {
-                var item = lsvBookmarks.SelectedItems[0];
+                ListViewItem item = lsvBookmarks.SelectedItems[0];
                 if (item != null && item.Tag != null)
                 {
-                    using (var edit = new EditBookmark())
+                    using (EditBookmark edit = new EditBookmark())
                     {
                         edit.BeginTime = item.SubItems[1].Text;
                         edit.EndTime = item.SubItems[2].Text;
@@ -417,10 +417,10 @@ namespace OpenALPRPlugin.Client
         {
             if (lsvBookmarks.SelectedItems.Count != 0)
             {
-                var item = lsvBookmarks.SelectedItems[0];
+                ListViewItem item = lsvBookmarks.SelectedItems[0];
                 if (item != null && item.Tag != null)
                 {
-                    var delete = MessageBox.Show($"Are you sure you want to delete '{item.SubItems[3].Text}' '{item.SubItems[4].Text}'  ?", "Deleting Bookmark", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    DialogResult delete = MessageBox.Show($"Are you sure you want to delete '{item.SubItems[3].Text}' '{item.SubItems[4].Text}'  ?", "Deleting Bookmark", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if(delete == DialogResult.Yes)
                     {
                         if(await BookmarksFinder.DeleteBookmark(item.Tag as FQID))
@@ -434,17 +434,17 @@ namespace OpenALPRPlugin.Client
         {
             if (lsvBookmarks.SelectedItems.Count != 0)
             {
-                var item = lsvBookmarks.SelectedItems[0];
+                ListViewItem item = lsvBookmarks.SelectedItems[0];
                 if (item != null && item.Tag != null)
                 {
-                    var bookmark = await BookmarksFinder.GetBookmark(item.Tag as FQID);
+                    Bookmark bookmark = await BookmarksFinder.GetBookmark(item.Tag as FQID);
                     if (bookmark != null)
                     {
                         VideoReplayView videoReplayView = null;
                         try
                         {
                             videoReplayView = new VideoReplayView();
-                            var tuple = new Tuple<Item, DateTime, DateTime>(bookmark.GetDeviceItem(), bookmark.TimeBegin, bookmark.TimeEnd);
+                            Tuple<Item, DateTime, DateTime> tuple = new Tuple<Item, DateTime, DateTime>(bookmark.GetDeviceItem(), bookmark.TimeBegin, bookmark.TimeEnd);
                             videoReplayView.Add(new Tuple<Item, DateTime, DateTime>[] { tuple });
                             videoReplayView.ShowDialog(this);
                         }
@@ -468,7 +468,7 @@ namespace OpenALPRPlugin.Client
             {
                 try
                 {
-                    var node = sender as ListView;
+                    ListView node = sender as ListView;
                     node.ContextMenu = cmBookmarks;
 
                     cmBookmarks.MenuItems[0].Enabled = true;
@@ -489,7 +489,7 @@ namespace OpenALPRPlugin.Client
             {
                 for (int i = 0; i < 120; i++)
                 {
-                    var time = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);
+                    DateTime time = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local);
                     await BookmarksFinder.CreateBookmark(
                                       selectedCameraItem.FQID,
                                       time.AddSeconds(-5),
@@ -512,16 +512,16 @@ namespace OpenALPRPlugin.Client
 
             try
             {
-                var lines = GetCameraMapping();
+                string[] lines = GetCameraMapping();
                 for(int i = 0; i < lines.Length; i++)
                 {
-                    var line = lines[i];
+                    string line = lines[i];
                     if(!string.IsNullOrEmpty (line))
                     {
-                        var entry = line.Split(new char[] { '|' });
-                        var milestoneCameraName = string.Empty;
-                        var alprCameraName = string.Empty;
-                        var alprCameraId = string.Empty;
+                        string[] entry = line.Split(new char[] { '|' });
+                        string milestoneCameraName = string.Empty;
+                        string alprCameraName = string.Empty;
+                        string alprCameraId = string.Empty;
 
                         if (entry.Length != 0)
                             milestoneCameraName = entry[0];
@@ -542,7 +542,7 @@ namespace OpenALPRPlugin.Client
                 Logger.Log.Error(null, ex);
             }
 
-            using (var cameraMapping = new CameraMapping())
+            using (CameraMapping cameraMapping = new CameraMapping())
             {
                 try
                 {
@@ -551,12 +551,12 @@ namespace OpenALPRPlugin.Client
                     if (cameraMapping.Saved)
                     {
                         cameraList = cameraMapping.CameraList;
-                        var filePath = CameraMappingFile();
+                        string filePath = CameraMappingFile();
                         if (!string.IsNullOrEmpty(filePath))
                         {
-                            using (var outputFile = new StreamWriter(filePath))
+                            using (StreamWriter outputFile = new StreamWriter(filePath))
                             {
-                                foreach (var item in cameraList)
+                                foreach (OpenALPRmilestoneCameraName item in cameraList)
                                 {
                                     //AXIS M1054 Network Camera (192.168.0.33) - Camera 1|TestCamera|237528343
                                     await outputFile.WriteLineAsync($"{item.MilestoneName}|{item.OpenALPRname}|{item.OpenALPRId}\n");
@@ -574,7 +574,7 @@ namespace OpenALPRPlugin.Client
 
         private string[] GetCameraMapping()
         {
-            var filePath = CameraMappingFile();
+            string filePath = CameraMappingFile();
             if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
             {
                 string[] cameras = File.ReadAllLines(filePath);
@@ -587,7 +587,7 @@ namespace OpenALPRPlugin.Client
        
         private string CameraMappingFile()
         {
-            var mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), OpenALPRPluginDefinition.PlugName, "Mapping");
+            string mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), OpenALPRPluginDefinition.PlugName, "Mapping");
 
             if (!Directory.Exists(mappingPath))
             {
@@ -629,7 +629,7 @@ namespace OpenALPRPlugin.Client
 
             try
             {
-                var mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Mapping");
+                string mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Mapping");
 
                 if (!Directory.Exists(mappingPath))
                 {
@@ -637,11 +637,11 @@ namespace OpenALPRPlugin.Client
                     Helper.SetDirectoryNetworkServiceAccessControl(mappingPath);
                 }
 
-                var filePath = Path.Combine(mappingPath, "AlertList.txt");
+                string filePath = Path.Combine(mappingPath, "AlertList.txt");
 
                 if (!File.Exists(filePath))
                 {
-                    using (var outputFile = new StreamWriter(filePath, false))
+                    using (StreamWriter outputFile = new StreamWriter(filePath, false))
                     {
                         outputFile.WriteLine("# Edit this file to add alerts.");
                         outputFile.WriteLine("# Each line represents one alert and a description separated by a comma.");

@@ -16,7 +16,7 @@ namespace OpenALPRQueueConsumer
 
         static OpenALPRQueueMilestoneDefinition()
         {
-            var assembly = Assembly.GetExecutingAssembly();
+            Assembly assembly = Assembly.GetExecutingAssembly();
             string name = assembly.GetName().Name;
             Logger.Initialize(name);
 
@@ -26,7 +26,7 @@ namespace OpenALPRQueueConsumer
                 fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
 #else
             
-            var path = @"C:\Program Files\VideoOS\MIPPlugins\OpenALPR\OpenALPRQueueMilestone.exe";
+            string path = @"C:\Program Files\VideoOS\MIPPlugins\OpenALPR\OpenALPRQueueMilestone.exe";
 
             fileVersion = File.Exists(path) ?
                 FileVersionInfo.GetVersionInfo(path) :

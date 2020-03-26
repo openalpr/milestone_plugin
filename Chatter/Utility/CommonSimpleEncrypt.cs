@@ -25,7 +25,7 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
         /// <returns></returns>
         public static byte[] NewKey()
         {
-            var key = new byte[KeyBitSize / 8];
+            byte[] key = new byte[KeyBitSize / 8];
             Random.GetBytes(key);
             return key;
         }
@@ -49,8 +49,8 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
             if (string.IsNullOrEmpty(secretMessage))
                 throw new ArgumentException("Secret Message Required!", "secretMessage");
 
-            var plainText = Encoding.UTF8.GetBytes(secretMessage);
-            var cipherText = SimpleEncrypt(plainText, cryptKey, authKey, nonSecretPayload);
+            byte[] plainText = Encoding.UTF8.GetBytes(secretMessage);
+            byte[] cipherText = SimpleEncrypt(plainText, cryptKey, authKey, nonSecretPayload);
             return Convert.ToBase64String(cipherText);
         }
 
@@ -70,8 +70,8 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
             if (string.IsNullOrWhiteSpace(encryptedMessage))
                 throw new ArgumentException("Encrypted Message Required!", nameof(encryptedMessage));
 
-            var cipherText = Convert.FromBase64String(encryptedMessage);
-            var plainText = SimpleDecrypt(cipherText, cryptKey, authKey, nonSecretPayloadLength);
+            byte[] cipherText = Convert.FromBase64String(encryptedMessage);
+            byte[] plainText = SimpleDecrypt(cipherText, cryptKey, authKey, nonSecretPayloadLength);
             return Encoding.UTF8.GetString(plainText);
         }
 
@@ -95,8 +95,8 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
             if (string.IsNullOrEmpty(secretMessage))
                 throw new ArgumentException("Secret Message Required!", nameof(secretMessage));
 
-            var plainText = Encoding.UTF8.GetBytes(secretMessage);
-            var cipherText = SimpleEncryptWithPassword(plainText, password, nonSecretPayload);
+            byte[] plainText = Encoding.UTF8.GetBytes(secretMessage);
+            byte[] cipherText = SimpleEncryptWithPassword(plainText, password, nonSecretPayload);
             return Convert.ToBase64String(cipherText);
         }
 
@@ -119,8 +119,8 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
             if (string.IsNullOrWhiteSpace(encryptedMessage))
                 throw new ArgumentException("Encrypted Message Required!", nameof(encryptedMessage));
 
-            var cipherText = Convert.FromBase64String(encryptedMessage);
-            var plainText = SimpleDecryptWithPassword(cipherText, password, nonSecretPayloadLength);
+            byte[] cipherText = Convert.FromBase64String(encryptedMessage);
+            byte[] plainText = SimpleDecryptWithPassword(cipherText, password, nonSecretPayloadLength);
             return Encoding.UTF8.GetString(plainText);
         }
 
@@ -155,7 +155,7 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
             byte[] cipherText = null;
             byte[] iv = null;
 
-            using (var aes = new AesManaged
+            using (AesManaged aes = new AesManaged
             {
                 KeySize = KeyBitSize,
                 BlockSize = BlockBitSize,
@@ -167,7 +167,7 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
                 aes.GenerateIV();
                 iv = aes.IV;
 
-                var encrypter = aes.CreateEncryptor(cryptKey, iv);
+                ICryptoTransform encrypter = aes.CreateEncryptor(cryptKey, iv);
                 MemoryStream cipherStream = null;
 
                 try
@@ -177,7 +177,7 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
                     try
                     {
                         cryptoStream = new CryptoStream(cipherStream, encrypter, CryptoStreamMode.Write);
-                        using (var binaryWriter = new BinaryWriter(cryptoStream))
+                        using (BinaryWriter binaryWriter = new BinaryWriter(cryptoStream))
                         {
                             cryptoStream = null;
                             //Encrypt Data
@@ -198,13 +198,13 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
             }
 
             //Assemble encrypted message and add authentication
-            using (var hmac = new HMACSHA256(authKey))
+            using (HMACSHA256 hmac = new HMACSHA256(authKey))
             {
                 MemoryStream encryptedStream = null;
                 try
                 {
                     encryptedStream = new MemoryStream();
-                    using (var binaryWriter = new BinaryWriter(encryptedStream))
+                    using (BinaryWriter binaryWriter = new BinaryWriter(encryptedStream))
                     {
                         //Prepend non-secret payload if any
                         binaryWriter.Write(nonSecretPayload);
@@ -215,7 +215,7 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
                         binaryWriter.Flush();
 
                         //Authenticate all data
-                        var tag = hmac.ComputeHash(encryptedStream.ToArray());
+                        byte[] tag = hmac.ComputeHash(encryptedStream.ToArray());
                         //Postpend tag
                         binaryWriter.Write(tag);
                         binaryWriter.Flush();
@@ -247,12 +247,12 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
             if (encryptedMessage == null || encryptedMessage.Length == 0)
                 throw new ArgumentException("Encrypted Message Required!", nameof(encryptedMessage));
 
-            using (var hmac = new HMACSHA256(authKey))
+            using (HMACSHA256 hmac = new HMACSHA256(authKey))
             {
-                var sentTag = new byte[hmac.HashSize / 8];
+                byte[] sentTag = new byte[hmac.HashSize / 8];
                 //Calculate Tag
-                var calcTag = hmac.ComputeHash(encryptedMessage, 0, encryptedMessage.Length - sentTag.Length);
-                var ivLength = (BlockBitSize / 8);
+                byte[] calcTag = hmac.ComputeHash(encryptedMessage, 0, encryptedMessage.Length - sentTag.Length);
+                int ivLength = (BlockBitSize / 8);
 
                 //if message length is to small just return null
                 if (encryptedMessage.Length < sentTag.Length + nonSecretPayloadLength + ivLength)
@@ -262,15 +262,15 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
                 Array.Copy(encryptedMessage, encryptedMessage.Length - sentTag.Length, sentTag, 0, sentTag.Length);
 
                 //Compare Tag with constant time comparison
-                var compare = 0;
-                for (var i = 0; i < sentTag.Length; i++)
+                int compare = 0;
+                for (int i = 0; i < sentTag.Length; i++)
                     compare |= sentTag[i] ^ calcTag[i];
 
                 //if message doesn't authenticate return null
                 if (compare != 0)
                     return null;
 
-                using (var aes = new AesManaged
+                using (AesManaged aes = new AesManaged
                 {
                     KeySize = KeyBitSize,
                     BlockSize = BlockBitSize,
@@ -280,17 +280,17 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
                 {
 
                     //Grab IV from message
-                    var iv = new byte[ivLength];
+                    byte[] iv = new byte[ivLength];
                     Array.Copy(encryptedMessage, nonSecretPayloadLength, iv, 0, iv.Length);
 
-                    var decrypter = aes.CreateDecryptor(cryptKey, iv);
-                    var plainTextStream = new MemoryStream();
+                    ICryptoTransform decrypter = aes.CreateDecryptor(cryptKey, iv);
+                    MemoryStream plainTextStream = new MemoryStream();
                     {
                         CryptoStream decrypterStream = null;
                         try
                         {
                             decrypterStream = new CryptoStream(plainTextStream, decrypter, CryptoStreamMode.Write);
-                            using (var binaryWriter = new BinaryWriter(decrypterStream))
+                            using (BinaryWriter binaryWriter = new BinaryWriter(decrypterStream))
                             {
                                 decrypterStream = null;
                                 //Decrypt Cipher Text from Message
@@ -339,7 +339,7 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
             if (secretMessage == null || secretMessage.Length == 0)
                 throw new ArgumentException("Secret Message Required!", nameof(secretMessage));
 
-            var payload = new byte[((SaltBitSize / 8) * 2) + nonSecretPayload.Length];
+            byte[] payload = new byte[((SaltBitSize / 8) * 2) + nonSecretPayload.Length];
 
             Array.Copy(nonSecretPayload, payload, nonSecretPayload.Length);
             int payloadIndex = nonSecretPayload.Length;
@@ -347,9 +347,9 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
             byte[] cryptKey;
             byte[] authKey;
             //Use Random Salt to prevent pre-generated weak password attacks.
-            using (var generator = new Rfc2898DeriveBytes(password, SaltBitSize / 8, Iterations))
+            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, SaltBitSize / 8, Iterations))
             {
-                var salt = generator.Salt;
+                byte[] salt = generator.Salt;
 
                 //Generate Keys
                 cryptKey = generator.GetBytes(KeyBitSize / 8);
@@ -361,9 +361,9 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
 
             //Deriving separate key, might be less efficient than using HKDF, 
             //but now compatible with RNEncryptor which had a very similar wireformat and requires less code than HKDF.
-            using (var generator = new Rfc2898DeriveBytes(password, SaltBitSize / 8, Iterations))
+            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, SaltBitSize / 8, Iterations))
             {
-                var salt = generator.Salt;
+                byte[] salt = generator.Salt;
 
                 //Generate Keys
                 authKey = generator.GetBytes(KeyBitSize / 8);
@@ -398,8 +398,8 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
             if (encryptedMessage == null || encryptedMessage.Length == 0)
                 throw new ArgumentException("Encrypted Message Required!", nameof(encryptedMessage));
 
-            var cryptSalt = new byte[SaltBitSize / 8];
-            var authSalt = new byte[SaltBitSize / 8];
+            byte[] cryptSalt = new byte[SaltBitSize / 8];
+            byte[] authSalt = new byte[SaltBitSize / 8];
 
             //Grab Salt from Non-Secret Payload
             Array.Copy(encryptedMessage, nonSecretPayloadLength, cryptSalt, 0, cryptSalt.Length);
@@ -409,12 +409,12 @@ namespace OpenALPRQueueConsumer.Chatter.Utility
             byte[] authKey;
 
             //Generate crypt key
-            using (var generator = new Rfc2898DeriveBytes(password, cryptSalt, Iterations))
+            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, cryptSalt, Iterations))
             {
                 cryptKey = generator.GetBytes(KeyBitSize / 8);
             }
             //Generate auth key
-            using (var generator = new Rfc2898DeriveBytes(password, authSalt, Iterations))
+            using (Rfc2898DeriveBytes generator = new Rfc2898DeriveBytes(password, authSalt, Iterations))
             {
                 authKey = generator.GetBytes(KeyBitSize / 8);
             }

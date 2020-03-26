@@ -29,7 +29,7 @@ namespace OpenALPRPlugin.Client
         public override void Init()
         {
             //int rec1_3Width = 249;
-            //var rect = new Rectangle[3];
+            //Rectangle[] rect = new Rectangle[3];
 
             //rect[0] = new Rectangle(000, 000, rec1_3Width, 999);
             //rect[1] = new Rectangle(rec1_3Width, 000, 999 - 2 * rec1_3Width, 999);

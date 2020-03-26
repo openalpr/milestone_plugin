@@ -28,13 +28,13 @@ namespace OpenALPRQueueConsumer.Utility
                 Helper.SetDirectoryNetworkServiceAccessControl(LogPath);
             }
 
-            var fullName = Path.Combine(LogPath, $"{logName}.log");
+            string fullName = Path.Combine(LogPath, $"{logName}.log");
 
             log4net.Config.XmlConfigurator.Configure();
-            var hierarchy = LogManager.GetRepository() as Hierarchy;
+            Hierarchy hierarchy = LogManager.GetRepository() as Hierarchy;
             hierarchy.Threshold = Level.Debug;
 
-            var logger = hierarchy.LoggerFactory.CreateLogger(hierarchy, logName);
+            log4net.Repository.Hierarchy.Logger logger = hierarchy.LoggerFactory.CreateLogger(hierarchy, logName);
             logger.Hierarchy = hierarchy;
             logger.AddAppender(CreateFileAppender(logName, fullName));
             logger.Repository.Configured = true;
@@ -46,11 +46,11 @@ namespace OpenALPRQueueConsumer.Utility
 
         private static IAppender CreateFileAppender(string name, string fileName)
         {
-            var patternLayout = new PatternLayout();
+            PatternLayout patternLayout = new PatternLayout();
             patternLayout.ConversionPattern = "%date{yyyy-MMM-dd HH:mm:ss,fff} [%t][%M] %-5level - %message  %newline";
             patternLayout.ActivateOptions();
 
-            var appender = new RollingFileAppender()
+            RollingFileAppender appender = new RollingFileAppender()
             {
                 Name = name,
                 File = fileName,

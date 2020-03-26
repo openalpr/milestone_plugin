@@ -69,19 +69,18 @@ namespace OpenALPRQueueConsumer
             Program.Log.Info("Start the service");
 
             AppDomain.CurrentDomain.SetPrincipalPolicy(PrincipalPolicy.WindowsPrincipal);
-            var appprincipal = Thread.CurrentPrincipal as WindowsPrincipal;
+            WindowsPrincipal appprincipal = Thread.CurrentPrincipal as WindowsPrincipal;
             Program.Log.Info($"Is in administrators: {appprincipal.IsInRole("Administrators")}");
             Program.Log.Info($"Windows identity: {WindowsIdentity.GetCurrent().Name}"); //Windows identity: NT AUTHORITY\SYSTEM  
 
             LogSystemInfo();
             WriteExecutingAssemblyVersion();
-
 #if !DEBUG
-            using (var impersonation = new Impersonation(BuiltinUser.NetworkService))
+            using (Impersonation impersonation = new Impersonation(BuiltinUser.NetworkService))
             {
 #endif
-                try
-                {
+            try
+            {
                     SDKEnvironment.Initialize();// General initialize. Always required
                     SDKEnvironment.RemoveAllServers();
                     TryConnectingToMilestoneServer();
@@ -125,7 +124,7 @@ namespace OpenALPRQueueConsumer
             {
                 IsConnectedToMilestoneServer = true;
 
-                var temp = Helper.ReadConfigKey(MilestoneServerNameString);
+                string temp = Helper.ReadConfigKey(MilestoneServerNameString);
                 if (temp != serverName)
                     Helper.AddUpdateAppSettings(MilestoneServerNameString, serverName);
 
@@ -184,7 +183,7 @@ namespace OpenALPRQueueConsumer
             try
             {
 #if DEBUG
-                var name = Assembly.GetExecutingAssembly().GetName().Name;
+                string name = Assembly.GetExecutingAssembly().GetName().Name;
                 FileVersion = FileVersionInfo.GetVersionInfo(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), $"{name}.exe"));
 #else
                 FileVersion = FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule.FileName);
@@ -197,7 +196,7 @@ namespace OpenALPRQueueConsumer
 
             if (FileVersion != null)
             {
-                var version = $"{Program.ProductName} service version: {FileVersion.FileVersion}";
+                string version = $"{Program.ProductName} service version: {FileVersion.FileVersion}";
                 Program.Log.Info(version);
             }
 
@@ -220,12 +219,12 @@ namespace OpenALPRQueueConsumer
             {
                 if (e.User.Name != User.AutoExporterServiceName)
                 {
-                    var msg = $"New Client: {e.User.Name}";
+                    string msg = $"New Client: {e.User.Name}";
                     Console.WriteLine(msg);
                     Program.Log.Info(msg);
                 }
 
-                //var info = new Info { MsgId = MessageId.Init, Message1 = CodecList };
+                //Info info = new Info { MsgId = MessageId.Init, Message1 = CodecList };
                 //Chatting.Whisper(e.User.Name, info);
             }
         }

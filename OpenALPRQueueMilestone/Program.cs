@@ -23,9 +23,9 @@ namespace OpenALPRQueueConsumer
 
             try
             {
-                var VideoOS = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                string VideoOS = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
                 
-                var dir = Path.Combine(VideoOS, @"VideoOS\MIPPlugins\OpenALPR");
+                string dir = Path.Combine(VideoOS, @"VideoOS\MIPPlugins\OpenALPR");
                 if (Directory.Exists(dir))
                     Directory.SetCurrentDirectory(dir);
                 Console.WriteLine($"Current Directory: {Environment.CurrentDirectory}");
