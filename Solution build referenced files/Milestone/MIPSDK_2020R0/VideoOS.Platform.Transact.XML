@@ -1,0 +1,1235 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VideoOS.Platform.Transact</name>
+    </assembly>
+    <members>
+        <member name="T:VideoOS.Platform.Transact.Connector.ConnectorInstance">
+            <summary>
+            The server will hold an instance of this class for each source defined and it will be the responsibility
+            of the instance to deliver the data to be processed by the server.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.ConnectorInstance.Init(VideoOS.Platform.Transact.Connector.ITransactionDataReceiver,System.Collections.Generic.IEnumerable{VideoOS.Platform.Transact.Connector.Property.ConnectorProperty})">
+            <summary>
+            Should do any initialization needed.
+            </summary>
+            <param name="transactionDataReceiver">Call the methods on this to pass transaction data into the system.</param>
+            <param name="properties">The properties for the connector.</param>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.ConnectorInstance.Close">
+            <summary>
+            Should cleanup the connector instance and dispose any resources.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.ConnectorInstance.ValidateProperties(System.Collections.Generic.IEnumerable{VideoOS.Platform.Transact.Connector.Property.ConnectorProperty})">
+            <summary>
+            Validates the connector properties. If one or more properties are not valid, the
+            returned <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValidationResult"/> will contain a reference
+            to the first invalid property as well as a text describing the error.
+            <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"/> and <see cref="P:System.Globalization.CultureInfo.CurrentCulture"/>
+            will reflect the culture of client, where the information will be displayed.
+            Names and texts should therefore be specified in the culture given by <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"/>.
+            Numbers, times, and dates should be formatted using <see cref="P:System.Globalization.CultureInfo.CurrentCulture"/>.
+            </summary>
+            <param name="properties">The connector properties to validate.</param>
+            <returns>Default is a valid result. Override to provide custom validation logic.</returns>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.ConnectorInstance.UpdateProperties(System.Collections.Generic.IEnumerable{VideoOS.Platform.Transact.Connector.Property.ConnectorProperty})">
+            <summary>
+            Updates the values of the custom connector properties defined by <seealso cref="M:VideoOS.Platform.Transact.Connector.ConnectorDefinition.GetPropertyDefinitions"/>.
+            </summary>
+            <param name="properties"></param>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty">
+            <summary>
+            Represents the value of a custom connector property defined by classes inheriting <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty.Key">
+            <summary>
+            Gets the key of the property matching a <see cref="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition.Key"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition"/> class.
+            </summary>
+            <param name="key">The property key.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty`1">
+            <summary>
+            Represents the value of a custom connector property defined by classes inheriting <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty`1.Value">
+            <summary>
+            Gets the value of the property. Non-string types are converted to string.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty`1.#ctor(System.String,`0)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition`1"/> class.
+            </summary>
+            <param name="key">The property key.</param>
+            <param name="value">The property value.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorBooleanProperty">
+            <summary>
+            Represents the boolean value of a custom connector property defined by <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorBooleanPropertyDefinition"/>.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorBooleanProperty.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorBooleanProperty"/> class.
+            </summary>
+            <param name="key">The property key.</param>
+            <param name="value">The property value.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorIntegerProperty">
+            <summary>
+            Represents the integer value of a custom connector property defined by <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorIntegerPropertyDefinition"/>.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorIntegerProperty.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorIntegerProperty"/> class.
+            </summary>
+            <param name="key">The property key.</param>
+            <param name="value">The property value.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorStringProperty">
+            <summary>
+            Represents the string value of a custom connector property defined by <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorStringPropertyDefinition"/>.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorStringProperty.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorStringProperty"/> class.
+            </summary>
+            <param name="key">The property key.</param>
+            <param name="value">The property value.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPasswordProperty">
+            <summary>
+            Represents the password value of a custom connector property defined by <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPasswordPropertyDefinition"/>.
+            Password properties will be masked when displayed and encrypted when stored.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorPasswordProperty.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPasswordProperty"/> class.
+            </summary>
+            <param name="key">The property key.</param>
+            <param name="value">The property value.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorOptionProperty">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorOptionProperty.#ctor(System.String,System.String)">
+            <summary>
+            Represents the selected option of a custom connector property defined by <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorOptionsPropertyDefinition"/>.
+            </summary>
+            <param name="key">The property key.</param>
+            <param name="value">The selected option matching a <seealso cref="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValueOption.Key"/>.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition">
+            <summary>
+            Defines a custom property of a transaction connector, which should be set when configuring a transaction source.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition.Key">
+            <summary>
+            Gets or sets a unique key that should be matched by <see cref="P:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty.Key"/> to reference this property.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition.DisplayName">
+            <summary>
+            Gets or sets the displayed name of this property.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition.ToolTip">
+            <summary>
+            Gets or sets the tool tip to be shown for this property.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition`1"/> class.
+            </summary>
+            <param name="key">A unique key for this property</param>
+            <param name="displayName">The displayed name of this property</param>
+            <param name="toolTip">Tool tip to be shown for this property</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> or <paramref name="displayName"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> or <paramref name="displayName"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition`1">
+            <summary>
+            Defines a custom property of a transaction connector, which should be set when configuring a transaction source.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition`1.DefaultValue">
+            <summary>
+            Gets or sets the default value for this property.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition`1.#ctor(System.String,System.String,`0,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyDefinition`1"/> class.
+            </summary>
+            <param name="key">A unique key for this property</param>
+            <param name="displayName">The displayed name of this property</param>
+            <param name="defaultValue">The default value for this property</param>
+            <param name="toolTip">Tool tip to be shown for this property</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> or <paramref name="displayName"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> or <paramref name="displayName"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorBooleanPropertyDefinition">
+            <summary>
+            Defines a boolean-valued custom property of a transaction connector, which should be set when configuring a transaction source.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorBooleanPropertyDefinition.#ctor(System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorBooleanPropertyDefinition"/> class.
+            </summary>
+            <param name="key">A unique key.</param>
+            <param name="displayName">The displayed name.</param>
+            <param name="defaultValue">The default value.</param>
+            <param name="toolTip">Tool tip to be shown.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> or <paramref name="displayName"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> or <paramref name="displayName"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorIntegerPropertyDefinition">
+            <summary>
+            Defines an integer-valued custom property of a transaction connector, which should be set when configuring a transaction source.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorIntegerPropertyDefinition.MinValue">
+            <summary>
+            Gets or sets the minimum value of <see cref="P:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty`1.Value"/>.
+            Default: <see cref="F:System.Int32.MinValue"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorIntegerPropertyDefinition.MaxValue">
+            <summary>
+            Gets or sets the maximum value of <see cref="P:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty`1.Value"/>.
+            Default: <see cref="F:System.Int32.MaxValue"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorIntegerPropertyDefinition.#ctor(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorIntegerPropertyDefinition"/> class.
+            </summary>
+            <param name="key">A unique key.</param>
+            <param name="displayName">The displayed name.</param>
+            <param name="defaultValue">The default value.</param>
+            <param name="toolTip">Tool tip to be shown.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> or <paramref name="displayName"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> or <paramref name="displayName"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorStringPropertyDefinition">
+            <summary>
+            Defines a string-valued custom property of a transaction connector, which should be set when configuring a transaction source.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorStringPropertyDefinition.MinLength">
+            <summary>
+            Gets or sets the minimum length of <see cref="P:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty`1.Value"/>.
+            Default: 0
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorStringPropertyDefinition.MaxLength">
+            <summary>
+            Gets or sets the maximum length of <see cref="P:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty`1.Value"/>.
+            Default: 256
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorStringPropertyDefinition.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorStringPropertyDefinition"/> class.
+            </summary>
+            <param name="key">A unique key.</param>
+            <param name="displayName">The displayed name.</param>
+            <param name="defaultValue">The default value.</param>
+            <param name="toolTip">Tool tip to be shown.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> or <paramref name="displayName"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> or <paramref name="displayName"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPasswordPropertyDefinition">
+            <summary>
+            Defines a password-valued custom property of a transaction connector, which should be set when configuring a transaction source.
+            Password properties will be masked when displayed and encrypted when stored.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPasswordPropertyDefinition.MinLength">
+            <summary>
+            Gets or sets the minimum length of <see cref="P:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty`1.Value"/>.
+            Default: 0
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPasswordPropertyDefinition.MaxLength">
+            <summary>
+            Gets or sets the maximum length of <see cref="P:VideoOS.Platform.Transact.Connector.Property.ConnectorProperty`1.Value"/>.
+            Default: 256
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorPasswordPropertyDefinition.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPasswordPropertyDefinition"/> class.
+            </summary>
+            <param name="key">A unique key.</param>
+            <param name="displayName">The displayed name.</param>
+            <param name="defaultValue">The default value.</param>
+            <param name="toolTip">Tool tip to be shown.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> or <paramref name="displayName"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> or <paramref name="displayName"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorOptionsPropertyDefinition">
+            <summary>
+            Defines an options-valued custom property of a transaction connector, which should be set when configuring a transaction source.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorOptionsPropertyDefinition.ValueOptions">
+            <summary>
+            Gets or sets the possible options presented.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorOptionsPropertyDefinition.#ctor(System.String,System.String,System.String,System.String,System.Collections.Generic.IEnumerable{VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValueOption})">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorOptionsPropertyDefinition"/> class.
+            </summary>
+            <param name="key">A unique key.</param>
+            <param name="displayName">The displayed name.</param>
+            <param name="defaultValue">The default option given by of the <see cref="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValueOption.Key"/>s in <see cref="P:VideoOS.Platform.Transact.Connector.Property.ConnectorOptionsPropertyDefinition.ValueOptions"/>.</param>
+            <param name="toolTip">Tool tip to be shown.</param>
+            <param name="valueOptions">The possible options presented.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/>, <paramref name="displayName"/> or <paramref name="valueOptions"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> or <paramref name="displayName"/> is empty or only white spaces</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="valueOptions"/> is empty</exception>
+            <exception cref="T:System.ArgumentException">If <see cref="P:VideoOS.Platform.Transact.Connector.Property.ConnectorOptionsPropertyDefinition.ValueOptions"/> contains duplicated keys or values</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValidationResult">
+            <summary>
+            Represents either a valid or an invalid validation result for connector properties.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValidationResult.ValidResult">
+            <summary>
+            A <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValidationResult"/> representing a valid result.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValidationResult.IsValid">
+            <summary>
+            Gets a value indicating whether the properties are all valid.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValidationResult.InvalidPropertyKey">
+            <summary>
+            Gets the key of the first invalid property. 
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValidationResult.ErrorText">
+            <summary>
+            Gets a text describing the error.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValidationResult.CreateInvalidResult(System.String,System.String)">
+            <summary>
+            Creates an instance of <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValidationResult"/> representing an invalid result.
+            </summary>
+            <param name="invalidPropertyKey">The key of the first invalid property.</param>
+            <param name="errorText">A text describing the error.</param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValueOption">
+            <summary>
+            Represents a single selectable option to be displayed for a <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorOptionsPropertyDefinition"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValueOption.Key">
+            <summary>
+            Gets a unique key for this option.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValueOption.DisplayName">
+            <summary>
+            Gets to name to be displayed for this option.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValueOption.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VideoOS.Platform.Transact.Connector.Property.ConnectorPropertyValueOption"/> class.
+            </summary>
+            <param name="key"></param>
+            <param name="displayName"></param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="key"/> or <paramref name="displayName"/> is null</exception>
+            <exception cref="T:System.ArgumentException">If <paramref name="key"/> or <paramref name="displayName"/> is empty or only white spaces</exception>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.ITransactionDataReceiver">
+            <summary>
+            An object implementing this interface will be passed to connector instances allowing them
+            to add transaction data to the system.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.ITransactionDataReceiver.WriteRawData(System.Byte[])">
+            <summary>
+            Use this method for adding raw data to the system. The data will be parsed according to the source
+            configuration and then added to the database.
+            Please note that one transaction can span multiple pieces of 'rawData' and one piece of 'rawData' can
+            also contain more than one transaction.
+            </summary>
+            <param name="rawData">The raw (unparsed) transaction data to be added</param>
+            <remarks>Once the data has been passed as <paramref name="rawData"/>, it cannot be modified again!
+            Thus a client needs to pass a new array every time.</remarks>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.ITransactionDataReceiver.WriteRawData(System.Byte[],System.DateTime)">
+            <summary>
+            Use this method for adding raw data to the system With a timestamp. The data will be parsed according to the source
+            configuration and then added to the database. This method is intended to be used when the transactional being written
+            is not "live". Otherwise it is better to leave timestamping to the VMS.
+            Please note that one transaction can span multiple pieces of 'rawData' and one piece of 'rawData' can
+            also contain more than one transaction.
+            </summary>
+            <param name="rawData">The raw (unparsed) transaction data to be added</param>
+            <param name="timestamp">The timestamp of the data. The time must be in UTC format!</param>
+            <remarks>Once the data has been passed as <paramref name="rawData"/>, it cannot be modified again!
+            Thus a client needs to pass a new array every time.</remarks>
+            <exception cref="T:System.ArgumentException">If the <paramref name="timestamp"/> is not in UTC.</exception>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.ITransactionDataReceiver.MinimalAcceptedTimestamp">
+            <summary>
+            Gets the minimal timestamp accepted when calling <see cref="M:VideoOS.Platform.Transact.Connector.ITransactionDataReceiver.WriteRawData(System.Byte[],System.DateTime)"/>.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.Util">
+            <summary>
+            This class is responsible for containing static cross-cutting methods.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.Util.Log(System.Boolean,System.String,System.String)">
+            <summary>
+            Logs a message
+            </summary>
+            <param name="error">True if this is an error</param>
+            <param name="where">Where this is coming from; provide class name and method</param>
+            <param name="text">The message</param>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Connector.ConnectorDefinition">
+            <summary>
+            This class is responsible for defining the interface of Transact connectors. 
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.ConnectorDefinition.Id">
+            <summary>
+            Gets the unique id of this connector. If copying any of the sample connectors, be sure to replace this id with a new one.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.ConnectorDefinition.Name">
+            <summary>
+            Gets the name of the connector. This is used for logging. If you want to display a name to a user,
+            use <see cref="P:VideoOS.Platform.Transact.Connector.ConnectorDefinition.DisplayName"/> instead.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.ConnectorDefinition.DisplayName">
+            <summary>
+            Gets the name of the connector.
+            <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"/> and <see cref="P:System.Globalization.CultureInfo.CurrentCulture"/>
+            will reflect the culture of client, where the information will be displayed.
+            Names and texts should therefore be specified in the culture given by <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"/>.
+            Numbers, times, and dates should be formatted using <see cref="P:System.Globalization.CultureInfo.CurrentCulture"/>.
+            </summary>
+            <returns>A <see cref="T:System.String"/> with the localized connector name.</returns>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.ConnectorDefinition.VersionText">
+            <summary>
+            Gets the version of this connector in text format.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Connector.ConnectorDefinition.Manufacturer">
+            <summary>
+            Gets the manufacturer of this connector.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.ConnectorDefinition.GetPropertyDefinitions">
+            <summary>
+            Gets all the custom properties required to configure this connector.
+            <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"/> and <see cref="P:System.Globalization.CultureInfo.CurrentCulture"/>
+            will reflect the culture of client, where the information will be displayed.
+            Names and texts should therefore be specified in the culture given by <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"/>.
+            Numbers, times, and dates should be formatted using <see cref="P:System.Globalization.CultureInfo.CurrentCulture"/>.
+            </summary>
+            <returns>Default is an empty list of properties. Override to provide your own properties.</returns>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.ConnectorDefinition.Init">
+            <summary>
+            Initialize the connector.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.ConnectorDefinition.Close">
+            <summary>
+            Stop the connector and dispose of any resources.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Connector.ConnectorDefinition.CreateConnectorInstance">
+            <summary>
+            Called to get a new instance of the connector - to be used by a single source.
+            </summary>
+            <returns>Instance of a class derived from ConnectorInstance</returns>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Internal.Environment">
+            <summary>
+            This class contains the Transact environment properties.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Internal.Environment.Log">
+            <summary>
+            Gets or sets the logging instance used in the environment.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Internal.Logging.IPlatformLog">
+            <summary>
+            This interface is responsible for containing the methods used for logging in Transact
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Internal.Logging.IPlatformLog.Info(System.String,System.String)">
+            <summary>
+            Log at the info level to the log-file.
+            </summary>
+            <param name="where">An indication of where the message is logged from. This can be the class name, method name or something else that gives contextual information.</param>
+            <param name="text">The message that will be logged.</param>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Internal.Logging.IPlatformLog.Error(System.String,System.String)">
+            <summary>
+            Log at the error level to the log-file.
+            </summary>
+            <param name="where">An indication of where the error is logged from. This can be the class name, method name or something else that gives contextual information.</param>
+            <param name="text">The message that will be logged.</param>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient">
+            <summary>
+            This interface is responsible for the operations needed to query the Transact service and get information on the data recorded.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLinesForTransactionAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLinesForTransactionParameters)">
+            <summary>
+            Get all lines for a transaction.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLinesForSourceByTimeAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByTimeParameters)">
+            <summary>
+            Get a number of lines for a source before and after a timestamp.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLinesForSourceByLineIdAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByLineIdParameters)">
+            <summary>
+            Get a number of lines for a source before and after a particular line.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetExtendedTransactionLinesAsync(VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters)">
+            <summary>
+            Get a number of transaction lines matching the provided parameters.
+            </summary>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.StartLiveSessionAsync(VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionParameters)">
+            <summary>
+            Start a live session on the specified source and fetch the specified number of preceding
+            transaction lines. Use the returned session id when calling <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLiveLinesAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesParameters)"/>
+            and <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.StopLiveSessionAsync(VideoOS.Platform.Transact.Services.DataContracts.StopLiveSessionParameters)"/>.
+            </summary>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.StopLiveSessionAsync(VideoOS.Platform.Transact.Services.DataContracts.StopLiveSessionParameters)">
+            <summary>
+            Stop a live session, which was started using <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.StartLiveSessionAsync(VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionParameters)"/>.
+            </summary>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLiveLinesAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesParameters)">
+            <summary>
+            Get the transaction lines added in the specified session since last time this method
+            was called. The call will hang until either at least one transaction line can be
+            returned or the specified timeout expires.
+            </summary>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetTransactionsInfoAsync(VideoOS.Platform.Transact.Services.DataContracts.GetTransactionsInfoParameters)">
+            <summary>
+            Get all transaction infos matching the provided parameters.
+            </summary>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.Close">
+            <summary>
+            Shut down the client and clean up resources.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.Client.TransactQueryClient">
+            <summary>
+            This class is responsible for providing an implementation of <see cref="T:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient"/>
+            that reads its information from a web service on the event server. This client is designed so the instance is
+            reused through the entire lifetime of the program. It will internally create and shut down connections as needed.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.TransactQueryClient.#ctor(VideoOS.Platform.ServerId)">
+            <summary>
+            Create a new instance of <see cref="T:VideoOS.Platform.Transact.Services.Client.TransactQueryClient"/> and set its dependencies.
+            </summary>
+            <param name="serverId">The <see cref="T:VideoOS.Platform.ServerId"/> of the management server.</param>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.TransactQueryClient.GetLinesForTransactionAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLinesForTransactionParameters)">
+            <summary>
+            <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLinesForTransactionAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLinesForTransactionParameters)"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.TransactQueryClient.GetLinesForSourceByTimeAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByTimeParameters)">
+            <summary>
+            <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLinesForSourceByTimeAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByTimeParameters)"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.TransactQueryClient.GetLinesForSourceByLineIdAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByLineIdParameters)">
+            <summary>
+            <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLinesForSourceByTimeAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByTimeParameters)"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.TransactQueryClient.GetExtendedTransactionLinesAsync(VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters)">
+            <summary>
+            <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetExtendedTransactionLinesAsync(VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters)"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.TransactQueryClient.StartLiveSessionAsync(VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionParameters)">
+            <summary>
+            <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.StartLiveSessionAsync(VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionParameters)"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.TransactQueryClient.StopLiveSessionAsync(VideoOS.Platform.Transact.Services.DataContracts.StopLiveSessionParameters)">
+            <summary>
+            <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.StopLiveSessionAsync(VideoOS.Platform.Transact.Services.DataContracts.StopLiveSessionParameters)"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.TransactQueryClient.GetLiveLinesAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesParameters)">
+            <summary>
+            <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLiveLinesAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesParameters)"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.TransactQueryClient.GetTransactionsInfoAsync(VideoOS.Platform.Transact.Services.DataContracts.GetTransactionsInfoParameters)">
+            <summary>
+            <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetTransactionsInfoAsync(VideoOS.Platform.Transact.Services.DataContracts.GetTransactionsInfoParameters)"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Client.TransactQueryClient.Close">
+            <summary>
+            <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.Close"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.QueryServiceFaultDetail">
+            <summary>
+            Detail class for <see cref="T:System.ServiceModel.FaultException`1"/> thrown by the TransactQueryService.
+            The above exception will be wrapped in a <see cref="T:VideoOS.Platform.Transact.Services.Exceptions.TransactServiceException"/> and should not be handled directly by user code.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.QueryServiceFaultDetail.ErrorCode">
+            <summary>
+            Error code of the service fault. See <see cref="T:VideoOS.Platform.Transact.Services.DataContracts.QueryServiceFaultErrorCodes"/> for a list of supported error codes.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.QueryServiceFaultDetail.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.QueryServiceFaultErrorCodes">
+            <summary>
+            Error codes supported by <see cref="P:VideoOS.Platform.Transact.Services.DataContracts.QueryServiceFaultDetail.ErrorCode"/>.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.Services.DataContracts.QueryServiceFaultErrorCodes.Unclassified">
+            <summary>
+            Error code for unclassified errors.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.Services.DataContracts.QueryServiceFaultErrorCodes.InvalidAuthentication">
+            <summary>
+            Error code for 'invalid authentication'.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.Services.DataContracts.QueryServiceFaultErrorCodes.InvalidSessionId">
+            <summary>
+            Error code for 'invalid session id'.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.Services.DataContracts.QueryServiceFaultErrorCodes.GenericDatabaseException">
+            <summary>
+            Error code for 'generic database exception'.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.Services.DataContracts.QueryServiceFaultErrorCodes.UnknownSource">
+            <summary>
+            Error code for 'unknown source'.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.Services.DataContracts.QueryServiceFaultErrorCodes.UnlicensedSource">
+            <summary>
+            Error code for 'unlicensed source'.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.ExtendedTransactionLine">
+            <summary>
+            Data Transfer object that contains the details for a single extended transaction line.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.ExtendedTransactionLine.TransactionId">
+            <summary>
+            Id of the transaction
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.ExtendedTransactionLine.TransactionTimestamp">
+            <summary>
+            Start time of the transaction in UTC time
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.ExtendedTransactionLine.Source">
+            <summary>
+            The id of the source from which the transaction origined
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.ExtendedTransactionLine.CameraIds">
+            <summary>
+            The cameras associated to the transaction
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.ExtendedTransactionLine.LineId">
+            <summary>
+            Id of the transaction line
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.ExtendedTransactionLine.LineTimestamp">
+            <summary>
+            Timestamp of the transaction line in UTC time
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.ExtendedTransactionLine.Content">
+            <summary>
+            The actual transaction line contents
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.ExtendedTransactionLine.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.TransactionInfo">
+            <summary>
+            Data Transfer object that contains the start and end time for a single transaction.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.TransactionInfo.CreatedTimestamp">
+            <summary>
+            Begin timestamp of the transaction in UTC time
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.TransactionInfo.EndedTimestamp">
+            <summary>
+            End timestamp of the transaction in UTC time - potentially null if transaction has not been ended yet
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.TransactionInfo.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.TransactionLine">
+            <summary>
+            Data Transfer object that contains the details for a single transaction line.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.TransactionLine.TransactionId">
+            <summary>
+            Id of the transaction
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.TransactionLine.LineId">
+            <summary>
+            Id of the transaction line
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.TransactionLine.LineTimestamp">
+            <summary>
+            Timestamp of the transaction line in UTC time
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.TransactionLine.Content">
+            <summary>
+            The actual transaction line contents
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.TransactionLine.IsFirstLine">
+            <summary>
+            A flag indicating if the transaction line is the first in the transaction
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.TransactionLine.IsLastLine">
+            <summary>
+            A flag indicating if the transaction line is the last in the transaction
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.TransactionLine.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.TransactionLineComparer">
+            <summary>
+            Compares two TransactionLines by their LineId
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.DataContracts.TransactionLineComparer.Equals(VideoOS.Platform.Transact.Services.DataContracts.TransactionLine,VideoOS.Platform.Transact.Services.DataContracts.TransactionLine)">
+            <summary>
+            Compares the two lines by their LineId
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.DataContracts.TransactionLineComparer.GetHashCode(VideoOS.Platform.Transact.Services.DataContracts.TransactionLine)">
+            <summary>
+            Returns the LineId as hash code for the given line.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters">
+            <summary>
+            Data Transfer object that contains the parameters for the call to <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetExtendedTransactionLinesAsync(VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters)"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters.SourceIds">
+            <summary>
+            Array of sources to return results from - if empty all sources will be searched
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters.UtcFrom">
+            <summary>
+            Start time of the period within to search
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters.UtcTo">
+            <summary>
+            End time of the period within to search
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters.Substring">
+            <summary>
+            Substring to search for
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters.From">
+            <summary>
+            Index of first result to return (for paging)
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters.Count">
+            <summary>
+            Number of results to return (for paging)
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters.SortOrder">
+            <summary>
+            Sort order of the result. Must be one of the constants defined in <see cref="T:VideoOS.Platform.Transact.SortOrder" />
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesParameters.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForTransactionParameters">
+            <summary>
+            Data Transfer object that contains the parameters for the call to <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLinesForTransactionAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLinesForTransactionParameters)"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForTransactionParameters.TransactionId">
+            <summary>
+            Transaction id.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForTransactionParameters.SourceId">
+            <summary>
+            Source id.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForTransactionParameters.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByTimeParameters">
+            <summary>
+            Data Transfer object that contains the parameters for the call to <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLinesForSourceByTimeAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByTimeParameters)"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByTimeParameters.SourceId">
+            <summary>
+            Source id.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByTimeParameters.UtcTime">
+            <summary>
+            Timestamp (in UTC).
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByTimeParameters.CountBefore">
+            <summary>
+            Maximum number of lines before the timestamp.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByTimeParameters.CountAfter">
+            <summary>
+            Maximum number of lines after the timestamp.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByTimeParameters.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByLineIdParameters">
+            <summary>
+            Data Transfer object that contains the parameters for the call to <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLinesForSourceByLineIdAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByLineIdParameters)"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByLineIdParameters.SourceId">
+            <summary>
+            Source id.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByLineIdParameters.LineId">
+            <summary>
+            Line Id.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByLineIdParameters.CountBefore">
+            <summary>
+            Maximum number of lines before the line.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByLineIdParameters.CountAfter">
+            <summary>
+            Maximum number of lines after the line.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLinesForSourceByLineIdParameters.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionParameters">
+            <summary>
+            Data Transfer object that contains the parameters for the call to <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.StartLiveSessionAsync(VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionParameters)"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionParameters.SourceId">
+            <summary>
+            The id of the transaction source, on which to start a live session.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionParameters.PrecedingLineCount">
+            <summary>
+            The number of preceding lines to fetch, before the session is started.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionParameters.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.StopLiveSessionParameters">
+            <summary>
+            Data Transfer object that contains the parameters for the call to <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.StopLiveSessionAsync(VideoOS.Platform.Transact.Services.DataContracts.StopLiveSessionParameters)"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.StopLiveSessionParameters.SessionId">
+            <summary>
+            The id of the session, which to stop.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.StopLiveSessionParameters.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesParameters">
+            <summary>
+            Data Transfer object that contains the parameters for the call to <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLiveLinesAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesParameters)"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesParameters.SessionId">
+            <summary>
+            The id of the session, of which get transaction lines.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesParameters.Timeout">
+            <summary>
+            The maximum amount of time, which to wait for transaction lines to be returned.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesParameters.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.GetTransactionsInfoParameters">
+            <summary>
+            Data Transfer object that contains the parameters for the call to <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetTransactionsInfoAsync(VideoOS.Platform.Transact.Services.DataContracts.GetTransactionsInfoParameters)"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetTransactionsInfoParameters.SourceId">
+            <summary>
+            The id of the source, for which to get transaction infos.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetTransactionsInfoParameters.UtcFrom">
+            <summary>
+            Begin timestamp (in UTC).
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetTransactionsInfoParameters.UtcTo">
+            <summary>
+            End timestamp (in UTC).
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetTransactionsInfoParameters.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesResult">
+            <summary>
+            Data Transfer object that contains a list of extended transaction lines.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesResult.TransactionLines">
+            <summary>
+            The extended transaction lines that matched the search result.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetExtendedTransactionLinesResult.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.GetTransactionLinesResult">
+            <summary>
+            Data Transfer object that contains a list of transaction lines.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetTransactionLinesResult.TransactionLines">
+            <summary>
+            The transaction lines that matched the search result.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetTransactionLinesResult.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionResult">
+            <summary>
+            Data Transfer object that contains the result of the call to <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.StartLiveSessionAsync(VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionParameters)"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionResult.SessionId">
+            <summary>
+            A unique id of the started session.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionResult.TransactionLines">
+            <summary>
+            The number of specified preceding transaction lines.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.StartLiveSessionResult.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.StopLiveSessionResult">
+            <summary>
+            Data Transfer object that contains the result of the call to <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.StopLiveSessionAsync(VideoOS.Platform.Transact.Services.DataContracts.StopLiveSessionParameters)"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.StopLiveSessionResult.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesResult">
+            <summary>
+            Data Transfer object that contains the result of the call to <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLiveLinesAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesParameters)"/>.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesResult.TransactionLines">
+            <summary>
+            The transaction lines added, since last <see cref="M:VideoOS.Platform.Transact.Services.Client.ITransactQueryClient.GetLiveLinesAsync(VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesParameters)"/> was called.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetLiveLinesResult.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.DataContracts.GetTransactionsInfoResult">
+            <summary>
+            Data Transfer object that contains a list of transaction infos.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetTransactionsInfoResult.TransactionInformation">
+            <summary>
+            The transaction infos that matched the search request.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.Transact.Services.DataContracts.GetTransactionsInfoResult.ExtensionData">
+            <summary>
+            <see cref="P:System.Runtime.Serialization.IExtensibleDataObject.ExtensionData"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.Internal.WcfClientWrapper`2">
+            <summary>
+            Reserved for internal use! This class is responsible handling the lifetime of the WCF proxy class and handling failure of the WCF channel.
+            </summary>
+            <typeparam name="TClient">The WCF client proxy</typeparam>
+            <typeparam name="TChannel">The WCF service interface</typeparam>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Internal.WcfClientWrapper`2.#ctor(VideoOS.Platform.ServerId,System.String,System.String,System.Func{System.ServiceModel.Channels.Binding,System.ServiceModel.EndpointAddress,`0})">
+            <summary>
+            Create a new instance of <see cref="T:VideoOS.Platform.Transact.Services.Internal.WcfClientWrapper`2"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Internal.WcfClientWrapper`2.#ctor(VideoOS.Platform.ServerId,System.String,System.String,System.String,System.Func{System.ServiceModel.Channels.Binding,System.ServiceModel.EndpointAddress,`0})">
+            <summary>
+            Create a new instance of <see cref="T:VideoOS.Platform.Transact.Services.Internal.WcfClientWrapper`2"/>
+            </summary>
+            <remarks>The spnName is not used - the correct SPN name will be generated by other contructor</remarks>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Internal.WcfClientWrapper`2.Close">
+            <summary>
+            Closes the client.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Internal.WcfClientWrapper`2.CallWithRetryAsync``1(System.Func{`0,System.String,System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Calls a method on the WCF proxy with error handling.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.Internal.WebServiceConstants">
+            <summary>
+            Reserved for internal use! This class is responsible for the constants used for the web services in Transact
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.Services.Internal.WebServiceConstants.Namespace">
+            <summary>
+            The namespace used in the Transact services
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.Services.Internal.WebServiceConstants.QueryServiceSpnName">
+            <summary>
+            The SPN name for the Query service
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.Services.Internal.WebServiceConstants.QueryServicePathCredentials">
+            <summary>
+            The service path for the Query service with credential authentication
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.Services.Internal.WebServiceConstants.QueryServicePathToken">
+            <summary>
+            The service path for the Query service with token authentication
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.Services.Exceptions.TransactServiceException">
+            <summary>
+            This class is responsible for conveying information on exceptions in the Transact services.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Exceptions.TransactServiceException.#ctor(System.String)">
+            <summary>
+            Create a new instance of <see cref="T:VideoOS.Platform.Transact.Services.Exceptions.TransactServiceException"/> and set its message
+            </summary>
+            <param name="message">An informative message describing the error</param>
+        </member>
+        <member name="M:VideoOS.Platform.Transact.Services.Exceptions.TransactServiceException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create a new instance of <see cref="T:VideoOS.Platform.Transact.Services.Exceptions.TransactServiceException"/> and set its message
+            </summary>
+            <param name="message">An informative message describing the error</param>
+            <param name="innerException">The exception that caused this exception to be thrown</param>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.AssemblyInfo">
+            <summary>
+            Information specific for this component.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.SortOrder">
+            <summary>
+            Defines the different strings that can be used for specifying the sort order in the transaction server requests
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.SortOrder.SourceAscending">
+            <summary>
+            Sort ascending based on the source name of the transaction
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.SortOrder.SourceDescending">
+            <summary>
+            Sort descending based on the source name of the transaction
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.SortOrder.TimeAscending">
+            <summary>
+            Sort ascending based on the time of the transaction
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.SortOrder.TimeDescending">
+            <summary>
+            Sort descending based on the time of the transaction
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.Transact.TransactKind">
+            <summary>
+            This class is responsible for containing the IDs for the Kinds that are used in Transact
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.TransactKind.TransactSource">
+            <summary>
+            The kind of a transaction source.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.Transact.TransactKind.TransactDefinition">
+            <summary>
+            The kind of a transaction definition.
+            </summary>
+        </member>
+    </members>
+</doc>

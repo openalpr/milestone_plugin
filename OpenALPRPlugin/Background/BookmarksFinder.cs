@@ -102,7 +102,7 @@ namespace OpenALPRPlugin.Background
                                 BookmarkService.Instance.BookmarkSearchFromBookmark(
                                     bookmarkFQID,
                                     period,
-                                    bookmarksCount +1,
+                                    bookmarksCount + 1,
                                     kinds,
                                     new FQID[] { items[0].FQID },
                                     optUsers,

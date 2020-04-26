@@ -1,0 +1,1905 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VideoOS.Platform.SDK.UI</name>
+    </assembly>
+    <members>
+        <member name="F:VideoOS.Platform.SDK.UI.Audio.AudioPlayer._device">
+            <summary>
+            Holds the device configuration
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.Audio.AudioPlayer._audioPlayerComponent">
+            <summary>
+            The audio component
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.Audio.AudioPlayer._lastPlaybackReSync">
+            <summary>
+            Holds a timestamp indicating when the last playback reSync call was made to the audio toolkit. 
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.Audio.AudioPlayer._playbackReSyncInterval">
+            <summary>
+            Specifies the audio toolkit playback reSync frequency. It should not be reSynced to often
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.Audio.AudioPlayer.#ctor">
+            <summary>
+            Creates a new instance of the <c>AudioPlayerControl</c> class.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.Audio.AudioPlayer.ConnectionAttemptCompletedEventHandler">
+            <summary>
+            Represents the method that will handle the connection attempt completed
+            </summary>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.UI.Audio.AudioPlayer.AudioPlayerConnectionAttemptCompletedEvent">
+            <summary>
+            Audio Player connection attempt completed
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.Audio.AudioPlayer.FireAudioPlayerConnectionAttemptCompletedEvent(System.Guid,System.Boolean)">
+            <summary>
+            Activates the AudioPlayerConnectionAttemptCompletedEvent
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.Audio.AudioPlayer.AudioPlayerComponent_ConnectionAttemptCompleted(System.Object,System.Boolean)">
+            <summary>
+            If audio toolkit connection is successful then start live or playback if necessary
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.Audio.AudioPlayer.Connect(VideoOS.Platform.SDK.Config.IStreamDevice)">
+            <summary>
+            Init the audio toolkit and connect it to a microphone/speaker
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.Audio.AudioPlayer.ConnectionAttemptCompletedEventArgs">
+            <summary>
+            Implements the class that contains the event args for the Connection Attempt Completed Event
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.Audio.AudioPlayer.ConnectionAttemptCompletedEventArgs._deviceId">
+            <summary>
+            The device id of the event args
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.Audio.AudioPlayer.ConnectionAttemptCompletedEventArgs._connectionSuccessful">
+            <summary>
+            The connection success of the event args
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.Audio.AudioPlayer.ConnectionAttemptCompletedEventArgs.#ctor(System.Guid,System.Boolean)">
+            <summary>
+            Constructs a ConnectionAttemptCompletedEventArgs instance
+            </summary>
+            <param name="deviceId">The device id of the event args</param>
+            <param name="connectionSuccessful">Indicates whether the connection was successful or not.</param>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Audio.AudioPlayer.ConnectionAttemptCompletedEventArgs.DeviceId">
+            <summary>
+            Gets or sets the device id of the event args
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Audio.AudioPlayer.ConnectionAttemptCompletedEventArgs.ConnectionSuccessful">
+            <summary>
+            Gets or sets the connection success of the event args
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.Audio.IAudioPlayerComponent">
+            <summary>
+            Contract for an audio player component
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.Audio.NAudioPlayerComponent.CallbackHandler">
+            <summary>
+            Since the toolkit callbacks do not indicate origin, we need to wrap the callback to ensure that callbacks for "old" instances
+            are ignored.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.HeaderControl">
+            <summary>
+            Internal use only
+            </summary>
+            <summary>
+            HeaderControl
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.HeaderControl.#ctor">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.HeaderControl.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.HeaderTextConverter">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.HeaderTextConverter.Convert(System.Object[],System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.HeaderTextConverter.ConvertBack(System.Object,System.Type[],System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.ColorToBrushConverter">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.ColorToBrushConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.ColorToBrushConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.HeaderHeightConverter">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.HeaderHeightConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.HeaderHeightConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.FontSizeConverter">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.FontSizeConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.FontSizeConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.ConnectionLostVisibleConverter">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.ConnectionLostVisibleConverter.Convert(System.Object[],System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.ConnectionLostVisibleConverter.ConvertBack(System.Object,System.Type[],System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.EventOccurredSignalVisibleConverter">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.EventOccurredSignalVisibleConverter.Convert(System.Object[],System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.EventOccurredSignalVisibleConverter.ConvertBack(System.Object,System.Type[],System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.MotionOccurredSignalVisibleConverter">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.MotionOccurredSignalVisibleConverter.Convert(System.Object[],System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.MotionOccurredSignalVisibleConverter.ConvertBack(System.Object,System.Type[],System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorSourceConverter">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorSourceConverter.GraySignalImageSource">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorSourceConverter.GreenSignalImageSource">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorSourceConverter.RedSignalImageSource">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorSourceConverter.YellowSignalImageSource">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorSourceConverter.LoadImage(System.Reflection.Assembly,System.String)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorSourceConverter.Convert(System.Object[],System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorSourceConverter.ConvertBack(System.Object,System.Type[],System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorTooltipConverter">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorTooltipConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorTooltipConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorVisibleConverter">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorVisibleConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.ImageIndicatorVisibleConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Internal use only
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.DelegateCommand">
+            <summary>
+            Provides implementation of the <c>ICommand</c> interface through delegates and lambda expressions.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.Header.DelegateCommand.OnCanExecuteChanged">
+            <summary>
+            This method is used to walk the delegate chain and tell WPF that
+            our command execution status has changed.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.Header.resources.Strings">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.DirectX.Header.resources.Strings.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.DirectX.Header.resources.Strings.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.DirectX.Header.resources.Strings.IconCameraConnectionLostTooltip">
+            <summary>
+              Looks up a localized string similar to The camera is not connected..
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.DirectX.Header.resources.Strings.IconEventTooltip">
+            <summary>
+              Looks up a localized string similar to An event occurred. Click the view to acknowledge this message..
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.DirectX.Header.resources.Strings.IconMotionTooltip">
+            <summary>
+              Looks up a localized string similar to Motion was detected. Click the view to acknowledge this message..
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.DirectX.Header.resources.Strings.ImageIndicatorTooltipGreen">
+            <summary>
+              Looks up a localized string similar to Showing live video..
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.DirectX.Header.resources.Strings.ImageIndicatorTooltipGrey">
+            <summary>
+              Looks up a localized string similar to The video has not changed for more than two seconds..
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.DirectX.Header.resources.Strings.ImageIndicatorTooltipRed">
+            <summary>
+              Looks up a localized string similar to Recording video..
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.DirectX.Header.resources.Strings.ImageIndicatorTooltipYellow">
+            <summary>
+              Looks up a localized string similar to Playing back recorded video..
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.ImageViewerDirectX.SetUpdatedToken(System.String)">
+            <summary>
+            This is used when existing session needs to update to a new token
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.DirectX.ImageViewerDirectX.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.ImageViewerDirectX.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.ImageViewerDirectX.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.PlaybackThrottler">
+            <summary>
+            Throttles the playback calls to the VideoPlayer component to happen only when needed. Needed is when;
+            - The speed is changed.
+            - The time is changed more than deffined by the speed (e.g. during skip gaps).
+            - The maximum time between the playback calls are reached (for synchronizing the playback time)
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.DirectX.PlaybackThrottler.MaxUpdatedSignalInterval">
+            <summary>
+            Defines the maximum time between the update signal.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.DirectX.PlaybackThrottler.TimeJumpDetectionThresshold">
+            <summary>
+            Defines the time jump detection thresshold
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.PlaybackThrottler.HasTimeJumped(System.DateTime,System.DateTime,System.DateTime,System.DateTime,System.Double)">
+            <summary>
+            Detects if time has jumped or not. 
+            </summary>
+            <param name="oldTime"></param>
+            <param name="oldTimeUpdateTime"></param>
+            <param name="newTime"></param>
+            <param name="newTimeUpdateTime"></param>
+            <param name="speed"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.SmartClientVideoPlayer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.DirectX.ViewModelBase">
+            <summary>
+            Provides a base class for view models.  Copy of version from SC_CommonFiles.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.ViewModelBase.SetProperty``1(``0@,``0,System.String)">
+            <summary>
+            Sets the value of the parameter and fires the PropertyChanged event if it has changed.
+            </summary>
+            <typeparam name="TProperty"></typeparam>
+            <param name="storageField"></param>
+            <param name="value"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.ViewModelBase.SetProperty``1(System.Func{``0},System.Action{``0},``0,System.String)">
+            <summary>
+            Sets the value of a property that lives in a wrapped entity
+            </summary>
+            <typeparam name="TProperty"></typeparam>
+            <param name="getPropertyValue">Specifies how to get the current value of the property</param>
+            <param name="setPropertyValue">Specifies how to set the new value of the property</param>
+            <param name="value">Specifies the new value</param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.DirectX.ViewModelBase.GetMemberInfo(System.Linq.Expressions.Expression)">
+            <summary>
+            Converts an expression into a <see cref="T:System.Reflection.MemberInfo"/>.
+            </summary>
+            <param name="expression">The expression to convert.</param>
+            <returns>The member info.</returns>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm">
+             <summary>
+             A dialog to be used to let a user login to a Milestone VMS system.
+             
+             </summary>
+             
+             If login is performed in the Program.cs file, the following code could be used:
+             <code>
+             [STAThread]
+            	static void Main()
+            	{
+            		Application.EnableVisualStyles();
+            		Application.SetCompatibleTextRenderingDefault(false);
+            
+            		VideoOS.Platform.SDK.Environment.Initialize();
+            		DialogLoginForm loginForm = new DialogLoginForm(SetLoginResult);
+            		loginForm.DisableAutoLogin = true;		// Consider to support auto login, by setting this to false
+                 loginForm.ServerConfigurationEnum = ServerConfigurationEnum.AllServersIndividually; // login to all servers individually (new from MIPSDK 2015)
+            		Application.Run(loginForm);
+            		if (Connected)
+            		{
+            			Application.Run(new MyMainForm());
+            		}
+            	}
+            
+            	private static bool Connected = false;
+            	private static void SetLoginResult(bool connected)
+            	{
+            		Connected = connected;
+            	}
+             </code>
+             
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.ServerConfigurationEnum">
+            <summary>
+            Define how servers in a Master/Slave setup should be added.
+            
+            Is only relevant for Enterprise and Profesional products
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.ServerConfigurationEnum.MasterAndSlaves">
+            <summary>
+            Add the master as one server and all slaves as recorders under the master server. 
+            
+            Note that some functions and features cannot be used on the slaves.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.ServerConfigurationEnum.MasterOnly">
+            <summary>
+            Only add the identified server.  The slaves can be added later by use of Site information and hierarchy.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.ServerConfigurationEnum.AllServersIndividually">
+            <summary>
+            Add identified server, and all all slaves as individual server as well.  All servers will appear on top level.
+            
+            Use this option when MIP configuration is stored on each server, and needs to be retrieved.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.ServerConfiguration">
+            <summary>
+            Define how the servers should be added during the login process.
+            
+            The default value is MasterAndSlaves
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.AutoLogin">
+            <summary>
+            Set this to true if you like the autologin tick mark to be set at start
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.DisableAutoLogin">
+            <summary>
+            Set this property to false, if the AutoLogin is already ticked to on, but should be ignored this time.
+            
+            This property should be used when the application has already logged on automatically, and 
+            the user need to logout/login to provide new server address or credentials.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.EnsureDomain">
+            <summary>
+            If set to true the current domain will automatically be added to the user name if no domain is provided
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.LoginLogoImage">
+            <summary>
+            Set this Image to have your own image at top of the login dialog.
+            
+            Ideal size is 469x62 pixels, but will be streached to fit.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.SetLoginResultDelegate">
+            <summary>
+            A callback method for setting how the login performed.
+            </summary>
+            <param name="connected"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.#ctor(VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.SetLoginResultDelegate)">
+            <summary>
+            Initialize the login dialog, and set the callback method for setting the result of the entire login process.
+            </summary>
+            <param name="setLoginResult"></param>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.UpdateProgressSafe">
+            <summary>
+            Will be called whenever progress is updated
+            </summary>
+            <param name="progress"></param>
+            <param name="text"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.UpdateProgress(System.Double,System.String)">
+            <summary>
+            Call this to update the state of the progress indicator
+            </summary>
+            <param name="progress"></param>
+            <param name="text"></param>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.LoginDialog.DialogLoginForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.LoginDialog.LoginProgressBar.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.LoginDialog.LoginProgressBar.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.LoginDialog.LoginProgressBar.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.LoginDialog.LoginControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.LoginDialog.LoginControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.LoginDialog.LoginControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl">
+            <summary>
+            Interaction logic for PlatformImageViewerWpfControl.xaml
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._selected">
+            <summary>
+            boolean indicating whether the view item is currently selected or not.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._cameraDevice">
+            <summary>
+            Reference to the current active camera device. If no camera device is active (e.g. not found in system configuration) then the value is null
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._suppressUpdateOnMotionOnly">
+            <summary>
+            boolean indicating if the Update On Motion Only camera param is suppressed
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._titlebarBackSelectedColor">
+            <summary>
+            Color of titlebar when imageviewer is selected
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._titlebarBackUnselectedColor">
+            <summary>
+            Color of titlebar when imageviewer is not selected
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._titlebarFontSelectedColor">
+            <summary>
+            Color of titlebar when imageviewer is selected
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._titlebarFontUnselectedColor">
+            <summary>
+            Color of titlebar when imageviewer is not selected
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._multicastEnabled">
+            <summary>
+            True if multicast (UDP) is enabled, otherwise false.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._multicastMode">
+            <summary>
+            Multicast mode
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._multicastIPAddress">
+            <summary>
+            The multicast IP address
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._multicastPort">
+            <summary>
+            The multicast port
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._multicastSSRC">
+            <summary>
+            The multicast SSRC identifier
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._multicastPrivacyMask">
+            <summary>
+            The multicast privacy mask
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._onImageReceivedTime">
+            <summary>
+            Holds the latest timestamp of any picture notified by OnImageReceivedEvent
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._onImageReceivedActive">
+            <summary>
+            True if OnImageReceivedEvent is active and we have received the first such event since activation, false otherwise
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._digitalZoomInfoUserControl">
+            <summary>
+            Reference to the DigitalZoomInfoUserControl that is displayed during digital zoom
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl._updateDigitalZoomInfoImageTimer">
+            <summary>
+            Timer that trigger update of the digital zoom info image
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ShapesOverlayAdd(System.Collections.Generic.List{System.Windows.Shapes.Shape},VideoOS.Platform.Client.ShapesOverlayRenderParameters)">
+            <summary>
+            Method to add overlay shapes.
+            
+            The returned Guid is used to later modify and remove the overlays.
+            
+            Note: Valid from 2016 R3 when using the hardware accellerared ImageViewerControl.
+            </summary>
+            <param name="overlayShapes"></param>
+            <param name="renderParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ShapesOverlayUpdate(System.Guid,System.Collections.Generic.List{System.Windows.Shapes.Shape})">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="overlayShapes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ShapesOverlayUpdate(System.Guid,VideoOS.Platform.Client.ShapesOverlayRenderParameters)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="renderParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ShapesOverlayUpdate(System.Guid,System.Collections.Generic.List{System.Windows.Shapes.Shape},VideoOS.Platform.Client.ShapesOverlayRenderParameters)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="overlayShapes"></param>
+            <param name="renderParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ShapesOverlayRemove(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.Create">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.SetImageFPS(System.Int32,System.Boolean)">
+            <summary>
+            Set the framerate, must be 0,1,2
+            </summary>
+            <param name="frameRateEnum"></param>
+            <param name="updateOnMotionOnly"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.SetTitleBarSettings">
+            <summary>
+            Sets the titlebar, liveindicator and status text depending on the viewItem context
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ConnectToServer">
+            <summary>
+            Connects the ImageViewer to a camera device
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ImageViewerLiveStop">
+            <summary>
+            Stops ImageViewer live feed.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ImageViewerGoto(System.DateTime)">
+            <summary>
+            Tells the ImageViewer to go to the image at a specific time
+            <param name="gotoTime">The time that the ImageViewer shall go to</param>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ImageViewerBegin">
+            <summary>
+            Tells the ImageViewer to go to the first image
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ImageViewerEnd">
+            <summary>
+            Tells the ImageViewer to go to the last image
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ImageViewerNext">
+            <summary>
+            Tells the ImageViewer to go to the next image
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ImageViewerPrevious">
+            <summary>
+            Tells the ImageViewer to go to the previous image
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ImageViewerNextSequence">
+            <summary>
+            Tells the ImageViewer to go to the next sequence
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ImageViewerPreviousSequence">
+            <summary>
+            Tells the ImageViewer to go to the previous sequence
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.ImageViewerDigitalZoomPtz(System.String)">
+            <summary>
+            Sends a ptz command to the imageviewer, Only used to ptz in an ipix image or perform digital zoom operation
+            </summary>
+            <param name="ptzMoveRelativeType">The type of ptz command</param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.PlatformImageViewerWpfControl.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.SDKAudioControl">
+            <summary>
+            Audio control class
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKAudioControl._playbackResyncInterval">
+            <summary>
+            Specifies the audio ax playback resync frequency. It should not be resync'et to often
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKAudioControl.#ctor(VideoOS.Platform.Client.PlaybackController)">
+            <summary>
+            Audio control constructor
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.SDKAudioControl.Volume">
+            <summary>
+            Gets or sets the volume.
+            </summary>
+            <value>The volume.</value>
+            <exception cref="T:System.ArgumentOutOfRangeException">The value have to be between 0 and 1</exception>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.SDKAudioControl.Mute">
+            <summary>
+            Gets or sets a value indicating whether this is mute.
+            </summary>
+            <value><c>true</c> if mute; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKAudioControl.DestForMe(VideoOS.Platform.FQID)">
+            <summary>
+            When using the built-in playback controller, then FQID == null, otherwise the FQID == a specific created Playback Controller
+            </summary>
+            <param name="fqid"></param>
+            <returns>True, if the mode change is for this instance</returns>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.SDKAudioControl.HasSelectedDevice">
+            <summary>
+            Gets a value indicating whether this instance has selected audio device.
+            </summary>
+            <value>
+            	<c>true</c> if this instance has selected audio device; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.SDKAudioControl.DeviceConnectionState">
+            <summary>
+            Gets or sets the state of the device connection.
+            </summary>
+            <value>The state of the device connection.</value>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKAudioControl.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKAudioControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKAudioControl.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.LoginCancelled">
+            <summary>
+              Looks up a localized string similar to Canceling.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.LoginDialogTitle">
+            <summary>
+              Looks up a localized string similar to Connect to server.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.LoginErrorCancelled">
+            <summary>
+              Looks up a localized string similar to Failed to connect. The login was cancelled..
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.LoginErrorDualLoginRequiredOk">
+            <summary>
+              Looks up a localized string similar to Failed to connect. Login authorization required..
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.LoginErrorServerNotFound">
+            <summary>
+              Looks up a localized string similar to Failed to connect. Check the server address..
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.LoginErrorUnknown">
+            <summary>
+              Looks up a localized string similar to Failed to connect. Login failed because of an error..
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.LoginErrorUserNotOk">
+            <summary>
+              Looks up a localized string similar to Failed to connect. Check the user name and password..
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.LoginInvalidUsername">
+            <summary>
+              Looks up a localized string similar to Invalid user name.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.LoginProgressTextConnect">
+            <summary>
+              Looks up a localized string similar to Connecting....
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.LogonLogo">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.PasswordLabelSimple">
+            <summary>
+              Looks up a localized string similar to &amp;Password:.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.PasswordLabelWindows">
+            <summary>
+              Looks up a localized string similar to &amp;Password:.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.ServerTypeNameSimple">
+            <summary>
+              Looks up a localized string similar to Basic authentication.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.ServerTypeNameWindows">
+            <summary>
+              Looks up a localized string similar to Windows authentication.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.ServerTypeNameWindowsDefault">
+            <summary>
+              Looks up a localized string similar to Windows authentication (current user).
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.URIError">
+            <summary>
+              Looks up a localized string similar to The specified URL is not valid..
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.UserLabelSimple">
+            <summary>
+              Looks up a localized string similar to &amp;User name:.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.Properties.Resources.UserLabelWindows">
+            <summary>
+              Looks up a localized string similar to &amp;User name:.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.SDKImageViewerControl.EClientMode">
+            <summary>
+            Enum specifying Image Viewer ActiveX client mode
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.SDKImageViewerControl.MulticastMode">
+            <summary>
+            Enum specifying the multicast mode
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl.MulticastMode.Disabled">
+            <summary>
+            Indicates that multicast is disabled
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl.MulticastMode.Stopped">
+            <summary>
+            Indicates that multicast is enabled, but not started yet
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl.MulticastMode.Started">
+            <summary>
+            Indicates that multicast is enabled, and started
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._imageViewer">
+            <summary>
+            Reference to the Image Viewer ActiveX. Null when ImageViewerActiveX is not initialized.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._cameraDevice">
+            <summary>
+            Reference to the current active camera device. If no camera device is active (e.g. not found in system configuration) then the value is null
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._viewItem">
+            <summary>
+            Reference to the camera view item
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._enableBrowseMode">
+            <summary>
+            boolean indicating if Browse mode is enabled
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._enableSetupMode">
+            <summary>
+            boolean indicating if Browse mode is enabled
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._suppressUpdateOnMotionOnly">
+            <summary>
+            boolean indicating if the Update On Motion Only camera param is suppressed
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._enableRecordedImageDisplayedEvent">
+            <summary>
+            boolean indicating if the recorded image displayed event is enabled
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._enableMouseControlledPtz">
+            <summary>
+            boolean indicating if Mouse Controlled PTZ is enabled
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._enableScrollWheel">
+            <summary>
+            boolean indicating if Scroll Wheel is enabled
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._enableMiddleButtonClick">
+            <summary>
+            boolean indicating if Middle Button Click is enabled
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._enableLiveInformationStatePackage">
+            <summary>
+            boolean indicating whether Live Information State Packages are received from server
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._setEClientMode">
+            <summary>
+            boolean indicating is the Image Viewer ActiveX EClientMode must be set
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._digitalZoomInfoUserControl">
+            <summary>
+            Reference to the DigitalZoomInfoUserControl that is displayed during digital zoom
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._updateDigitalZoomInfoImageTimer">
+            <summary>
+            Timer that trigger update of the digital zoom info image
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._selected">
+            <summary>
+            boolean indicating whether the view item is currently selected or not.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._isStandalone">
+            <summary>
+            boolean indicating whether the imageviewer is used in a view or as a standalone (It is set from the derived class)
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._hidden">
+            <summary>
+            boolean indicating whether the image viewer is currently hidden or not (e.g. the view item is hidden when another view item is maximized).
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._onImageReceivedTime">
+            <summary>
+            Holds the latest timestamp of any picture notified by OnImageReceivedEvent
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._onImageReceivedActive">
+            <summary>
+            True if OnImageReviecedEvent is active and we have revieved the first such event since activation, false otherwise
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._multicastEnabled">
+            <summary>
+            True if multicast (UDP) is enabled, otherwise false.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._multicastMode">
+            <summary>
+            Multicast mode
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._multicastIPAddress">
+            <summary>
+            The multicast IP address
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._multicastPort">
+            <summary>
+            The multicast port
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._multicastSSRC">
+            <summary>
+            The multicast SSRC identifier
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._multicastPrivacyMask">
+            <summary>
+            The multicast privacy mask
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._multicastPrivacyMaskVersion">
+            <summary>
+            The multicast privacy mask version
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._fullLayoutPanel">
+            <summary>
+            Panel including Image Viewer ActiveX, Digital Zoom Image Control and Text Label
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._imageViewerControlPanel">
+            <summary>
+            Panel including only the Image Viewer ActiveX
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._digitalZoomInfoImageControlPanel">
+            <summary>
+            Panel including only the Digital Zoom Image Control
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._textLabel">
+            <summary>
+            Text label for displaying user messages 
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._titlebarSelectedColor">
+            <summary>
+            Color of titlebar when imageviewer is selected
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._titlebarUnselectedColor">
+            <summary>
+            Color of titlebar when imageviewer is not selected
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._titlebarFading">
+            <summary>
+            Fading step of titlebar colors
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._digitalZoomYOffset">
+            <summary>
+            Extra Y-offset for the digitalZoom panel
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.UI.SDKImageViewerControl._adaptiveStreaming">
+            <summary>
+            Determine the stream resolution should be adapted based on the view size.
+            </summary>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ClickEvent">
+            <summary>
+            Signals that the Image Viewer is clicked
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.FireClickEvent(System.EventArgs)">
+            <summary>
+            Activates the ClickEvent
+            </summary>
+            <param name="e">Event args</param>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.UI.SDKImageViewerControl.DoubleClickEvent">
+            <summary>
+            Signals that the Image Viewer is double clicked
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.FireDoubleClickEvent(System.EventArgs)">
+            <summary>
+            Activates the DoubleClickEvent
+            </summary>
+            <param name="e">Event args</param>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.UI.SDKImageViewerControl.RightClickEvent">
+            <summary>
+            Signals that the Image Viewer is right clicked
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.FireRightClickEvent(System.EventArgs)">
+            <summary>
+            Activates the RightClickEvent
+            </summary>
+            <param name="e">Event args</param>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.UI.SDKImageViewerControl.MiddleClickEvent">
+            <summary>
+            Signals that the Image Viewer is middle button clicked
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.FireMiddleClickEvent(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Activates the RightClickEvent
+            </summary>
+            <param name="e">Event args</param>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ScrollWheelEvent">
+            <summary>
+            Sends Scroll Wheel events 
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.FireScrollWheelEvent(VideoOS.UI.Common.WPF.VideoPlayer.PtzScrollWheelEventArgs)">
+            <summary>
+            Activates the ScrollWheelEvent
+            </summary>
+            <param name="e">Event args</param>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.UI.SDKImageViewerControl.LiveInformationStatePackageChangedEvent">
+            <summary>
+            Sends Live Information Package 
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.FireLiveInformationStatePackageChangedEvent(VideoOS.Platform.SDK.UI.OnLiveInformationStatePackageChangedEventArgs)">
+            <summary>
+            Activates the LiveInformationPackageEvent
+            </summary>
+            <param name="e">Event args</param>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerConnectResponseReceivedEvent">
+            <summary>
+            Image Viewer connection response 
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.FireImageViewerConnectResponseReceivedEvent(VideoOS.Platform.SDK.UI.OnConnectResponseReceivedEventArgs)">
+            <summary>
+            Activates the ImageViewerConnectResponseReceivedEvent
+            </summary>
+            <param name="e">Event args</param>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerRecordedImageDisplayedEvent">
+            <summary>
+            Image Viewer recorded image displayed
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.FireImageViewerRecordedImageDisplayedEvent(VideoOS.Platform.SDK.UI.OnRecordedImageDisplayedEventArgs)">
+            <summary>
+            Activates the ImageViewerRecordedImageDisplayedEvent
+            </summary>
+            <param name="e">Event args</param>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.UI.SDKImageViewerControl.VideoImageEvent">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.SDKImageViewerControl.InfoText">
+            <summary>
+            Sets the Image Viewer information text 
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.SDKImageViewerControl.Selectable">
+            <summary>
+            Gets if the Image Viewer Control is selectable. 
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.SDKImageViewerControl.Selected">
+            <summary>
+            Gets or sets the selected status on the content holder.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.SDKImageViewerControl.Focused">
+            <summary>
+            Gets a value indicating wheather the Image Viewer Control has input focus.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.SDKImageViewerControl.UseDigitalZoom">
+            <summary>
+            Gets the local Use Digital Zoom value.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.SDKImageViewerControl.CameraDevice">
+            <summary>
+            Reference to the current active camera device.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.SDKImageViewerControl.FQID">
+            <summary>
+            This needs to be set at same time as above !!
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ViewItem">
+            <summary>
+            Reference to camera view item
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.Create">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.Initialize">
+            <summary>
+            Initializes the ImageViewer. Calling setup methods and sets up event listeners
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.Connect">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.Disconnect">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ConnectToServer">
+            <summary>
+            Connects the ImageViewer to a camera device
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.StartLive">
+            <summary>
+            Puts the camera into live mode
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.StartBrowse">
+            <summary>
+            Puts the camera into browse mode
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.StartSetup">
+            <summary>
+            Puts the camera into setup mode
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerLiveStart">
+            <summary>
+            Starts ImageViewer live feed.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerLiveStop">
+            <summary>
+            Stops ImageViewer live feed.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerGoto(System.DateTime)">
+            <summary>
+            Tells the ImageViewer to go to the image at a specific time
+            <param name="gotoTime">The time that the ImageViewer shall go to</param>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerPlayback(System.DateTime)">
+            <summary>
+            Tells the ImageViewer to go to the image at a specific time,
+            The Playback is framerate limited, so the request may be discarded.
+            <param name="gotoTime">The time that the ImageViewer shall go to</param>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerNext">
+            <summary>
+            Tells the ImageViewer to go to the next image
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerPrevious">
+            <summary>
+            Tells the ImageViewer to go to the previous image
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerNextSequence">
+            <summary>
+            Tells the ImageViewer to go to the next sequence
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerPreviousSequence">
+            <summary>
+            Tells the ImageViewer to go to the previous sequence
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerBegin">
+            <summary>
+            Tells the ImageViewer to go to the first image
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerEnd">
+            <summary>
+            Tells the ImageViewer to go to the last image
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ImageViewerDigitalZoomPtz(System.String)">
+            <summary>
+            Sends a ptz command to the imageviewer, Only used to ptz in an ipix image or perform digital zoom operation
+            </summary>
+            <param name="ptzMoveRelativeType">The type of ptz command</param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.IsSelectable">
+            <summary>
+            Returns true if the camera is currently selectable.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.SetTitleBarSettings">
+            <summary>
+            Sets the titlebar, liveindicator and status text depending on the viewItem context
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.SetImageFPS(System.Int32,System.Boolean)">
+            <summary>
+            Set the framerate, must be 0,1,2
+            </summary>
+            <param name="frameRateEnum"></param>
+            <param name="updateOnMotionOnly"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ShapesOverlayAdd(System.Collections.Generic.List{System.Windows.Shapes.Shape},VideoOS.Platform.Client.ShapesOverlayRenderParameters)">
+            <summary>
+            Method to add overlay shapes.
+            
+            The returned Guid is used to later modify and remove the overlays.
+            
+            Note: Valid from 2016 R3 when using the hardware accellerared ImageViewerControl.
+            </summary>
+            <param name="overlayShapes"></param>
+            <param name="renderParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ShapesOverlayUpdate(System.Guid,System.Collections.Generic.List{System.Windows.Shapes.Shape})">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="overlayShapes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ShapesOverlayUpdate(System.Guid,VideoOS.Platform.Client.ShapesOverlayRenderParameters)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="renderParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ShapesOverlayUpdate(System.Guid,System.Collections.Generic.List{System.Windows.Shapes.Shape},VideoOS.Platform.Client.ShapesOverlayRenderParameters)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="overlayShapes"></param>
+            <param name="renderParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.SDKImageViewerControl.ShapesOverlayRemove(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.UI.Environment">
+            <summary>
+            The environment for UI controls
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.UI.Environment.Initialize">
+            <summary>
+            Initializes the UI environment
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.SDKIpixController">
+            <summary>
+            Build in controller containing ipix related events, e.g. ptz events
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.SDKIpixController.IpixSplitModes">
+            <summary>
+            Enum defining the available ipix split modes
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.SDKIpixController.IpixSplitModes.SplitMode1x1">
+            <summary>
+            one by on split mode
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.SDKIpixController.IpixSplitModes.SplitMode2x2">
+            <summary>
+            two by two split mode
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.SDKIpixController.ConfigPropStringIpixViewPointPan">
+            <summary>
+            const specifying the property key string that shall be used when savinng the ipix pan value in the configuration
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.SDKIpixController.ConfigPropStringIpixViewPointTilt">
+            <summary>
+            const specifying the property key string that shall be used when savinng the ipix tilt value in the configuration
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.SDKIpixController.ConfigPropStringIpixViewPointZoom">
+            <summary>
+            const specifying the property key string that shall be used when savinng the ipix zoom value in the configuration
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKIpixController.#ctor">
+            <summary>
+            Constructs a IpixController instance
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.SDKIpixController.IpixPresetEventHandler">
+            <summary>
+            Represents the method that will handle ipix preset events
+            </summary>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.SDKIpixController.IpixPresetEvent">
+            <summary>
+            Signals that the current selected ipix camera should perform a preset operation
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKIpixController.FireIpixPresetEvent(System.String)">
+            <summary>
+            Activates the IpixPresetEvent
+            </summary>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.SDKIpixController.SaveViewpointEvent">
+            <summary>
+            Signals that the current selected ipix camera should save current viewpoint information
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKIpixController.FireSaveViewpointEvent">
+            <summary>
+            Activates the SaveViewpointEvent
+            </summary>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.SDKIpixController.LoadViewpointEvent">
+            <summary>
+            Signals that the current selected ipix camera should load the stored viewpoint information
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKIpixController.FireLoadViewpointEvent">
+            <summary>
+            Activates the loadViewpointEvent
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKIpixController.IpixPreset(System.String)">
+            <summary>
+            Request that the IpixPresetEvent is activated
+            </summary>
+            <param name="ipixPresetName">The name of the preset to include in the event</param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKIpixController.LoadViewpoint">
+            <summary>
+            Request that the LoadViewpointEvent is activated
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKIpixController.SaveViewpoint">
+            <summary>
+            Request that the SaveViewpointEvent is activated
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKIpixController.GetNumberOfViewpoints(VideoOS.Platform.SDK.SDKIpixController.IpixSplitModes)">
+            <summary>
+            Return the number of viewpoints in a specified ipix split mode
+            </summary>
+            <param name="ipixSplitMode">The ipis split mode</param>
+            <returns>The number of viewpoints</returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKIpixController.GetViewPointAtPosition(System.Drawing.Point,System.Drawing.Size,VideoOS.Platform.SDK.SDKIpixController.IpixSplitModes)">
+            <summary>
+            Returns the index of the viewpoint at a specified position in the ipix window.
+            </summary>
+            <param name="position">The position</param>
+            <param name="ipixWindowSize">The ipix window size</param>
+            <param name="ipixSplitMode">The ipix split mode</param>
+            <returns>Index of viewpoint at the position</returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKIpixController.ConvertQualityToIpixQuality(System.Int32)">
+            <summary>
+            Converta a image quality value to the quality value that shall be used when displaying ipix images. This is nessesary because the ipix images must not be resized.
+            </summary>
+            <param name="quality">The image quality</param>
+            <returns>The ipix image quality</returns>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.SDKIpixController.IpixPresetEventArgs">
+            <summary>
+            Implements the class that contains the event args for the ipix preset event
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.SDKIpixController.IpixPresetEventArgs._ipixPresetName">
+            <summary>
+            The ipix preset name parameter of the event args
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKIpixController.IpixPresetEventArgs.#ctor(System.String)">
+            <summary>
+            Constructs a IpixPresetEventArgs instance
+            </summary>
+            <param name="ipixPresetName">The ipix preset name parameter of the event args</param>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.SDKIpixController.IpixPresetEventArgs.IpixPresetName">
+            <summary>
+            Gets or sets the ipix preset name parameter of the event args
+            </summary>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.SDKDigitalZoomInfoUserControl.ZoomRectangleMovedByUserEvent">
+            <summary>
+            Signals that the zoom rectangle is moved by the user
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKDigitalZoomInfoUserControl.FireZoomRectangleMovedByUserEvent(System.EventArgs)">
+            <summary>
+            Activates the ZoomRectangleMovedByUserEvent
+            </summary>
+            <param name="e">Event args</param>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.SDKDigitalZoomInfoUserControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKDigitalZoomInfoUserControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKDigitalZoomInfoUserControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.SDKDigitalZoomController">
+            <summary>
+            Build in controller containing digital zoom related events and methods, e.g. ptz events
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.SDKDigitalZoomController._digitalZoomEnabled">
+            <summary>
+            Indicates whether digital zoom is enabled or not
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKDigitalZoomController.#ctor">
+            <summary>
+            Constructs a DigitalZoomController instance
+            </summary>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.SDKDigitalZoomController.UseDigitalZoomChangedEvent">
+            <summary>
+            Signals that the digital zoom enabled states has changed
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKDigitalZoomController.FireUseDigitalZoomChangedEvent">
+            <summary>
+            Activates the UseDigitalZoomChangedEvent
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.SDKDigitalZoomController.DigitalZoomPtzEventHandler">
+            <summary>
+            Represents the method that will handle digital zoom ptz events
+            </summary>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.SDKDigitalZoomController.DigitalZoomPtzEvent">
+            <summary>
+            Signals that the current selected camera should perform a digital zoom ptz operation
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKDigitalZoomController.FireDigitalZoomPtzEvent(System.String)">
+            <summary>
+            Activates the FireDigitalZoomPtzEvent
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.SDKDigitalZoomController.CurrentDigitalZoomRectangleChangedEventHandler">
+            <summary>
+            Represents the method that will handle current digital zoom rectangle changed event
+            </summary>
+        </member>
+        <member name="E:VideoOS.Platform.SDK.SDKDigitalZoomController.CurrentDigitalZoomRectangleChangedEvent">
+            <summary>
+            Signals that the current digital zoom rectangle has changed
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKDigitalZoomController.FireCurrentDigitalZoomRectangleChangedEvent(VideoOS.Platform.SDK.SDKDigitalZoomController.CurrentDigitalZoomRectangleChangedEventArgs)">
+            <summary>
+            Activates the CurrentDigitalZoomRectangleChangedEvent
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.SDKDigitalZoomController.DigitalZoomEnabled">
+            <summary>
+            Sets or gets whether digital zoom is enable or not.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.SDKDigitalZoomController.SelectedDigitalZoomEnabled">
+            <summary>
+            Sets or gets whether the visible digital zoom is enable or not.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKDigitalZoomController.DigitalZoomPtz(System.String)">
+            <summary>
+            Request that the DigitalZoomPtzEvent is activated
+            </summary>
+            <param name="ptzMoveRelativeType">The zoom ptz type of the event</param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKDigitalZoomController.GetCurrentDigitalZoomRectangle(VideoOS.Platform.SDK.SDKImageViewerParameters)">
+            <summary>
+            Gets the current digital zoom rectangle
+            </summary>
+            <param name="cameraViewItem">The view item identifying the camera</param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKDigitalZoomController.SetCurrentDigitalZoomRectangle(VideoOS.Platform.SDK.SDKImageViewerParameters,VideoOS.Platform.SDK.SDKDigitalZoomController.DigitalZoomRectangle)">
+            <summary>
+            Sets the current digital zoom rectangle of a specific camera
+            </summary>
+            <param name="cameraViewItem">The view item identifying the camera</param>
+            <param name="digitalZoomRectangle">The rectangle to set</param>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.SDKDigitalZoomController.DigitalZoomPtzEventArgs">
+            <summary>
+            Implements the class that contains the event args for the digital zoom ptz event
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.SDKDigitalZoomController.DigitalZoomPtzEventArgs._ptzMoveRelativeType">
+            <summary>
+            The digital zoom ptz type parameter of the event args
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKDigitalZoomController.DigitalZoomPtzEventArgs.#ctor(System.String)">
+            <summary>
+            Constructs a DigitalZoomPtzEventArgs instance
+            </summary>
+            <param name="ptzMoveRelativeType">The digital ptz type parameter of the event args</param>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.SDKDigitalZoomController.DigitalZoomPtzEventArgs.PtzMoveRelativeType">
+            <summary>
+            Gets or sets the digital zoom ptz type parameter of the event args
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.SDKDigitalZoomController.DigitalZoomRectangle">
+            <summary>
+            Data class representing a digital zoom rectangle
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.SDKDigitalZoomController.CurrentDigitalZoomRectangleChangedEventArgs">
+            <summary>
+            Implements the class that contains the event args for the CurrentDigitalZoomRectangleChangedEventArgs
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.SDKDigitalZoomController.CurrentDigitalZoomRectangleChangedEventArgs._cameraViewItem">
+            <summary>
+            The camera view item parameter of the event args
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKDigitalZoomController.CurrentDigitalZoomRectangleChangedEventArgs.#ctor(VideoOS.Platform.SDK.SDKImageViewerParameters)">
+            <summary>
+            Constructs a CurrentDigitalZoomRectangleChangedEventArgs instance
+            </summary>
+            <param name="cameraViewItem">The camera view item parameter of the event args</param>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.SDKDigitalZoomController.CurrentDigitalZoomRectangleChangedEventArgs.CameraViewItem">
+            <summary>
+            Gets or sets the camera view item parameter of the event args
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.PlatformImageViewerControl.ShapesOverlayAdd(System.Collections.Generic.List{System.Windows.Shapes.Shape},VideoOS.Platform.Client.ShapesOverlayRenderParameters)">
+            <summary>
+            Method to add overlay shapes.
+            
+            The returned Guid is used to later modify and remove the overlays.
+            
+            Note: Valid from 2016 R3 when using the hardware accellerared ImageViewerControl.
+            </summary>
+            <param name="overlayShapes"></param>
+            <param name="renderParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.PlatformImageViewerControl.ShapesOverlayUpdate(System.Guid,System.Collections.Generic.List{System.Windows.Shapes.Shape})">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="overlayShapes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.PlatformImageViewerControl.ShapesOverlayUpdate(System.Guid,VideoOS.Platform.Client.ShapesOverlayRenderParameters)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="renderParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.PlatformImageViewerControl.ShapesOverlayUpdate(System.Guid,System.Collections.Generic.List{System.Windows.Shapes.Shape},VideoOS.Platform.Client.ShapesOverlayRenderParameters)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="overlayShapes"></param>
+            <param name="renderParameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.PlatformImageViewerControl.ShapesOverlayRemove(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.SDKImageViewerParameters.GetPanoramicViewpointHomePositions">
+            <summary>
+            Sets the panoramic view point positions. View point positions saved in the configuration is used. If they are not available the view points is set to default values.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.SDKPlaybackController">
+            <summary>
+            Build in controller containing browse information and events, e.g. current browse time, 
+            goto, prev, next ect. 
+            
+            This class is included to provide backwards compatibility.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.VideoQualityManager.BuildCustomCameraBufferingParametersXml(System.Int32,System.Boolean,System.Boolean)">
+             <summary>
+             Build a xml document containing the video buffering information used by the Image Viewer ActiveX
+             The result is in this format:
+             <!--
+             <Buffering>
+              <Threads>
+                <MaxDecodingThreads>1</MaxDecodingThreads>
+                <TimingResolutionMilliseconds>16</TimingResolutionMilliseconds>
+              </Threads>
+              <DecodeQueue>
+                <MaxFrames>10</MaxFrames>
+                <SubsamplingLowPercentage>0</SubsamplingLowPercentage>
+                <SubsamplingHighPercentage>0</SubsamplingHighPercentage>
+                <SkipToLatest>false</SkipToLatest>
+              </DecodeQueue>
+              <PaintQueue>
+                <MaxFrames>0</MaxFrames>
+                <MaxSpanMilliseconds>0</MaxSpanMilliseconds>
+                <AdjustmentFactor>0</AdjustmentFactor>
+              </PaintQueue>
+              <Toolkit>
+                <BufferMilliseconds>0</BufferMilliseconds>
+              </Toolkit>
+            </Buffering>
+             -->
+             </summary>
+            <param name="priority"></param>
+            <param name="useMultipleCpus"></param>
+            <param name="ptzEnabled"></param>
+            <returns>The xml document containing the video buffering information</returns>
+        </member>
+        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+            <summary>
+            GeneratedInternalTypeHelper
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+            <summary>
+            CreateInstance
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            GetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            SetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+            <summary>
+            CreateDelegate
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+            <summary>
+            AddEventHandler
+            </summary>
+        </member>
+    </members>
+</doc>

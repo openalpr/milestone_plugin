@@ -1,0 +1,272 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VideoOS.Platform.SDK.RemoteRetrievalTasks</name>
+    </assembly>
+    <members>
+        <member name="T:VideoOS.Platform.SDK.RemoteRetrievalTasks.TaskState">
+            <summary>
+            Represents a state of a remote rcording retrieval task.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.RemoteRetrievalTasks.TaskState.Inactive">
+            <summary>
+            Task is inactive
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.RemoteRetrievalTasks.TaskState.Stopped">
+            <summary>
+            Task is stopped
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.RemoteRetrievalTasks.TaskState.Failed">
+            <summary>
+            Task is failed
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.RemoteRetrievalTasks.TaskState.InProgress">
+            <summary>
+            Task is in progress
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.RemoteRetrievalTasks.TaskState.Succeeded">
+            <summary>
+            Task is succeeded
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.RemoteRetrievalTasks.TaskState.Stopping">
+            <summary>
+            Task is about to stop
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.RemoteRetrievalTasks.TaskState.Unknown">
+            <summary>
+            Task is in unknown state
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.SDK.RemoteRetrievalTasks.TaskState.Removed">
+            <summary>
+            Task has been removed
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask">
+            <summary>
+            Object representing remote recording retrieval tasks in XProtect Corporate system.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.Stop">
+            <summary>
+            Stops tasks execution or from being executed.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.State">
+            <summary>
+            State of the task.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.DeviceId">
+            <summary>
+            Id of device for which the task was requested.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.DeviceName">
+            <summary>
+            Name of device for which the task was requested.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.StartTime">
+            <summary>
+            Start time of requested recordings as UTC time.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.EndTime">
+            <summary>
+            End time of requested recordings as UTC time.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.CreationTime">
+            <summary>
+            The time this retrieval task was created. If no such time is available DateTime.MinValue will be returned.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.User">
+            <summary>
+            User who requested the task.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.PercentCompleted">
+            <summary>
+            Number of percent in which the task is completed.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.Equals(System.Object)">
+            <summary>
+            Specialized implementation of equals method
+            </summary>
+            <param name="obj"></param>
+            <returns>true if objects are equal</returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.Equals(VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask)">
+            <summary>
+            Compares the current task with the one given. 
+            </summary>
+            <param name="task"></param>
+            <returns>True if internal ID and <see cref="P:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.DeviceId"/> are equal, otherwise false.</returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask.GetHashCode">
+            <summary>
+            Specialized implementation of GetHashCode method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager">
+            <summary>
+            Class used for communicating with XProtect Corporate and Expert system in order to request remote recording retrievals. This class only works with XProtect Corporate 2013 or newer.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.#ctor(VideoOS.Platform.FQID)">
+            <summary>
+            Construct class with identification of what Management Server to work with.
+            </summary>
+            <param name="fqid"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.#ctor(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Construct class with specific credentials. <br/>
+            Please consider using the more secure version using SecureString for the password instead.
+            </summary>
+            <param name="serverAddress">IP address or name of XProtect Corporate/Expert Management Server</param>
+            <param name="port">Specify port if available. When set to 0 - default port of 80 is used.</param>
+            <param name="userName">'Domain\Username' for AD and local users, or just 'username' for basic users.</param>
+            <param name="password">password to be used for authentication</param>
+            <exception cref="T:System.ArgumentNullException">thrown when any of parameters is null</exception>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.#ctor(System.String,System.Int32,System.String,System.Security.SecureString)">
+            <summary>
+            Construct class with specific credentials. 
+            </summary>
+            <param name="serverAddress">IP address or name of XProtect Corporate/Expert Management Server</param>
+            <param name="port">Specify port if available. When set to 0 - default port of 80 is used.</param>
+            <param name="userName">'Domain\Username' for AD and local users, or just 'username' for basic users.</param>
+            <param name="password">password to be used for authentication</param>
+            <exception cref="T:System.ArgumentNullException">thrown when any of parameters is null</exception>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.IsConnected">
+            <summary>
+            Tells whether the manager is connected or not
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.Connect">
+            <summary>
+            Connects to XProtect Corporate Management Server using credentials provided in <see cref="N:VideoOS.Platform.Login"/>. 
+            </summary>
+            <exception cref="T:System.InvalidOperationException">thrown when trying to connect before logging in. Call <see cref="N:VideoOS.Platform.Login"/> first.</exception>
+            <exception cref="T:System.InvalidOperationException">thrown when trying to login twice or logging in to a version earlier than XProtect Corporate 2013</exception>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.Disconnect">
+            <summary>
+            Disconnects from XProtect Corporate Management Server.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">thrown when trying to disconnect before logging in. Call <see cref="N:VideoOS.Platform.Login"/> first.</exception>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.Dispose">
+            <summary>
+            Disposes the manager
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.Retrieve(System.Guid,System.DateTime,System.DateTime)">
+            <summary>
+            Creates a remote recordings retrieval task that retrieves remote recordings for given device from the specified time.
+            </summary>
+            <param name="deviceId">Id of device</param>
+            <param name="start">start time of recording to be retrieved provided as UTC</param>
+            <param name="end">end time of recording to be retrieved provided as UTC</param>
+            <exception cref="T:System.UnauthorizedAccessException">thrown when user does not have enough rights to retrieve remote recordings from given device. 
+            Check XProtect Corporate system configuration.</exception>
+            <exception cref="T:System.ArgumentException">thrown when <paramref name="start"/> or <paramref name="end"/> are not UTC times. 
+            Also thrown when <paramref name="start"/> is not at least 1 ms after <paramref name="end"/>.
+            Also thrown when trying to retrieve remot recordings from a device that does not support remote recordings retrieval or does not exist.</exception>
+            <exception cref="T:System.InvalidOperationException">thrown when trying to retrieve recordings before logging in. Call <see cref="N:VideoOS.Platform.Login"/> first.</exception>
+            <returns>a <see cref="T:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask"/> object containing information about remote recordings retrieval task</returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.Retrieve(System.Guid,System.DateTime,System.DateTime,System.String)">
+            <summary>
+            Creates a remote recordings retrieval task that retrieves remote recordings for given device from the specified time. Allows for specifying 
+            user name under which the task will appear in XProtect Smart Client.
+            </summary>
+            <param name="deviceId">Id of device</param>
+            <param name="start">start time of recording to be retrieved provided as UTC</param>
+            <param name="end">end time of recording to be retrieved provided as UTC</param>
+            <param name="userName">user name under which the task will appear in XProtect Smart Client</param>
+            <exception cref="T:System.UnauthorizedAccessException">thrown when user does not have enough rights to retrieve remote recordings from given device. 
+            Check XProtect Corporate system configuration.</exception>
+            <exception cref="T:System.ArgumentException">thrown when <paramref name="start"/> or <paramref name="end"/> are not UTC times. 
+            Also thrown when <paramref name="start"/> is not at least 1 ms after <paramref name="end"/>.
+            Also thrown when trying to retrieve remot recordings from a device that does not support remote recordings retrieval or does not exist.</exception>
+            <exception cref="T:System.InvalidOperationException">thrown when trying to retrieve recordings before logging in. Call <see cref="N:VideoOS.Platform.Login"/> first.</exception>
+            <returns>a <see cref="T:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask"/> object containing information about remote recordings retrieval task</returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.Retrieve(System.Guid,System.Guid,System.Guid,System.DateTime,System.DateTime)">
+            <summary>
+            Creates a remote recordings retrieval task that retrieves remote recordings for given device from the specified time.
+            </summary>
+            <param name="recordingServerId">Id of recording server</param>
+            <param name="hardwareId">Id of hardware</param>
+            <param name="deviceId">Id of device</param>
+            <param name="start">start time of recording to be retrieved provided as UTC</param>
+            <param name="end">end time of recording to be retrieved provided as UTC</param>
+            <exception cref="T:System.UnauthorizedAccessException">thrown when user does not have enough rights to retrieve remote recordings from given device. 
+            Check XProtect Corporate system configuration.</exception>
+            <exception cref="T:System.ArgumentException">thrown when <paramref name="start"/> or <paramref name="end"/> are not UTC times. 
+            Also thrown when <paramref name="start"/> is not at least 1 ms after <paramref name="end"/>.
+            Also thrown when trying to retrieve remot recordings from a device that does not support remote recordings retrieval.
+            Also thrown when recording server, hardware or device with given Id does not exist.</exception>
+            <exception cref="T:System.InvalidOperationException">thrown when trying to retrieve recordings before logging in. Call <see cref="N:VideoOS.Platform.Login"/> first.</exception>
+            <exception cref="T:System.Exception">thrown when something unexpected happened.</exception>
+            <returns>a <see cref="T:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask"/> object containing information about remote recordings retrieval task</returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.Retrieve(System.Guid,System.Guid,System.Guid,System.DateTime,System.DateTime,System.String)">
+            <summary>
+            Creates a remote recordings retrieval task that retrieves remote recordings for given device from the specified time. Allows for specifying 
+            user name under which the task will appear in XProtect Smart Client.
+            </summary>
+            <param name="recordingServerId">Id of recording server</param>
+            <param name="hardwareId">Id of hardware</param>
+            <param name="deviceId">Id of device</param>
+            <param name="start">start time of recording to be retrieved provided as UTC</param>
+            <param name="end">end time of recording to be retrieved provided as UTC</param>
+            <param name="userName">user name under which the task will appear in XProtect Smart Client</param>
+            <exception cref="T:System.UnauthorizedAccessException">thrown when user does not have enough rights to retrieve remote recordings from given device. 
+            Check XProtect Corporate system configuration.</exception>
+            <exception cref="T:System.ArgumentException">thrown when <paramref name="start"/> or <paramref name="end"/> are not UTC times. 
+            Also thrown when <paramref name="start"/> is not at least 1 ms after <paramref name="end"/>.
+            Also thrown when trying to retrieve remot recordings from a device that does not support remote recordings retrieval.
+            Also thrown when recording server, hardware or device with given Id does not exist.</exception>
+            <exception cref="T:System.InvalidOperationException">thrown when trying to retrieve recordings before logging in. Call <see cref="N:VideoOS.Platform.Login"/> first.</exception>
+            <exception cref="T:System.Exception">thrown when something unexpected happened.</exception>
+            <returns>a <see cref="T:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask"/> object containing information about remote recordings retrieval task</returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.GetTasks">
+            <summary>
+            Returns a list of remote recording retrieval tasks for all recording servers connected to XProtect Management Server.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">thrown when trying to get tasks before logging in. Call <see cref="N:VideoOS.Platform.Login"/> first.</exception>
+            <returns>a list of <see cref="T:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask"/> for all recording servers in XProtect system</returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.GetTasks(System.Guid)">
+            <summary>
+            Returns a list of remote recording retrieval tasks for given recording server.
+            </summary>
+            <param name="recordingServerId">Id of recording server</param>
+            <exception cref="T:System.ArgumentException">thrown when recording server with given Id does not exist.</exception>
+            <exception cref="T:System.InvalidOperationException">thrown when trying to get tasks before logging in. Call <see cref="N:VideoOS.Platform.Login"/> first.</exception>
+            <returns>a list of <see cref="T:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask"/> for given recording server</returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTaskManager.RefreshTasks">
+            <summary>
+            Refreshes information stored in <see cref="T:VideoOS.Platform.SDK.RemoteRetrievalTasks.RetrievalTask"/> objects created by this manager.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">thrown when trying to refresh tasks before logging in. Call <see cref="N:VideoOS.Platform.Login"/> first.</exception>
+        </member>
+    </members>
+</doc>

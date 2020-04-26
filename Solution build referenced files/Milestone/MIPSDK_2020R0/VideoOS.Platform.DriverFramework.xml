@@ -1,0 +1,2977 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VideoOS.Platform.DriverFramework</name>
+    </assembly>
+    <members>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.BaseCommand">
+            <summary>
+            Base class for a command
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.BaseCommand.Execute(System.String,System.String)">
+            <summary>
+            Execute this command on this device with the provided device ID - and with the given parameters
+            </summary>
+            <param name="deviceId">ID of the device to execute this command on</param>
+            <param name="parameter">Parameters to this command</param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.BaseStreamSession">
+            <summary>
+            Derive from this class to implement your Video, Audio or Metadata stream session
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.BaseStreamSession.GetLiveFrame(System.TimeSpan,VideoOS.Platform.DriverFramework.Data.BaseDataHeader@,System.Byte[]@)">
+            <summary>
+            Get live frame 
+            </summary>
+            <param name="timeout">Should be used to wait max the timeout period for a frame</param>
+            <param name="header">Return the frame header</param>
+            <param name="data">Return the frame data</param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.BaseStreamSession.Close">
+            <summary>
+            Perform any cleanup here when session is removed
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Managers.CommandManager.NoSuchCommandError">
+            <summary>
+            Return String if no such command is registered
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.CommandManager.#ctor(VideoOS.Platform.DriverFramework.Container)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="container"><see cref="P:VideoOS.Platform.DriverFramework.Managers.CommandManager.Container"/></param>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Managers.CommandManager.Container">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Managers.CommandManager.Container"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.CommandManager.RegisterCommand(System.String,VideoOS.Platform.DriverFramework.Managers.BaseCommand)">
+            <summary>
+            Registers the command so it later can be executed
+            </summary>
+            <param name="commandId">ID of the command</param>
+            <param name="command">The command</param>
+            <exception cref="T:VideoOS.Platform.DriverFramework.Exceptions.MIPDriverException">If the command is already registered</exception>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.CommandManager.Clear">
+            <summary>
+            <see cref="T:VideoOS.Platform.DriverFramework.Managers.ICommandManager"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.CommandManager.VideoOS#Platform#DriverFramework#Managers#ICommandExecutor#ExecuteCommand(System.String,System.String,System.String)">
+            <summary>
+            Find the command with the corresponding ID and executes this with the provided parameters.
+            </summary>
+            <param name="deviceId">ID of the device to execute the command to</param>
+            <param name="commandId">ID of the command to be executed</param>
+            <param name="parameter">Parameters for the command</param>
+            <returns>The result or <see cref="F:VideoOS.Platform.DriverFramework.Managers.CommandManager.NoSuchCommandError"/> if it fails</returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ICommandExecutor.ExecuteCommand(System.String,System.String,System.String)">
+            <summary>
+            Only called from Corporate
+            Find the command based on the command ID, and execute it with the provided parameters
+            </summary>
+            <param name="commandId">ID of the command to execute</param>
+            <param name="deviceId">ID of the device to execute this on</param>
+            <param name="parameter">Parameters provided to the given command</param>
+            <returns>Result of the execution</returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.ICommandManager">
+            <summary>
+            Interface for a CommandManager
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ICommandManager.RegisterCommand(System.String,VideoOS.Platform.DriverFramework.Managers.BaseCommand)">
+            <summary>
+            Registers the command, so it later can be executed with some (later provided) parameters
+            </summary>
+            <param name="commandId">ID of the command</param>
+            <param name="command">The command</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ICommandManager.Clear">
+            <summary>
+            Clears the list of commands
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.ConfigurationManager">
+            <summary>
+            Manages driver specific configurations
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ConfigurationManager.#ctor(VideoOS.Platform.DriverFramework.Container)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="container"><see cref="P:VideoOS.Platform.DriverFramework.Managers.ConfigurationManager.Container"/></param>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Managers.ConfigurationManager.Container">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Managers.ConfigurationManager.Container"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ConfigurationManager.FetchProductInformationCorporate">
+            <summary>
+            General information about the connected device - get information from the device.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ConfigurationManager.FetchHardwareDefinition">
+            <summary>
+            Returns all details of the definition for the connected device - get it from the device.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ConfigurationManager.FetchProductInformation">
+            <summary>
+            Override this method to return the product information.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ConfigurationManager.BuildDevices">
+            <summary>
+            Implement this method to add devices to your hardware.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ConfigurationManager.BuildHardwareSettings">
+            <summary>
+            Implement this method to add hardware specific settings.
+            </summary>
+            <returns>A dictionary of strings, keys are the settings name, value is the default value for the setting</returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ConfigurationManager.BuildFields">
+            <summary>
+            Implement this method to add setup fields. These are custom settings of various types for your hardware. See the samples for examples of how to create these.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ConfigurationManager.BuildHardwareEvents">
+            <summary>
+            Implement this method to add custom events to your hardware.
+            </summary>
+            <returns>A collection of custom events supported by this driver</returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.ConnectionManager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ConnectionManager.#ctor(VideoOS.Platform.DriverFramework.Container)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="container"><see cref="P:VideoOS.Platform.DriverFramework.Managers.ConnectionManager.Container"/></param>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Managers.ConnectionManager.Container">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Managers.ConnectionManager.Container"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ConnectionManager.Close">
+            <summary>
+            Close connection to device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Managers.ConnectionManager.IsConnected">
+            <summary>
+            Tells recorder if the connection to the device is up
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ConnectionManager.Connect(System.Uri,System.String,System.Security.SecureString,System.Collections.Generic.ICollection{VideoOS.Platform.DriverFramework.Data.Settings.HardwareSetting})">
+            <summary>
+            Connects to device.
+            </summary>
+            <param name="uri"></param>
+            <param name="userName"></param>
+            <param name="password"></param>
+            <param name="hardwareSettings"></param>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Managers.MilestoneLogoStreamSession.testFrame">
+            <summary>
+            Milestone Logo
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.EventManager">
+            <summary>
+            <see cref="T:VideoOS.Platform.DriverFramework.Managers.IEventManager"/>
+            <see cref="T:VideoOS.Platform.DriverFramework.Managers.IEventSubscriber"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.EventManager.#ctor(VideoOS.Platform.DriverFramework.Container)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="container"><see cref="P:VideoOS.Platform.DriverFramework.Managers.EventManager.Container"/></param>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Managers.EventManager.Container">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Managers.EventManager.Container"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.EventManager.IsSubscribed(System.Guid)">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Managers.IEventManager.IsSubscribed(System.Guid)"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.EventManager.NewEvent(System.String,System.Guid)">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Managers.IEventManager.NewEvent(System.String,System.Guid)"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.EventManager.NewEvent(System.String,System.Guid,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Managers.IEventManager.NewEvent(System.String,System.Guid,System.Collections.Generic.Dictionary{System.String,System.String})"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.EventManager.VideoOS#Platform#DriverFramework#Managers#IEventSubscriber#PopIssuedEvents">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Managers.IEventSubscriber.PopIssuedEvents"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.EventManager.VideoOS#Platform#DriverFramework#Managers#IEventSubscriber#StoreSubscriptions(System.Collections.Generic.HashSet{System.Guid})">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Managers.IEventSubscriber.StoreSubscriptions(System.Collections.Generic.HashSet{System.Guid})"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.EventManager.VideoOS#Platform#DriverFramework#Managers#IEventSubscriber#WaitForEvents(System.TimeSpan)">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Managers.IEventSubscriber.WaitForEvents(System.TimeSpan)"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.IEventSubscriber.PopIssuedEvents">
+            <summary>
+            Called by the driver framework to move stored events to the Recorder process.
+            </summary>
+            <returns>List of issued events</returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.IEventSubscriber.StoreSubscriptions(System.Collections.Generic.HashSet{System.Guid})">
+            <summary>
+            Called to tell driver what events should be issued into the Recorder process.
+            </summary>
+            <param name="events"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.IEventSubscriber.WaitForEvents(System.TimeSpan)">
+            <summary>
+            Blocks current thread until there are new events to be read.
+            </summary>
+            <param name="timeout">Max time to wait</param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.IEventManager">
+            <summary>
+            Handles driver events
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.IEventManager.IsSubscribed(System.Guid)">
+            <summary>
+            Will check the subscribed hash 
+            </summary>
+            <param name="eventId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.IEventManager.NewEvent(System.String,System.Guid)">
+            <summary>
+            Driver should call this method for each event happening on the hardware or device.
+            The event will contain no metadata.
+            </summary>
+            <param name="sourceId"></param>
+            <param name="eventId"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.IEventManager.NewEvent(System.String,System.Guid,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Driver should call this method for each event happening on the hardware or device.
+            The event will contain the metadata passed in the call.
+            </summary>
+            <param name="sourceId"></param>
+            <param name="eventId"></param>
+            <param name="metadata"></param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.ISettingsManager">
+            <summary>
+            Manages the settings for the device
+            </summary>
+        </member>
+        <member name="E:VideoOS.Platform.DriverFramework.Managers.ISettingsManager.OnSettingsChanged">
+            <summary>
+            Called when any setting is changed
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ISettingsManager.GetSetting``1(``0)">
+            <summary>
+            Gets a setting of specified type, by matching it with a search criteria setting
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="matchSetting">Provide a setting with the search criteria fields set</param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ISettingsManager.UpdateSettings(System.Collections.Generic.ICollection{VideoOS.Platform.DriverFramework.Data.Settings.ISetting})">
+            <summary>
+            Updates or adds all the settings from the provided collection.
+            </summary>
+            <param name="settings"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.ISettingsManager.UpdateSettings(System.Collections.Generic.ICollection{VideoOS.Platform.DriverFramework.Data.Settings.ISetting},System.Boolean)">
+            <summary>
+            Updates or adds all the settings from the provided collection.
+            </summary>
+            <param name="settings"></param>
+            <param name="notify">Specifies whether <see cref="E:VideoOS.Platform.DriverFramework.Managers.ISettingsManager.OnSettingsChanged"/> event should be sent.</param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.OutputManager">
+            <summary>
+            Override this manager to handle the output devices
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.OutputManager.#ctor(VideoOS.Platform.DriverFramework.Container)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="container"><see cref="P:VideoOS.Platform.DriverFramework.Managers.OutputManager.Container"/></param>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Managers.OutputManager.Container">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Managers.OutputManager.Container"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.OutputManager.IsActivated(System.String)">
+            <summary>
+            Returns current state of the output, if available.
+            </summary>
+            <param name="deviceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.OutputManager.TriggerOutput(System.String,System.Int32)">
+            <summary>
+            Triggers output for the specified duration
+            </summary>
+            <param name="deviceId"></param>
+            <param name="durationMS">The duration in milliseconds</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.OutputManager.ActivateOutput(System.String)">
+            <summary>
+            Activates the output
+            </summary>
+            <param name="deviceId"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.OutputManager.DeactivateOutput(System.String)">
+            <summary>
+            Deactivates the output
+            </summary>
+            <param name="deviceId"></param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.PlaybackManager">
+            <summary>
+            Implement this manager to support the Edge retrieval and playback from the device
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PlaybackManager.#ctor(VideoOS.Platform.DriverFramework.Container)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="container"><see cref="P:VideoOS.Platform.DriverFramework.Managers.PlaybackManager.Container"/></param>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Managers.PlaybackManager.Container">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Managers.PlaybackManager.Container"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Managers.PlaybackManager.MaxParallelDevices">
+            <summary>
+            Defines how many parallel sessions is supported by the driver when retrieving edge recordings.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PlaybackManager.Create(System.String)">
+            <summary>
+            Prepare for playback commands, and return a PlaybackId used for following commands.
+            </summary>
+            <param name="deviceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PlaybackManager.MoveTo(System.Guid,System.DateTime,VideoOS.Platform.DriverFramework.Data.MoveCriteria)">
+            <summary>
+            Perform the requested move function, and return true if data is available after the move.
+            </summary>
+            <param name="playbackId"></param>
+            <param name="dateTime"></param>
+            <param name="moveCriteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PlaybackManager.Navigate(System.Guid,VideoOS.Platform.DriverFramework.Data.NavigateCriteria)">
+            <summary>
+            Navigate to the a frame in the direction as given by the NavigateCriteria
+            </summary>
+            <param name="playbackId"></param>
+            <param name="navigateCriteria"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PlaybackManager.ReadData(System.Guid)">
+            <summary>
+            Read the data at the current position, as navigated to by MoveTo or Navigate.
+            
+            Return null if no data available.
+            </summary>
+            <param name="playbackId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PlaybackManager.GetSequences(System.Guid,VideoOS.Platform.DriverFramework.Data.SequenceType,System.DateTime,System.TimeSpan,System.Int32,System.TimeSpan,System.Int32)">
+            <summary>
+            Return a collection of start-end time stamps for when recordings or motions are available.
+            
+            The Recording sequences will normally overlap with the Motion sequences, e.g. a 
+            constant recording will only have one sequence, but a series of motion sequences
+            when something moved on the video.
+            
+            If Motion sequences are not available, just return an empty list.
+            </summary>
+            <param name="playbackId"></param>
+            <param name="sequenceType"></param>
+            <param name="dateTime"></param>
+            <param name="maxTimeBefore"></param>
+            <param name="maxCountBefore"></param>
+            <param name="maxTimeAfter"></param>
+            <param name="maxCountAfter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PlaybackManager.Destroy(System.Guid)">
+            <summary>
+            Release resources related to this playbackId
+            </summary>
+            <param name="playbackId"></param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.PtzManager">
+            <summary>
+            Implement this manager to support the PTZ cameras
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.#ctor(VideoOS.Platform.DriverFramework.Container)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="container"><see cref="P:VideoOS.Platform.DriverFramework.Managers.PtzManager.Container"/></param>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Managers.PtzManager.Container">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Managers.PtzManager.Container"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.GetPresets(System.String)">
+            <summary>
+            Get the list of PTZ presets names
+            </summary>
+            <param name="deviceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.AddPreset(System.String,System.String)">
+            <summary>
+            Adds a PTZ preset
+            </summary>
+            <param name="deviceId"></param>
+            <param name="name"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.UpdatePreset(System.String,System.String)">
+            <summary>
+            Updates a PTZ preset
+            </summary>
+            <param name="deviceId"></param>
+            <param name="name"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.DeletePreset(System.String,System.String)">
+            <summary>
+            Deletes a PTZ preset
+            </summary>
+            <param name="deviceId"></param>
+            <param name="name"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.ActivatePreset(System.String,System.String)">
+            <summary>
+            Activates a PTZ preset
+            </summary>
+            <param name="deviceId"></param>
+            <param name="name"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.CenterAndZoomToRectangle(System.String,VideoOS.Platform.DriverFramework.Data.Ptz.PtzRectangleData)">
+            <summary>
+            Centers and zooms to a rectangle
+            </summary>
+            <param name="deviceId"></param>
+            <param name="data"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.CenterOnPositionInView(System.String,VideoOS.Platform.DriverFramework.Data.Ptz.PtzCenterData)">
+            <summary>
+            Centers on a position
+            </summary>
+            <param name="deviceId"></param>
+            <param name="data"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.MoveStart(System.String,VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveStartData)">
+            <summary>
+            Start moving the device
+            </summary>
+            <param name="deviceId"></param>
+            <param name="ptzArgs"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.MoveStop(System.String)">
+            <summary>
+            Stop moving the device
+            </summary>
+            <param name="deviceId"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.MoveAbsolute(System.String,VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveAbsoluteData)">
+            <summary>
+            Move the device to an absolute position
+            </summary>
+            <param name="deviceId"></param>
+            <param name="ptzArgs"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.MoveRelative(System.String,System.String)">
+            <summary>
+            Move the device in a relative direction. 
+            </summary>
+            <param name="deviceId"></param>
+            <param name="direction"><see cref="T:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType" /></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.MoveHome(System.String)">
+            <summary>
+            Moves the device to the home position
+            </summary>
+            <param name="deviceId"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.GetAbsolutePosition(System.String)">
+            <summary>
+            Get the absolute current PTZ position
+            </summary>
+            <param name="deviceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.LensCommand(System.String,System.String)">
+            <summary>
+            Send a lens command to the device
+            </summary>
+            <param name="deviceId"></param>
+            <param name="command"><see cref="T:VideoOS.Platform.DriverFramework.Data.LensCommandType" /></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.PtzManager.SetAux(System.String,System.Int32,System.Boolean)">
+            <summary>
+            Sets an auxilary function of the device on or off
+            </summary>
+            <param name="deviceId"></param>
+            <param name="auxNumber"></param>
+            <param name="enable"></param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.SettingsManager">
+            <summary>
+            <see cref="T:VideoOS.Platform.DriverFramework.Managers.ISettingsManager"/>
+            </summary>
+        </member>
+        <member name="E:VideoOS.Platform.DriverFramework.Managers.SettingsManager.OnSettingsChanged">
+            <summary>
+            <see cref="E:VideoOS.Platform.DriverFramework.Managers.ISettingsManager.OnSettingsChanged"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SettingsManager.#ctor(VideoOS.Platform.DriverFramework.Container)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="container"><see cref="P:VideoOS.Platform.DriverFramework.Managers.SettingsManager.Container"/></param>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Managers.SettingsManager.Container">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Managers.SettingsManager.Container"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SettingsManager.UpdateSettings(System.Collections.Generic.ICollection{VideoOS.Platform.DriverFramework.Data.Settings.ISetting})">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Managers.ISettingsManager.UpdateSettings(System.Collections.Generic.ICollection{VideoOS.Platform.DriverFramework.Data.Settings.ISetting})"/>
+            </summary>
+            <param name="settings"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SettingsManager.UpdateSettings(System.Collections.Generic.ICollection{VideoOS.Platform.DriverFramework.Data.Settings.ISetting},System.Boolean)">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Managers.ISettingsManager.UpdateSettings(System.Collections.Generic.ICollection{VideoOS.Platform.DriverFramework.Data.Settings.ISetting},System.Boolean)"/>
+            </summary>
+            <param name="settings"></param>
+            <param name="notify"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SettingsManager.GetSetting``1(``0)">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Managers.ISettingsManager.GetSetting``1(``0)"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="matchSetting"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.SpeakerManager">
+            <summary>
+            Implement this to use a speaker
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SpeakerManager.#ctor(VideoOS.Platform.DriverFramework.Container)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="container"><see cref="P:VideoOS.Platform.DriverFramework.Managers.SpeakerManager.Container"/></param>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Managers.SpeakerManager.Container">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Managers.SpeakerManager.Container"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SpeakerManager.CreateSpeakerStream(System.String)">
+            <summary>
+            Create a new speaker stream
+            </summary>
+            <param name="deviceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SpeakerManager.SendFrame(System.Guid,VideoOS.Platform.DriverFramework.Data.AudioHeader,System.Byte[])">
+            <summary>
+            Send an audio frame to the speaker
+            </summary>
+            <param name="speakerStreamInstance"></param>
+            <param name="audioHeader"></param>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SpeakerManager.Destroy(System.Guid)">
+            <summary>
+            Destroy the speaker stream
+            </summary>
+            <param name="speakerStreamInstance"></param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.StreamManager">
+            <summary>
+            Normally, you don't implement this class directly. 
+            It's recomended to derive instead from existing implementation with automatic stream sessions support: 
+            <see cref="T:VideoOS.Platform.DriverFramework.Managers.SessionEnabledStreamManager" />
+            You might need to derive directly from this class in the case you need to implement a custom session mechanism. 
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.StreamManager.#ctor(VideoOS.Platform.DriverFramework.Container)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="container"><see cref="P:VideoOS.Platform.DriverFramework.Managers.StreamManager.Container"/></param>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Managers.StreamManager.Container">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Managers.StreamManager.Container"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.StreamManager.CreateStream(System.String,System.Guid)">
+            <summary>
+            Create a stream. 
+            </summary>
+            <param name="deviceId"></param>
+            <param name="streamId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.StreamManager.GetLiveFrame(System.Guid,System.TimeSpan)">
+            <summary>
+            Get the Live frame
+            </summary>
+            <param name="sessionId">The id of the session</param>
+            <param name="timeout">Should be used to wait max the timeout period for a frame</param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.StreamManager.DestroyStream(System.Guid)">
+            <summary>
+            Destroy the stream
+            </summary>
+            <param name="sessionId"></param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Managers.SessionEnabledStreamManager">
+            <summary>
+            Use this to get the live stream from a device using a session mechanism
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SessionEnabledStreamManager.#ctor(VideoOS.Platform.DriverFramework.Container)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="container"><see cref="T:VideoOS.Platform.DriverFramework.Container"/></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SessionEnabledStreamManager.CreateStream(System.String,System.Guid)">
+            <summary>
+            Create a stream.
+            </summary>
+            <param name="deviceId"></param>
+            <param name="streamId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SessionEnabledStreamManager.GetLiveFrame(System.Guid,System.TimeSpan)">
+            <summary>
+            Get the live frame. By default calls the GetLiveFrame on the corresponding session.
+            Override if you wish to implement custom behavior.
+            </summary>
+            <param name="sessionId">The id of the session</param>
+            <param name="timeout">Should be used to wait max the timeout period for a frame</param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SessionEnabledStreamManager.DestroyStream(System.Guid)">
+            <summary>
+            Destroy the stream
+            </summary>
+            <param name="sessionId"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SessionEnabledStreamManager.GetSession(System.Guid)">
+            <summary>
+            Get a stream session by id
+            </summary>
+            <param name="sessionId"></param>
+            <returns>Session, or null if it's not found</returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SessionEnabledStreamManager.GetAllSessions">
+            <summary>
+            Returns all active sessions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Managers.SessionEnabledStreamManager.CreateSession(System.String,System.Guid,System.Guid)">
+            <summary>
+            You have to override this method to create a custom stream session
+            Default implementation serves a stream with the Milestone logo.
+            </summary>
+            <param name="deviceId">Device id of the session</param>
+            <param name="streamId">Stream id for this stream</param>
+            <param name="sessionId">Generated session Guid for the new session</param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.AudioCodecType">
+            <summary>
+            Audio codec types
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.PCM">
+            <summary>
+            Available Audio Codec types:              Codec-sub-types<br/>
+            0x01 - PCM                          0000<br/>
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.PCMLaw">
+            <summary>
+            Available Audio Codec types:              Codec-sub-types<br/>
+            0x02 - PCM law                      0001 = y-law, 0002 = a-law<br/>
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.PCMLawSubtypeYLaw">
+            <summary>
+            Subtype y-law for PCM law audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.PCMLawSubtypeALaw">
+            <summary>
+            Subtype a-law for PCM law audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G711">
+            <summary>
+            Available Audio Codec types:              Codec-sub-types<br/>
+            0x03 - G.711 (a-law or y-law)       0001 = y-law, 0002 = a-law<br/>
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G711SubtypeYLaw">
+            <summary>
+            Subtype y-law for G.711 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G711SubtypeALaw">
+            <summary>
+            Subtype a-law for G.711 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G721">
+            <summary>
+            Available Audio Codec types:              Codec-sub-types<br/>
+            0x04 - G.721 (32kbs)                0001 = little endian, 8001 = big endian<br/>
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G721SubtypeLittleEndian">
+            <summary>
+            Little endian subtype for G.721 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G721SubtypeBigEndian">
+            <summary>
+            Big endian subtype for G.721 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G723">
+            <summary>
+            Available Audio Codec types:              Codec-sub-types<br/>
+            0x07 - G.723 (24kbps or 40kbps)     0001 = 24bit little-endian, 0002 = 40bit little-endian, 8001 = 24bit big-endian, 8002 = 40bit big-endian<br/>
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G723Subtype24BitLittleEndian">
+            <summary>
+            24 bit little endian subtype for G.723 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G723Subtype40BitLittleEndian">
+            <summary>
+            40 bit little endian subtype for G.723 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G723Subtype24BitBigEndian">
+            <summary>
+            24 bit big endian subtype for G.723 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G723Subtype40BitBigEndian">
+            <summary>
+            40 bit big endian subtype for G.723 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G726">
+            <summary>
+            Available Audio Codec types:              Codec-sub-types<br/>
+            0x09 - G.726(16,24,32 or 40kpbs)    0001 = 16, 0002 = 24, 0003 = 32, 0004 = 40 bit little-endian<br/>
+                                                8001 = 16, 8002 = 24, 8003 = 32, 8004 = 40 bit big-endian<br/>
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G726Subtype16BitLittleEndian">
+            <summary>
+            16 bit little endian subtype for G.726 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G726Subtype24BitLittleEndian">
+            <summary>
+            24 bit little endian subtype for G.726 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G726Subtype32BitLittleEndian">
+            <summary>
+            32 bit little endian subtype for G.726 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G726Subtype40BitLittleEndian">
+            <summary>
+            40 bit little endian subtype for G.726 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G726Subtype16BitBigEndian">
+            <summary>
+            16 bit big endian subtype for G.726 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G726Subtype24BitBigEndian">
+            <summary>
+            24 bit big endian subtype for G.726 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G726Subtype32BitBigEndian">
+            <summary>
+            32 bit big endian subtype for G.726 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.G726Subtype40BitBigEndian">
+            <summary>
+            40 bit big endian subtype for G.726 audio codec
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.AACMPEG2">
+            <summary>
+            AAC ADTS MPEG2
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.AudioCodecType.AACMPEG4">
+            <summary>
+            AAC ADTS MPEG4
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.HeaderType">
+            <summary>
+            Header types
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.HeaderType.Video">
+            <summary>
+            Video header
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.HeaderType.Audio">
+            <summary>
+            Audio header
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.HeaderType.Metadata">
+            <summary>
+            Metadata header
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.LensCommandType">
+            <summary>
+            A struct specifying the lens command of a LensCommand message, used in the message's Data field.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.BrightnessDown">
+            <summary>
+            Brightness Down Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.BrightnessReset">
+            <summary>
+            Brightness Reset Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.BrightnessUp">
+            <summary>
+            Brightness Up Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.FocusAuto">
+            <summary>
+            Focus Auto Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.FocusDown">
+            <summary>
+            Focus Down Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.FocusDownStart">
+            <summary>
+            Focus Down Start Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.FocusStop">
+            <summary>
+            Focus Stop Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.FocusUp">
+            <summary>
+            Focus Up Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.FocusUpStart">
+            <summary>
+            Focus Up Start Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.GainDown">
+            <summary>
+            Gain Down Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.GainReset">
+            <summary>
+            Gain Reset Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.GainUp">
+            <summary>
+            Gain Up Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.IrisDown">
+            <summary>
+            Iris Down Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.IrisReset">
+            <summary>
+            Iris Reset Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.IrisUp">
+            <summary>
+            Iris Up Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.ShutterDown">
+            <summary>
+            Shutter Down Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.ShutterReset">
+            <summary>
+            Shutter Reset Command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.LensCommandType.ShutterUp">
+            <summary>
+            Shutter Up Command
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.AudioHeader">
+            <summary>
+            Interprets a BaseDataHeader for audio format.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.AudioHeader.CodecType">
+            <summary>
+            Codec type, see <see cref="T:VideoOS.Platform.DriverFramework.Data.AudioCodecType"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.AudioHeader.CodecSubtype">
+            <summary>
+            Codec subtype, see <see cref="T:VideoOS.Platform.DriverFramework.Data.AudioCodecType"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.AudioHeader.Timestamp">
+            <summary>
+            The time this frame started
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.AudioHeader.ChannelCount">
+            <summary>
+            Number of channels, mono = 01
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.AudioHeader.BitsPerSample">
+            <summary>
+            Bits per sample, e.g. 16
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.AudioHeader.Frequency">
+            <summary>
+            Frequency - how many samples per second, e.g. 16000
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.AudioHeader.SampleCount">
+            <summary>
+            Number of samples in this frame.  SampleCount * BitsPerSample/8 * ChanelCount + 42 must be = Length
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.AudioHeader.HeaderLength">
+            <summary>
+            Length of this Header
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.AudioHeader.HeaderType">
+            <summary>
+            Header type
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.AudioHeader.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.AudioHeader.#ctor(System.Byte[])">
+            <summary>
+            Constructor from byte array
+            </summary>
+            <param name="headerData"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.AudioHeader.Clone">
+            <summary>
+            Use this method to clone a header, when passing the header on to next processing
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.AudioHeader.ToString">
+            <summary>
+            Make a class relevant display
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.VideoCodecType">
+            <summary>
+            Video codec types
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.VideoCodecType.JPEG">
+            <summary>
+            Video Codec types:<br/>
+             - 0x01 : JPEG<br/>
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.VideoCodecType.MPEG4">
+            <summary>
+            Video Codec types:<br/>
+             - 0x04 : MPEG-4<br/>
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.VideoCodecType.H264">
+            <summary>
+            Video Codec types:<br/>
+             - 0x0A : H.264<br/>
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.VideoCodecType.H265">
+            <summary>
+            Video Codec types:<br/>
+             - 0x0D : H.265<br/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.BaseDataHeader">
+            <summary>
+            A data header for either audio, video, or metadata
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.BaseDataHeader.HeaderData">
+            <summary>
+            The actual byte format of all properties.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.BaseDataHeader.#ctor">
+            <summary>
+            Default header constructor
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.BaseDataHeader.#ctor(System.Byte[])">
+            <summary>
+            Constructs header from an existing byte array
+            </summary>
+            <param name="headerData"></param>
+            <exception cref="T:System.ArgumentException">if the byte stream is null or not a valid representation of this type of header</exception>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.BaseDataHeader.Clone">
+            <summary>
+            Clones the header
+            </summary>
+            <returns>New header with the same data</returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.BaseDataHeader.IsType(VideoOS.Platform.DriverFramework.Data.HeaderType)">
+            <summary>
+            Returns true if this header is of given type, otherwise false
+            </summary>
+            <param name="headerType"></param>
+            <returns></returns>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.BaseDataHeader.Length">
+            <summary>
+            Total length of payload only (not including this header)
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.BaseDataHeader.SequenceNumber">
+            <summary>
+            Sequence number, that is increasing by one for each frame
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.BaseDataHeader.HeaderLength">
+            <summary>
+            The length of the header
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.BaseDataHeader.HeaderType">
+            <summary>
+            Header type
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.IDataHeader">
+            <summary>
+            Interface for the data header
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.IDataHeader.HeaderData">
+            <summary>
+            Raw header bytes
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.IDataHeader.Length">
+            <summary>
+            The length of the payload
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.IDataHeader.SequenceNumber">
+            <summary>
+            Sequence number
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.IDataHeader.Clone">
+            <summary>
+            Clones this header
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.IDataHeader.HeaderType">
+            <summary>
+            Gets the header type
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.IDataHeader.IsType(VideoOS.Platform.DriverFramework.Data.HeaderType)">
+            <summary>
+            Checks the header is of the given type
+            </summary>
+            <param name="headerType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.MetadataHeader">
+            <summary>
+            Metadata header and accessors
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.MetadataHeader.MetadataType">
+            0x00 = Subtype has not been defined yet (considered an error).
+            0x01 = Vendor-specific meta data, which is considered completely "unknown" to us.
+            0x02 = GPS Location meta data (AKA Position)
+            0x03 = ONVIF compliant meta data stream as XML (defined in the ONVIF 'Video Analytics Service Specification')
+            0x04 = XML encoded event or log-message
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.MetadataHeader.Timestamp">
+            <summary>
+            The time this frame started
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.MetadataHeader.HeaderLength">
+            <summary>
+            Length of this Header
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.MetadataHeader.HeaderType">
+            <summary>
+            Header type
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.MetadataHeader.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.MetadataHeader.#ctor(System.Byte[])">
+            <summary>
+            Constructor from the header data
+            </summary>
+            <param name="headerData">The raw bytes of the header</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.MetadataHeader.Clone">
+            <summary>
+            Use this method to clone a header, when passing the header on to next processing
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.MetadataHeader.ToString">
+            <summary>
+            To string implementation
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.Ptz.PtzRectangleData">
+            <summary>
+            Defines a rectangle to be displayed. All values are in pixels.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzRectangleData.RefWidth">
+            <summary>
+            Width of the view in pixels.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzRectangleData.RefHeight">
+            <summary>
+            Height of the view in pixels.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzRectangleData.Left">
+            <summary>
+            Left boundary of the rectangle in pixels.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzRectangleData.Top">
+            <summary>
+            Top boundary of the rectangle in pixels.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzRectangleData.Bottom">
+            <summary>
+            Bottom boundary of the rectangle in pixels.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzRectangleData.Right">
+            <summary>
+            Right boundary of the rectangle in pixels.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.Ptz.PtzGetAbsoluteData">
+            <summary>
+            A class defining the PTZ values returned by the PTZGetAbsoluteRequest method.<br/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzGetAbsoluteData.Pan">
+            <summary>
+            The value for absolute Pan position, between -1 and 1.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzGetAbsoluteData.Tilt">
+            <summary>
+            The value for absolute Tilt position, between -1 and 1.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzGetAbsoluteData.Zoom">
+            <summary>
+            The value for Zoom is in interval 0..1, where 0=full zoom out; 1=full zoom in;
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveStartData">
+            <summary>
+            class describing the move start data
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveStartData.Pan">
+            <summary>
+            A number indicating the "left - right" movement. Values must be -1, 0 or 1. See also samples in the details section.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveStartData.Tilt">
+            <summary>
+            A number indicating the "up - down" movement. Values must be -1 , 0 or 1. See also samples in the details section.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveStartData.Zoom">
+            <summary>
+            A number indicating the zoom movement. Values must be -1, 0 or 1. See also samples in the details section.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveStartData.PanSpeed">
+            <summary>
+            A number indicating the speed of the Pan direction.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveStartData.TiltSpeed">
+            <summary>
+            A number indicating the speed of the Tilt direction.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveStartData.ZoomSpeed">
+            <summary>
+            A number indicating the speed of the Zoom. 
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveAbsoluteData">
+            <summary>
+            A class specifying the PTZ and speed of a PTZMoveAbsoluteCommand message, used in the message's Data field.
+            </summary>
+            <remarks>
+            The values for Pan an Tilt are between -1..1 or NaN if no movement should be performed.<br/>
+            The value for Zoom are in interval 0..1 or Nan, where 0=full zoom out; 1=full zoom in; NaN=no zoom change.<br/>
+            The value for Speed is in the interval 0..1.<br/>
+            </remarks>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveAbsoluteData.Pan">
+            <summary>
+            The values for Pan are between -1..1 or NaN.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveAbsoluteData.Tilt">
+            <summary>
+            The values for Tilt are between -1..1 or NaN.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveAbsoluteData.Zoom">
+            <summary>
+            The value for Zoom are in interval 0..1, where 0=full zoom out; 1=full zoom in; NaN=no zoom change.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveAbsoluteData.Speed">
+            <summary>
+            The value for Speed is in the interval 0..1.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzMoveAbsoluteData.AllowRepeats">
+            <summary>
+            Set to true, if you want all commands to be sent - even when the content has same values.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.Ptz.PtzCenterData">
+            <summary>
+            Defines a rectangle in which to center and zoom.<br/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzCenterData.RefWidth">
+            <summary>
+            Width of the image to center camera in. Value is in pixels.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzCenterData.RefHeight">
+            <summary>
+            Height of the image to center camera in. Value is in pixels.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzCenterData.CenterX">
+            <summary>
+            X-coordinate of where to center camera. Value is in pixels.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzCenterData.CenterY">
+            <summary>
+            Y-coordinate of where to center camera. Value is in pixels.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Ptz.PtzCenterData.Zoom">
+            <summary>
+            Zoom level in the interval [0-1] where 0=full zoom out and 1=full zoom in; &lt;0=no change.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType">
+            <summary>
+            A struct specifying the PTZ Move command of a PTZMoveCommand message, used in the message's Data field.
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType.Down">
+            <summary>
+            Down command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType.DownLeft">
+            <summary>
+            Down and Left command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType.DownRight">
+            <summary> 
+            Down and Right command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType.Home">
+            <summary> 
+            Home command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType.Left">
+            <summary> 
+            Left command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType.Right">
+            <summary> 
+            Right command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType.Up">
+            <summary>
+            Up command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType.UpLeft">
+            <summary>
+            Up and Left command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType.UpRight">
+            <summary> 
+            Up and Right command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType.ZoomIn">
+            <summary> 
+            Zoom In command
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.PtzMoveCommandType.ZoomOut">
+            <summary>
+            Zoom Out command
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.Settings.ISetting">
+            <summary>
+            Setting that has a key and value
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Settings.ISetting.Key">
+            <summary>
+            The key of the setting
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Settings.ISetting.Value">
+            <summary>
+            The value for the setting
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.ISetting.Matches(VideoOS.Platform.DriverFramework.Data.Settings.ISetting)">
+            <summary>
+            Check if a setting refers to the same setting as this one. <br/>
+            Specifically, a setting has to match on every parameter except value in order to be a valid match.<br/>
+            This means that two settings are the same, but may have different values because they represent the value of the setting at different<br/>
+            points in time (for instance during a settings update).
+            </summary>
+            <param name="setting"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.ISetting.Update(System.String)">
+            <summary>
+            Update the value of a setting
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.Settings.SettingsChangedEventArgs">
+            <summary>
+            Arguments for when a setting is changed
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Settings.SettingsChangedEventArgs.Settings">
+            <summary>
+            The list with the updated settings
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.SettingsChangedEventArgs.#ctor(System.Collections.Generic.ICollection{VideoOS.Platform.DriverFramework.Data.Settings.ISetting})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="settings"></param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.Settings.DeviceSetting">
+            <summary>
+            Setting for a device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Settings.DeviceSetting.DeviceId">
+            <summary>
+            The deviceId 
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.DeviceSetting.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="key">Key for this setting</param>
+            <param name="deviceId">ID of the device with this setting</param>
+            <param name="value">Value for this setting</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.DeviceSetting.CheckMatches(VideoOS.Platform.DriverFramework.Data.Settings.DeviceSetting)">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Data.Settings.Setting`1.CheckMatches(`0)"/>
+            </summary>
+            <param name="setting"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.Settings.HardwareSetting">
+            <summary>
+            Setting for a hardware
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.HardwareSetting.#ctor(System.String,System.String)">
+            <summary>
+            Constructor
+            </summary>        
+            <param name="key">Key for this setting</param>
+            <param name="value">Value for this setting</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.HardwareSetting.CheckMatches(VideoOS.Platform.DriverFramework.Data.Settings.HardwareSetting)">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Data.Settings.Setting`1.CheckMatches(`0)"/>
+            </summary>
+            <param name="setting"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.Settings.MetadataSetting">
+            <summary>
+            Metadata setting
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Settings.MetadataSetting.DeviceId">
+            <summary>
+            ID of the device that this setting belongs to
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Settings.MetadataSetting.StreamId">
+            <summary>
+            ID of the stream that this setting belongs to
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Settings.MetadataSetting.MetadataType">
+            <summary>
+            ID of the metadata type that this setting is relevant for
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.MetadataSetting.#ctor(System.String,System.String,System.Guid,System.Guid,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="key">Key of this setting</param>
+            <param name="deviceId">ID of the device that this setting belong to</param>
+            <param name="streamId">ID of the stream that this setting relates to</param>
+            <param name="metadataType">Type of metadata</param>
+            <param name="value">Value of this setting</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.MetadataSetting.CheckMatches(VideoOS.Platform.DriverFramework.Data.Settings.MetadataSetting)">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Data.Settings.Setting`1.CheckMatches(`0)"/>
+            </summary>
+            <param name="setting"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.Settings.Setting`1">
+            <summary>
+            Setting that has a key and value
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Settings.Setting`1.Key">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Data.Settings.ISetting.Key"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Settings.Setting`1.Value">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Data.Settings.ISetting.Value"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.Setting`1.#ctor(System.String,System.String)">
+            <summary>
+            Base class constructor
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.Setting`1.Update(System.String)">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Data.Settings.ISetting.Update(System.String)"/>
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.Setting`1.Matches(VideoOS.Platform.DriverFramework.Data.Settings.ISetting)">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Data.Settings.ISetting.Matches(VideoOS.Platform.DriverFramework.Data.Settings.ISetting)"/>
+            </summary>
+            <param name="setting"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.Setting`1.CheckMatches(`0)">
+            <summary>
+            Implement custom matching logic
+            </summary>
+            <param name="setting"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.Settings.StreamSetting">
+            <summary>
+            A setting for a stream
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Settings.StreamSetting.DeviceId">
+            <summary>
+            ID of the device that this stream setting belongs to
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.Settings.StreamSetting.StreamId">
+            <summary>
+            ID of the stream that this setting belongs to
+            </summary>        
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.StreamSetting.#ctor(System.String,System.String,System.Guid,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="key">Key</param>
+            <param name="deviceId">ID of the device</param>
+            <param name="streamId">ID of the stream</param>
+            <param name="value">Value</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.Settings.StreamSetting.CheckMatches(VideoOS.Platform.DriverFramework.Data.Settings.StreamSetting)">
+            <summary>
+            <see cref="M:VideoOS.Platform.DriverFramework.Data.Settings.Setting`1.CheckMatches(`0)"/>
+            </summary>
+            <param name="setting"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.VideoHeader">
+            <summary>
+            Video header data and accessors
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.VideoHeader.CodecType">
+            <summary>
+            See <see cref="T:VideoOS.Platform.DriverFramework.Data.VideoCodecType"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.VideoHeader.TimestampSync">
+            <summary>
+            Time of the previous key frame (or same as TimeStampFrame, if this is a key frame)
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.VideoHeader.TimestampFrame">
+            <summary>
+            Time of this frame
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.VideoHeader.SyncFrame">
+            <summary>
+            Is true when this frame is a key frame. All JPEG frames are considered key-frames.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.VideoHeader.HeaderLength">
+            <summary>
+            Length of this Header
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.VideoHeader.HeaderType">
+            <summary>
+            Header type
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.VideoHeader.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.VideoHeader.#ctor(System.Byte[])">
+            <summary>
+            Constructor from header bytes
+            </summary>
+            <param name="headerData"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.VideoHeader.Clone">
+            <summary>
+            Use this method to clone a header, when passing the header on to next processing
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.VideoHeader.ToString">
+            <summary>
+            To string implementation
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.GetLiveFrameResult">
+            <summary>
+            Class for containing result of call to <see cref="M:VideoOS.Platform.DriverFramework.Managers.StreamManager.GetLiveFrame(System.Guid,System.TimeSpan)"/>.<br/>
+            Depending on value of <see cref="P:VideoOS.Platform.DriverFramework.Data.GetLiveFrameResult.StreamLiveStatus"/>, <see cref="P:VideoOS.Platform.DriverFramework.Data.GetLiveFrameResult.Header"/> and <see cref="P:VideoOS.Platform.DriverFramework.Data.GetLiveFrameResult.Data"/> might be null.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.GetLiveFrameResult.#ctor(VideoOS.Platform.DriverFramework.Data.StreamLiveStatus,VideoOS.Platform.DriverFramework.Data.BaseDataHeader,System.Byte[])">
+            <summary>
+            Constructor
+            </summary>
+            <param name="streamLiveStatus">Status of the operation</param>
+            <param name="header">The header of the resulting frame (if any). Can be either VideoHeader, AudioHeader or MetadataHeader, representing the GenericByteData bytes.</param>
+            <param name="data">The data of the resulting frame (if any)</param>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.GetLiveFrameResult.StreamLiveStatus">
+            <summary>
+            Status of the operation
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.GetLiveFrameResult.Header">
+            <summary>
+            The header of the resulting frame (if any). Can be either VideoHeader, AudioHeader or MetadataHeader, representing the GenericByteData bytes.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.GetLiveFrameResult.Data">
+            <summary>
+            The data of the resulting frame (if any)
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.GetLiveFrameResult.EmptyResult">
+            <summary>
+            Use this to return an empty result if there is no data available (but no error)
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.GetLiveFrameResult.ErrorResult(VideoOS.Platform.DriverFramework.Data.StreamLiveStatus)">
+            <summary>
+            Use this to return a result with an error
+            </summary>
+            <param name="error">The type of error</param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.DriverEvent">
+            <summary>
+            Represents an event generated by a driver
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.DriverEvent.SourceId">
+            <summary>
+            The id of the source of this driver event
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.DriverEvent.EventType">
+            <summary>
+            Specifies the type of the driver event
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.DriverEvent.Metadata">
+            <summary>
+            Can contain a set of extra information to be passed through the system.<br/>
+            Predefined keys:<br/>
+            - CustomData                : can contain any string. <br/>
+            - System.EventSessionId     :<br/>
+            - System.EventIsDeferred    :<br/>
+            - TargetDevices             : An XML defining GUIDs for devices or groups<br/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.DriverEvent.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.DriverEvent.#ctor(System.String,System.Guid)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="sourceId">Id of the source</param>
+            <param name="type">Event type, please refer to DriverEventDefinitions for predefined events</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.DriverEvent.#ctor(System.String,System.Guid,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="sourceId">ID of the source</param>
+            <param name="type">Event type, please refer to <see cref="T:VideoOS.Platform.DriverFramework.Definitions.EventDefinition"/> for predefined events</param>
+            <param name="metadata">Metadata for the event</param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.MoveCriteria">
+            <summary>
+            Enum defining the sequence search behavior
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.MoveCriteria.Before">
+            <summary>
+            Finds the nearest sequence starting before the specified point in time
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.MoveCriteria.AtOrBefore">
+            <summary>
+            Finds the nearest sequence at the specified point in time or before
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.MoveCriteria.After">
+            <summary>
+            Finds the nearest sequence starting after the specified point in time
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.MoveCriteria.AtOrAfter">
+            <summary>
+            Finds the nearest sequence at the specified point in time or after
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.NavigateCriteria">
+            <summary>
+            Defines criteria for moving from the present location on the timeline
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.NavigateCriteria.First">
+            <summary>
+            Moves to the first frame in the sequence
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.NavigateCriteria.Last">
+            <summary>
+            Moves to the last frame in the sequence
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.NavigateCriteria.Next">
+            <summary>
+            Moves to the next frame in the sequence
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.NavigateCriteria.Previous">
+            <summary>
+            Moves to the previous frame in the sequence
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.NavigateCriteria.NextSequence">
+            <summary>
+            Moves to the sequence following the current sequence
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.NavigateCriteria.PreviousSequence">
+            <summary>
+            Moves to the sequence preceding the current sequence
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.PlaybackFrame">
+            <summary>
+            Defines one frame, e.g. JPEG, H.264 key frame or H.264 p-frames
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.PlaybackFrame.Header">
+            <summary>
+            The header of the frame
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.PlaybackFrame.Data">
+            <summary>
+            The data content of the frame
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.PlaybackFrame.AnyMotion">
+            <summary>
+            Specifies whether the frame contains motion
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.PlaybackReadResponse">
+            <summary>
+            One response should contain one frame for JPEG video, and a GOP of frames for H.264, H.265
+            
+            The Previous and Next time stamps are pointing to key-frames.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.PlaybackReadResponse.Frames">
+            <summary>
+            The list of frames in the response
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.PlaybackReadResponse.Previous">
+            <summary>
+            Time of the previous key-frame
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.PlaybackReadResponse.Next">
+            <summary>
+            Time of the next key-frame
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.PlaybackReadResponse.SequenceNumber">
+            <summary>
+            The identifier of this sequence
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.SequenceEntry">
+            <summary>
+            Defines a time range where data is available for playback
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.SequenceEntry.StartTime">
+            <summary>
+            The start time of the sequence entry
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Data.SequenceEntry.EndTime">
+            <summary>
+            The end time of the sequence entry
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.SequenceEntry.#ctor(System.DateTime,System.DateTime)">
+            <summary>
+            Constructor for the sequence entry
+            </summary>
+            <param name="startTime">The start time of the sequence entry</param>
+            <param name="endTime">The end time of the sequence entry</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Data.SequenceEntry.ToString">
+            <summary>
+            Represents the sequence entry as a string
+            </summary>
+            <returns>The string representation of this sequence entry</returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.SequenceType">
+            <summary>
+            Enum defining the type of a sequence
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.SequenceType.Recording">
+            <summary>
+            A recorded sequence
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.SequenceType.Motion">
+            <summary>
+            A sequence with motion
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.SpeakerStreamStatus">
+            <summary>
+            The status of the speaker stream
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.SpeakerStreamStatus.DataSent">
+            <summary>
+            Data is sent
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.SpeakerStreamStatus.NoConnection">
+            <summary>
+            No connection
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Data.StreamLiveStatus">
+            <summary>
+            The status of the stream
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.StreamLiveStatus.DataReceived">
+            <summary>
+            Data received
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.StreamLiveStatus.NoData">
+            <summary>
+            No data
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Data.StreamLiveStatus.NoConnection">
+            <summary>
+            No connection
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.MetadataType">
+            <summary>
+            Class with constants that is used by metadata devices
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.MetadataType.BoundingBoxTypeId">
+            <summary>
+            Id of the Bounding Box metadata type
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.MetadataType.BoundingBoxDisplayId">
+            <summary>
+            Id of the Bounding Box metadata display
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.MetadataType.GpsTypeId">
+            <summary>
+            Id of the GPS metadata type
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.MetadataType.GpsDisplayId">
+            <summary>
+            Id of the GPS metadata display
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.DriverInfo">
+            <summary>
+            Driver Information
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.DriverInfo.Id">
+            <summary>
+            The driver Id
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.DriverInfo.Name">
+            <summary>
+            The driver name
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.DriverInfo.GroupName">
+            <summary>
+            The driver group name 
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.DriverInfo.Version">
+            <summary>
+            The driver software version
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.DriverInfo.SupportedProducts">
+            <summary>
+            List of the hardware models supported by this driver
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Definitions.DriverInfo.#ctor(System.Guid,System.String,System.String,System.String,System.Collections.Generic.ICollection{VideoOS.Platform.DriverFramework.Definitions.ProductDefinition})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="id">Unique ID of the driver</param>
+            <param name="name">Name of the driver</param>
+            <param name="groupName">Name of the driver group</param>
+            <param name="version">Version of the driver</param>
+            <param name="supportedProducts">The list of products supported by this driver</param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.MetadataTypeDefinition">
+            <summary>
+            Class that defines a type of metadata
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.MetadataTypeDefinition.DisplayName">
+            <summary>
+            The name that will be displayed in the UI
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.MetadataTypeDefinition.DisplayNameId">
+            <summary>
+            The ID of the displayName name (for translation). See <see cref="P:VideoOS.Platform.DriverFramework.Definitions.MetadataTypeDefinition.DisplayName"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.MetadataTypeDefinition.ValidTime">
+            <summary>
+            The time before and after the metadata's timestamp that this metadata is valid
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.MetadataTypeDefinition.MetadataType">
+            <summary>
+            The Guid for the type of metadata
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.MetadataTypeDefinition.Settings">
+            <summary>
+            Settings relevant for this metadata type, key is the ReferenceId defined in HardwareDefinition.Fields
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.PtzMoveSupport">
+            <summary>
+            Class that defines if PTZ moves are supported
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzMoveSupport.AbsoluteSupport">
+            <summary>
+            If device supports absolute movements
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzMoveSupport.RelativeSupport">
+            <summary>
+            If device supports relative movements
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzMoveSupport.StartSupport">
+            <summary>
+            Does this PTZ device support starting a PTZ move
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzMoveSupport.StopSupport">
+            <summary>
+            Does this PTZ device support stopping a PTZ move
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzMoveSupport.AutomaticSupport">
+            <summary>
+            Does this PTZ device support automatic PTZ movement
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzMoveSupport.SpeedSupport">
+            <summary>
+            Does this PTZ device support changing speed of a PTZ movement
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.PtzSupport">
+            <summary>
+            Class that defines how the device supports PTZ
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzSupport.CenterSupport">
+            <summary>
+            Does this device support centering
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzSupport.RectangleSupport">
+            <summary>
+            Does this device support rectangular
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzSupport.HomeSupport">
+            <summary>
+            If the PTZ support homing
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzSupport.DiagonalSupport">
+            <summary>
+            Does this device support diagonal movement
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzSupport.PanSupport">
+            <summary>
+            How this device supports panning
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzSupport.TiltSupport">
+            <summary>
+            How this device supports tilting
+            </summary>        
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzSupport.ZoomSupport">
+            <summary>
+            How this device supports zooming
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PtzSupport.PresetSupport">
+            <summary>
+            How this device supports presetting
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Definitions.PtzSupport.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.BoolSetupField">
+            <summary>
+            Class that represents how a boolean field is defined
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.DoubleSetupField">
+            <summary>
+            Class that defines how a double field should be configured
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.EnumSetupField">
+            <summary>
+            Class that represents how an enum field is defined
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.EnumSetupField.EnumList">
+            <summary>
+            List of values that the field can have
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.BaseValueSetupField`1">
+            <summary>
+            A class that represents an integer number field
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.BaseValueSetupField`1.MinValue">
+            <summary>
+            The minimum valid value
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.BaseValueSetupField`1.MaxValue">
+            <summary>
+            The maximum valid value
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.BaseValueSetupField`1.Resolution">
+            <summary>
+            Define if the valid values can only be with specific steps, e.g. every 5: Like 0, 5, 10, 15 ...
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.ISetupField">
+            <summary>
+            Interface for the setup fields
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.Key">
+            <summary>
+            Unique setup field identifier
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.DisplayName">
+            <summary>
+            The name displayed for this setup field in the GUI
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.DisplayNameReferenceId">
+            <summary>
+            The reference of the <see cref="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.DisplayName"/> of this field
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.ReferenceId">
+            <summary>
+            The reference of this field
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.IsReadOnly">
+            <summary>
+            Specifies whether the field is readonly.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.IsVisible">
+            <summary>
+            Specifies whether the field will be visible in Management Client.<br/>
+            Supported from 2020 R1 version of VMS.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.NumberSetupField">
+            <summary>
+            A class that represents a long type number field
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Definitions.NumberSetupField.#ctor">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Definitions.BaseValueSetupField`1.Resolution"/> 
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.BaseSetupField`1">
+            <summary>
+            Base class for setup fields
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.BaseSetupField`1.Key">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.Key"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.BaseSetupField`1.DisplayName">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.DisplayName"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.BaseSetupField`1.DisplayNameReferenceId">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.DisplayNameReferenceId"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.BaseSetupField`1.ReferenceId">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.ReferenceId"/> 
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.BaseSetupField`1.IsReadOnly">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.IsReadOnly"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.BaseSetupField`1.IsVisible">
+            <summary>
+            <see cref="P:VideoOS.Platform.DriverFramework.Definitions.ISetupField.IsVisible"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.BaseSetupField`1.DefaultValue">
+            <summary>
+            The field's default value
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.StringSetupField">
+            <summary>
+            Class that represents how a string field is defined
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.StreamDefinition">
+            <summary>
+            Class that defines a stream
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.StreamDefinition.DisplayName">
+            <summary>
+            The name of the stream, like "Stream 1", "Stream 2", ...
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.StreamDefinition.ReferenceId">
+            <summary>
+            Id for each of the streams 
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.StreamDefinition.Settings">
+            <summary>
+            Settings relevant for this stream, key is the ReferenceId defined in HardwareDefinition.Fields
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.StreamDefinition.MetadataTypes">
+            <summary>
+            For metadata devices, this contains definition of what types of metadata it contains
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.StreamDefinition.RemotePlaybackSupport">
+            <summary>
+            Indicate if device has stored data that can be played back.
+            It Require you to implement the PlaybackManager, to support the playback handling.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.EventId">
+            <summary>
+            Predefined events, that a driver can issue
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.EventId.InputCurrentlyActivated">
+            <summary>
+            Used by driver to provide information about initial state, right after startup
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.EventId.InputCurrentlyDeactivated">
+            <summary>
+            Used by driver to provide information about initial state, right after startup
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.EventId.OutputCurrentlyActivated">
+            <summary>
+            Used by driver to provide information about initial state, right after startup
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.EventId.OutputCurrentlyDeactivated">
+            <summary>
+            Used by driver to provide information about initial state, right after startup
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.ProductDefinition">
+            <summary>
+            A definition of a product, supported by driver
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ProductDefinition.Id">
+            <summary>
+            Id of the product. Must be unique.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ProductDefinition.Name">
+            <summary>
+            The name of the product. Will be displayed.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.InputDeviceDefinition">
+            <summary>
+            Defines one input sensor.<br/>
+            <br/>
+            Right after connection is established to the real hardware, this class should issue <br/>
+            one of these events to initialize the current state of the input:<br/>
+            - InputCurrentlyActivated<br/>
+            - InputCurrentlyDeactivated<br/>
+            
+            If none of these are used, the input state will be unknown (NotAvailable) until the first change event is issued.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.InputDeviceDefinition.DeviceType">
+            <summary>
+            See <see cref="P:VideoOS.Platform.DriverFramework.Definitions.DeviceDefinitionBase.DeviceType"/>
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.MetadataDeviceDefinition">
+            <summary>
+            Class that defines a metadata device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.MetadataDeviceDefinition.DeviceType">
+            <summary>
+            The type of this device (Metadata)
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.SpeakerDeviceDefinition">
+            <summary>
+            Class that defines a speaker device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.SpeakerDeviceDefinition.DeviceType">
+            <summary>
+            This type of device (Speaker)
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.OutputDeviceDefinition">
+            <summary>
+            Defines one output signal (device).
+            
+            Right after connection is established to the real hardware, the driver should
+            check the current state of the output, and issue one of these two events:<br/>
+            - OutputCurrentlyActivated<br/>
+            - OutputCurrentlyDeactivated<br/>
+            To have the current output state initialized in the system.
+            
+            If none of these are issued, the state will be unknown(NotAvailable) until first output change is issued.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.OutputDeviceDefinition.DeviceType">
+            <summary>
+            Type of this device (Output)
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.OutputDeviceDefinition.SupportTrigger">
+            <summary>
+            Indicates if driver supports the OutputManager. Trigger methods
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.OutputDeviceDefinition.SupportSetState">
+            <summary>
+            Indicates if the driver supports the OutputManager. Activate and Deactivate methods
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.PresetSupport">
+            <summary>
+            Class that defines a preset support
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PresetSupport.LoadFromDeviceSupport">
+            <summary>
+            Does this support loading a preset from the device itself
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PresetSupport.SetPresetSupport">
+            <summary>
+            Does this device support setting a preset position
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PresetSupport.SpeedSupport">
+            <summary>
+            Does this device support varying speeds
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PresetSupport.QueryAbsolutePositionSupport">
+            <summary>
+            Does this device support asking for absolute positioning
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.PresetSupport.AbsoluteSpeedSupport">
+            <summary>
+            Does this device support setting the speed to an absolute value
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.StreamDeviceDefinition">
+            <summary>
+            Class that defines a stream device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.StreamDeviceDefinition.Streams">
+            <summary>
+            Defines available streams
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.CameraDeviceDefinition">
+            <summary>
+            Class that defines a camera device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.CameraDeviceDefinition.DeviceType">
+            <summary>
+            The type of the device (camera). See <see cref="T:VideoOS.Platform.DriverFramework.Definitions.DeviceType"/>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.CameraDeviceDefinition.PtzSupport">
+            <summary>
+            How the camera supports PTZ. See <see cref="T:VideoOS.Platform.DriverFramework.Definitions.PtzSupport"/>
+            Leave PtzSupport set to null to disable PTZ support
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.DeviceType">
+            <summary>
+            Defines a device type
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.DeviceType.Camera">
+            <summary>
+            Camera device
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.DeviceType.Microphone">
+            <summary>
+            Microphone device
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.DeviceType.Input">
+            <summary>
+            Input device
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.DeviceType.Output">
+            <summary>
+            Output device
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.DeviceType.Speaker">
+            <summary>
+            Speaker device
+            </summary>
+        </member>
+        <member name="F:VideoOS.Platform.DriverFramework.Definitions.DeviceType.Metadata">
+            <summary>
+            Metadata provider device
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.DeviceDefinitionBase">
+            <summary>
+            Defines fields common for all device types
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.DeviceDefinitionBase.DisplayName">
+            <summary>
+            Display name for the device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.DeviceDefinitionBase.DeviceId">
+            <summary>
+            Identification for the device. Could be a Guid, if sub-system provides this, or same as the index below.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.DeviceDefinitionBase.DeviceIndex">
+            <summary>
+            Device index is set automatically in Configuration manager
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.DeviceDefinitionBase.DeviceType">
+            <summary>
+            Defines the type of this device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.DeviceDefinitionBase.DeviceEvents">
+            <summary>
+            Defines the events issued by this device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.DeviceDefinitionBase.Settings">
+            <summary>
+            Select the setup fields defined on the HardwareDefinition, that are relevant for this devices, and its current value.
+            
+            The Key is the ReferenceId.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Definitions.DeviceDefinitionBase.ToString">
+            <summary>
+            Provide a string representation of this object.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.EventDefinition">
+            <summary>
+            Defines a event supported by the attached device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.EventDefinition.DisplayName">
+            <summary>
+            Display name for the event
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.EventDefinition.NameReferenceId">
+            <summary>
+            Id used for language translation
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.EventDefinition.ReferenceId">
+            <summary>
+            Id for this event
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.EventDefinition.CounterReferenceId">
+            <summary>
+            Id of another event that works counter to this one
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.HardwareDefinition">
+            <summary>
+            Defines the attached hardware and all its devices and events
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.HardwareDefinition.Events">
+            <summary>
+            Defines the events this hardware can generate.<br/>
+            
+            Events that each device can generate is not included here.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.HardwareDefinition.Devices">
+            <summary>
+            Defines all the devices attached
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.HardwareDefinition.Fields">
+            <summary>
+            Defines the fields available for setting parameters
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.HardwareDefinition.HardwareSettings">
+            <summary>
+            The settings relevant for the hardware. Return the list needed for the hardware (General) section.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.MicrophoneDeviceDefinition">
+            <summary>
+            Class that defines a microphone device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.MicrophoneDeviceDefinition.DeviceType">
+            <summary>
+            Type of this device (Microphone)
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Definitions.ProductInformation">
+            <summary>
+            Information about the connected system/device.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ProductInformation.HardwareId">
+            <summary>
+            Hardware Id. Set automatically.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ProductInformation.ProductId">
+            <summary>
+            Product id. Should match one of the product ids, specified in the <see cref="P:VideoOS.Platform.DriverFramework.Definitions.DriverInfo.SupportedProducts"/> property 
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ProductInformation.ProductName">
+            <summary>
+            Product name
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ProductInformation.ProductVersion">
+            <summary>
+            Product version
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ProductInformation.MacAddress">
+            <summary>
+            Mac address
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ProductInformation.FirmwareVersion">
+            <summary>
+            Firmware version
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ProductInformation.Firmware">
+            <summary>
+            Firmware
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ProductInformation.HardwareName">
+            <summary>
+            Hardware name
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Definitions.ProductInformation.SerialNumber">
+            <summary>
+            Serial number
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Definitions.ProductInformation.ToString">
+            <summary>
+            ToString implementation
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Exceptions.AuthenticationException">
+            <summary>
+            Unable to login to remote device
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Exceptions.AuthenticationException.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Exceptions.AuthenticationException.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Exceptions.AuthenticationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructor with inner exception
+            </summary>
+            <param name="message"></param>
+            <param name="inner"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Exceptions.AuthenticationException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Exceptions.ConnectionLostException">
+            <summary>
+            Driver should throw this exception when connection to device is lost
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Exceptions.ConnectionLostException.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Exceptions.ConnectionLostException.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Exceptions.ConnectionLostException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructor with inner exception
+            </summary>
+            <param name="message"></param>
+            <param name="inner"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Exceptions.ConnectionLostException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Exceptions.MIPDriverException">
+            <summary>
+            A base exception for all exceptions thrown by framework driver's
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Exceptions.MIPDriverException.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Exceptions.MIPDriverException.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Exceptions.MIPDriverException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructor with inner exception
+            </summary>
+            <param name="message"></param>
+            <param name="inner"></param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Exceptions.MIPDriverException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Container">
+            <summary>
+            Driver Connection. Created from DriverDefinition
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Container.#ctor(VideoOS.Platform.DriverFramework.DriverDefinition)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="definition"></param>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.ConfigurationManager">
+            <summary>
+            Manages driver specific configurations
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.StreamManager">
+            <summary>
+            Stream manager takes care of all stream creation, streaming and close for a given connection.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.PtzManager">
+            <summary>
+            PTZ Manager handles all handling for cameras that can move, e.g. presets, Joystick, relative movements.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.ConnectionManager">
+            <summary>
+            Handles connections to device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.SettingsManager">
+            <summary>
+            Built-in manager that keeps track of current settings.  
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.OutputManager">
+            <summary>
+            Handles commands related to an output device
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.EventManager">
+            <summary>
+            A built-in manager that stores events the VMS is subscribing for.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.EventSubscriber">
+            <summary>
+            Exposes methods used by DFW process.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.SpeakerManager">
+            <summary>
+            Implement this class for supporting outgoing audio to speakers
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.PlaybackManager">
+            <summary>
+            Implement all playback related commands.
+            
+            When remote playback is not supported, leave this at null.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.CommandManager">
+            <summary>
+            Command manager. Use it to register the driver commands
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.CommandExecutor">
+            <summary>
+            Command executor interface for the Corporate
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Container.Definition">
+            <summary>
+            Definition of the driver. Use it to access the capabilities of the driver.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.DriverDefinition">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.DriverDefinition.DriverInfo">
+            <summary>
+            Driver information
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.DriverDefinition.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.DriverDefinition.Connect(System.Uri,System.String,System.Security.SecureString,System.Collections.Generic.ICollection{VideoOS.Platform.DriverFramework.Data.Settings.HardwareSetting})">
+            <summary>
+            Initialize connection parameters to device
+            </summary>
+            <param name="uri"></param>
+            <param name="userName"></param>
+            <param name="password"></param>
+            <param name="hardwareSettings">Hardware specific settings, can contain authorization parameters, will be blank during initial detection</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.DriverDefinition.CreateContainer(System.Uri,System.String,System.Security.SecureString,System.Collections.Generic.ICollection{VideoOS.Platform.DriverFramework.Data.Settings.HardwareSetting})">
+            <summary>
+            Creates the container with all the managers
+            </summary>
+            <param name="uri"></param>
+            <param name="userName"></param>
+            <param name="password"></param>
+            <param name="hardwareSettings"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.DriverDefinition.CreateDriverInfo">
+            <summary>
+            Creates the driver information
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Utilities.DevelopmentExtensions">
+            <summary>
+            Extensions to provide guard conditions
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Utilities.DevelopmentExtensions.NullCheck(System.Object)">
+            <summary>
+            Throws an exception if the object is null
+            </summary>
+            <param name="objectToCheck">The object to be tested</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Utilities.DevelopmentExtensions.NullCheck(System.Object,System.String)">
+            <summary>
+            Throws an exception if the object is null
+            </summary>
+            <param name="objectToCheck">The object to be tested</param>
+            <param name="argumentName">The name of the object for exceptions</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Utilities.DevelopmentExtensions.NullOrEmptyCheck(System.String)">
+            <summary>
+            Throws an exception if the object is null or empty
+            </summary>
+            <param name="objectToCheck">The object to be tested</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Utilities.DevelopmentExtensions.NullOrEmptyCheck(System.String,System.String)">
+            <summary>
+            Throws an exception if the object is null or empty
+            </summary>
+            <param name="objectToCheck">The object to be tested</param>
+            <param name="argumentName">The name of the object for exceptions</param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Utilities.ILog">
+            <summary>
+            Interface for the DriverFramework Logger
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Utilities.ILog.Log(System.Boolean,System.String,System.String,System.Object[])">
+            <summary>
+            Logs a message
+            </summary>
+            <param name="isError">True if this is an error</param>
+            <param name="where">Where this is coming from, provide class name and method</param>
+            <param name="text">The message</param>
+            <param name="args">Any relevant parameters</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Utilities.ILog.LogDebug(System.String,System.String,System.Object[])">
+            <summary>
+            Logs a debug message
+            </summary>
+            <param name="where">Where this is coming from, provide class name and method</param>
+            <param name="text">The message</param>
+            <param name="args">Any relevant parameters</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Utilities.ILog.Trace(System.String,System.Object[])">
+            <summary>
+            Logs a debug message without need to specify the source (for quick tracing)
+            </summary>
+            <param name="text">The message</param>
+            <param name="args">Any relevant parameters</param>
+        </member>
+        <member name="M:VideoOS.Platform.DriverFramework.Utilities.ILog.LogError(System.String,System.String,System.Object[])">
+            <summary>
+            Logs an error message
+            </summary>
+            <param name="where">Where this is coming from, provide class name and method</param>
+            <param name="text">The message</param>
+            <param name="args">Any relevant parameters</param>
+        </member>
+        <member name="T:VideoOS.Platform.DriverFramework.Utilities.Toolbox">
+            <summary>
+            Toolbox gives access to the tools provided by the framework.  It is initialized by the framework and should not be changed by the driver code.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.DriverFramework.Utilities.Toolbox.Log">
+            <summary>
+            Use the Log to write the debug and error messages of your driver
+            The log file is in the %programdata%\Milestone\XProtect Recording Server\Logs\DriverFramework_YourDriver.log
+            </summary>
+        </member>
+    </members>
+</doc>

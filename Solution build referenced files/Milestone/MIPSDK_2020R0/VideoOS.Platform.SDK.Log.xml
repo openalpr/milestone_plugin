@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VideoOS.Platform.SDK.Log</name>
+    </assembly>
+    <members>
+        <member name="T:VideoOS.Platform.SDK.Log.Environment">
+            <summary>
+            Environment for the <see cref="T:VideoOS.Platform.SDK.Log.LogClient"/>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Log.Environment.Initialize">
+            <summary>
+            Call to initialize the Environment
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Log.LogClient.LookupLogClient(VideoOS.Platform.Item)">
+            <summary>
+            Lookup cached LogClientManager relevant for given Item.
+            </summary>
+            <param name="relatedItem"></param>
+            <exception cref="T:VideoOS.Platform.MIPException"></exception>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Log.LogClient.LookupLogClient(VideoOS.Platform.ServerId)">
+            <summary>
+            Lookup cacheed LogClientManager for given ServerId
+            </summary>
+            <param name="serverId"></param>
+            <exception cref="T:VideoOS.Platform.MIPException"></exception>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Log.LogClient.ReadGroups(VideoOS.Platform.ServerId)">
+            <summary>
+            Return the defined groups for this system.
+            </summary>
+            <param name="serverId"></param>
+            <exception cref="T:VideoOS.Platform.MIPException"></exception>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Log.LogClient.GetCount(VideoOS.Platform.ServerId,System.String,System.DateTime,System.DateTime)">
+            <summary>
+            Colculate the number of log messages in given group, and within given time span.
+            </summary>
+            <param name="serverId"></param>
+            <param name="group"></param>
+            <param name="beginTime"></param>
+            <param name="endTime"></param>
+            <exception cref="T:VideoOS.Platform.MIPException"></exception>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Log.LogClient.ReadLog(VideoOS.Platform.ServerId,System.Int32,System.Collections.ArrayList@,System.Collections.ArrayList@,System.String)">
+            <summary>
+            Read a set of messages from the log.  Max 1000 messages returned.  The page indicates which 1000 to fetch.
+            </summary>
+            <param name="serverId"></param>
+            <param name="page"></param>
+            <param name="result"></param>
+            <param name="names"></param>
+            <param name="group"></param>
+            <exception cref="T:VideoOS.Platform.MIPException"></exception>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Log.LogClient.ReadLog(VideoOS.Platform.ServerId,System.Int32,System.Collections.ArrayList@,System.Collections.ArrayList@,System.String,System.DateTime,System.DateTime)">
+            <summary>
+            
+            </summary>
+            <param name="serverId"></param>
+            <param name="page"></param>
+            <param name="result"></param>
+            <param name="names"></param>
+            <param name="group"></param>
+            <param name="beginTime"></param>
+            <param name="endTime"></param>
+            <exception cref="T:VideoOS.Platform.MIPException"></exception>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

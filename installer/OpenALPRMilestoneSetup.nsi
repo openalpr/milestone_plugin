@@ -60,11 +60,12 @@ Section "Files (required)"
   
   ; https://github.com/ReVolly/NsisDotNetChecker
   ;!insertmacro CheckNetFramework 452
-  !insertmacro CheckNetFramework 46
+  ;!insertmacro CheckNetFramework 46
   ;!insertmacro CheckNetFramework 461
   ;!insertmacro CheckNetFramework 462
   ;!insertmacro CheckNetFramework 47
   ;!insertmacro CheckNetFramework 471
+  !insertmacro CheckNetFramework 472
   
   ; Set output path to the service sub folder.
   SetOutPath "$INSTDIR\Service"

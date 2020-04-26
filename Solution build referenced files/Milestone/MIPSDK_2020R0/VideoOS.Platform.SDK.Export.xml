@@ -1,0 +1,755 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VideoOS.Platform.SDK.Export</name>
+    </assembly>
+    <members>
+        <member name="M:VideoOS.Platform.SDK.Export.DBExporterXpco.CheckExportAuthorization(System.Collections.Generic.IEnumerable{VideoOS.Platform.Item},System.Boolean)">
+            <summary>
+            Will check if all the provided items are authorized for export
+            </summary>
+            <param name="itemsToCheck"></param>
+            <param name="aviExport">If true authorization will be checked for AVI (/MKV) export - otherwise DB export</param>
+            <returns>True if all provided items are authorized</returns>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.Export.MKVExporter">
+            <summary>
+            This implementation of a AVIExporter function should not be used directly, but through 
+            the VideoOS.Platform.Data.AVIExporter class.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.MKVExporter.#ctor">
+            <summary>
+            Exports the currently defined devices in a number of data formats
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.MKVExporter.Init">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.MKVExporter.Close">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.MKVExporter.CameraList">
+            <summary>
+            The list of cameras to export
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.MKVExporter.AudioList">
+            <summary>
+            The list of Audio sources to export. Can be both microphones and Speakers.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.MKVExporter.Path">
+            <summary>
+            Where to store the export
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.MKVExporter.Filename">
+            <summary>
+            Name of the MKV file.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.MKVExporter.StartExport(System.DateTime,System.DateTime)">
+            <summary>
+            Exports the currently defined devices as an AVI file. Returns error if already in progress.
+            </summary>
+            <value>True if export was started. Is finished when Progress >= 100.</value>
+            <param name="start">The start time.</param>
+            <param name="end">The end time.</param>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.MKVExporter.Progress">
+            <summary>
+            Gets the updated progress in percent
+            </summary>
+            <value>The percent done. Out of range 0-100 means error.</value>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.MKVExporter.Cancel">
+            <summary>
+            Cancels the current export operation
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.MKVExporter.LastError">
+            <summary>
+            </summary>
+            <value>The last error.</value>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.MKVExporter.LastErrorString">
+            <summary>
+            </summary>
+            <value>The last error or exception.</value>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.MKVExporter.EndExport">
+            <summary>
+            Cancels and cleans up the current export operation
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.DatabaseSequences.FindOrCreate(VideoOS.Platform.FQID,VideoOS.Platform.SDK.Config.ISystemInfo)">
+            <summary>
+            We create one DataSequence per camera, and reuse for as long as the SystemInfo is 'connected'.
+            During the SystemInfo.Logout, the DatabaseSequences classes will be Disposed.
+            </summary>
+            <param name="fqid"></param>
+            <param name="systemInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.DatabaseSequences.FindTable(VideoOS.DatabaseUtility.MediaStorage.BankInfo,System.String)">
+            <summary>
+            The tableName is really a Guid for XPCO databases
+            </summary>
+            <param name="bank"></param>
+            <param name="tableName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.Export.DBExporter">
+            <summary>
+            Represents a common exporter with functions to export in various data formats.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.DBExporter.#ctor">
+            <summary>
+            Exports the currently defined devices in a number of data formats
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.DBExporter.Init">
+            <summary>
+            Initialize the exporter
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.DBExporter.Close">
+            <summary>
+            Uninitialize managed wrapper. Should be called when done using any instance of Exporter, for example at exit.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.DBExporter.CameraList">
+            <summary>
+            The list of cameras to export
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.DBExporter.AudioList">
+            <summary>
+            The list of Audio sources to export. Can be both microphones and Speakers.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.DBExporter.Compression">
+            <summary>
+            Set to True, if exported database is to be compressed
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.DBExporter.Encryption">
+            <summary>
+            Set to True if Encryption is required, also set the Password.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.DBExporter.Password">
+            <summary>
+            The password used for encryption.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.DBExporter.ViewerPaths">
+            <summary>
+            The path to the Viewer, and any language paths that should also be exported.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.DBExporter.Path">
+            <summary>
+            Where to store the export
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.DBExporter.StartExport(System.DateTime,System.DateTime)">
+            <summary>
+            Exports the currently defined devices as a Milestone database. Returns error if already in progress.
+            </summary>
+            <value>True if export was started. Is finished when Progress >= 100.</value>
+            <param name="start">The start time.</param>
+            <param name="end">The end time.</param>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.DBExporter.Progress">
+            <summary>
+            Gets the updated progress in percent
+            </summary>
+            <value>The percent done. Out of range 0-100 means error. -2 means uninitialized.</value>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.DBExporter.Cancel">
+            <summary>
+            Cancels the current export operation
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.DBExporter.LastError">
+            <summary>
+            Gets the last export error as a number.
+            </summary>
+            <value>The last error.</value>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.DBExporter.LastWarning">
+            <summary>
+            Get the last warning, if any.
+            </summary>
+            0 = No warnings<br/>
+            1 = Incomplete Export<br/>
+            2 = Video was transcoded, takes extra time - but is not an error<br/>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.DBExporter.LastErrorString">
+            <summary>
+            Gets the last export error as an English string.
+            </summary>
+            <value>The last error.</value>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.DBExporter.EndExport">
+            <summary>
+            Ends and cleans up the current export operation
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.Export.Environment">
+            <summary>
+            The environment for doing exports
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.Environment.Initialize">
+            <summary>
+            Initialize support for export methods DBExport, AVIExport, and more...
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.Export.AVIExporter">
+            <summary>
+            This implementation of a AVIExporter function should not be used directly, but through 
+            the VideoOS.Platform.Data.AVIExporter class.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.AVIExporter.#ctor">
+            <summary>
+            Exports the currently defined devices in a number of data formats
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.AVIExporter.Init">
+            <summary>
+            Initialize managed wrapper. Must be called by application before StartExport()
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.AVIExporter.Close">
+            <summary>
+            Uninitialize managed wrapper. Should be called when done using any instance of Exporter, for example at exit.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.CameraList">
+            <summary>
+            The list of cameras to export
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.AudioList">
+            <summary>
+            The list of Audio sources to export. Can be both microphones and Speakers.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.Path">
+            <summary>
+            Where to store the export
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.Filename">
+            <summary>
+            Name of the AVI file.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.Timestamp">
+            <summary>
+            True if timestamp should be placed on top of video
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.Codec">
+            <summary>
+            Codec to be used for AVI
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.CodecList">
+            <summary>
+            Returne all available codecs, relevant for current width and Height parameters
+            </summary>
+            <exception cref="T:VideoOS.Platform.MIPException">When a codec throws an exception, could be a codec that is not supported in executing 32/64 bit configuration</exception>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.FrameRate">
+            <summary>
+            Target frame rate
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.Width">
+            <summary>
+            Width of target AVI
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.Height">
+            <summary>
+            Height of target AVI
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.Channels">
+            <summary>
+            Number of audio channels
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.AudioSampleRate">
+            <summary>
+            Sample rate for Audio. Default is 8000
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.AudioSampleDepth">
+            <summary>
+            Audio bit per sample, default is 16 bits
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.Window">
+            <summary>
+            A rectagle to export, if only a part should be exported.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.AVIExporter.SetOverlayImage(System.Drawing.Bitmap,System.Int32,System.Int32,System.Double,System.Boolean)">
+            <summary>
+            Applies an overlay image to the exported video. The positioning and size are relative to the zoomed/cropped exported image (video). The method must be called prior to StartExport. For platform integrations this feature is only supported in combination with <see cref="M:VideoOS.Platform.SDK.Export.AVIExporter.StartExport(System.DateTime,System.DateTime)"/> method.
+            </summary>
+            <param name="overlayBitmap">The overlay image to be used. Should be in an alpha-enabled image color format (RGBA or BGRA) to be able to handle (semi-)transparent areas. Any other format will not support transparency.</param>
+            <param name="verticalOverlayPosition">The vertical position of the overlay image relative to the regular orientation of the output images, supports: Top, Centered and Bottom location - use defined constants.</param>
+            <param name="horizontalOverlayPosition">The horizontal position of the overlay image relative to the regular orientation of the output images, supports: Left, Centered and Right - use defined constants.</param>
+            <param name="scaleFactor">Scale factor relative the output image size. The value of 1.0 indicates 100% size, and smaller means that the overlay will cover a smaller area of the image. Larger values will result in that the surplus will be cropped.</param>
+            <param name="ignoreAspect">Flag indicating whether or not the aspect ratio is taken into account. The value of false will ensure aspect ratio correction, otherwise the overlaying is done directly on a pixel-to-pixel basis.</param>
+            <returns>True if successfully set the overlay image, otherwise false.</returns>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.AVIExporter.StartExport(System.DateTime,System.DateTime)">
+            <summary>
+            Exports the currently defined devices as an AVI file. Returns error if already in progress.
+            </summary>
+            <value>True if export was started. Is finished when Progress >= 100.</value>
+            <param name="start">The start time.</param>
+            <param name="end">The end time.</param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.AVIExporter.StartExport(System.Collections.Generic.IEnumerable{VideoOS.Platform.Data.SequenceAviExportElement})">
+            <summary>
+            Exports the specified sequences as one sequential AVI file. The sequences will be exported one after another in the order provided 
+            - no matter the chronological order of the data within.
+            </summary>
+            <remarks>The CameraList property is ignored and audio is not supported for this method.</remarks>
+            <param name="sequences">The list of sequences to export.</param>
+            <returns>True if export was started. Is finished when Progress >= 100.</returns>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.Progress">
+            <summary>
+            Gets the updated progress in percent
+            </summary>
+            <value>The percent done. Out of range 0-100 means error. -2 means uninitialized.</value>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.AVIExporter.Cancel">
+            <summary>
+            Cancels the current export operation
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.LastError">
+            <summary>
+            Gets the last export error as a number.<br/>
+            0     NO_ERROR_OCCURRED                     No error occurred.<br/>
+            1     ERROR_OPENING_VIDEO_STREAM            Error opening video stream from image server.<br/>
+            2     ERROR_OPENING_AUDIO_STREAM            Error opening audio stream from image server.<br/>
+            3     ERROR_INITIALIZING_EXPORT             Error initializing export (parameters are wrong).<br/>
+            4     ERROR_STARTING_AVI_ENCODER            Error starting AVI encoder.<br/>
+            5     ERROR_GETTING_NEXT_IMAGE_FROM_STREAM  Error getting next image from image stream.<br/>
+            6     ERROR_GETTING_AUDIO_FROM_STREAM       Error getting audio from audio stream.<br/>
+            7     ERROR_ADDING_IMAGE_TO_AVI_ENCODER     Error adding image to AVI encoder.<br/>
+            8     ERROR_ADDING_AUDIO_TO_AVI_ENCODER     Error adding audio to AVI encoder.<br/>
+            9     EXPORT_CANCELLED                      Export has been cancelled.<br/>
+            10    UNKNOWN_ERROR                         Unknown error. This should never happen.<br/>
+            </summary>
+            <value>The last error.</value>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.LastDetailedError">
+            <summary>
+            Can in some cases provided a more detailed error code, potentially helpful in debugging
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.AVIExporter.LastErrorString">
+            <summary>
+            Gets the last export error as a string. The format is the error in text form from the LastError : A detailed error text as described below:<br/>
+            0     DETAILED_ERROR_OK<br/>
+            1     DETAILED_ERROR_EXPORT_CANCELLED<br/>
+            2     DETAILED_ERROR_CANNOT_WRITE_FILE<br/>
+            3     DETAILED_ERROR_CANNOT_OVERWRITE_EXISTING_FILE<br/>
+            4     DETAILED_ERROR_CANNOT_CREATE_DESTINATION_FOLDER<br/>
+            5     DETAILED_ERROR_INVALID_FILE_NAME<br/>
+            6     DETAILED_ERROR_GETTING_VIDEO_FROM_SOURCE<br/>
+            7     DETAILED_ERROR_SETTING_VIDEO_FORMAT<br/>
+            8     DETAILED_ERROR_SETTING_VIDEO_DIMENSIONS<br/>
+            9     DETAILED_ERROR_STARTING_VIDEO_ENCODER<br/>
+            10    DETAILED_ERROR_ENCODING_VIDEO<br/>
+            11    DETAILED_ERROR_UNEXPECTED_FAILURE_DURING_VIDEO_EXPORT<br/>
+            12    DETAILED_ERROR_VIDEO_STREAM_ALREADY_OPEN<br/>
+            13    DETAILED_ERROR_CANNOT_CONNECT_TO_VIDEO_SOURCE<br/>
+            14    DETAILED_ERROR_SETTING_AUDIO_FORMAT<br/>
+            15    DETAILED_ERROR_STARTING_AUDIO_ENCODER<br/>
+            16    DETAILED_ERROR_GETTING_AUDIO_FROM_SOURCE<br/>
+            17    DETAILED_ERROR_ENCODING_AUDIO<br/>
+            18    DETAILED_ERROR_UNEXPECTED_FAILURE_DURING_AUDIO_EXPORT<br/>
+            19    DETAILED_ERROR_AUDIO_STREAM_ALREADY_OPEN<br/>
+            20    DETAILED_ERROR_CANNOT_CONNECT_TO_AUDIO_SOURCE<br/>
+            21    DETAILED_ERROR_INVALID_NUMBER_OF_AUDIO_CHANNELS<br/>
+            22    DETAILED_ERROR_INVALID_AUDIO_SAMPLING_RATE<br/>
+            23    DETAILED_ERROR_INVALID_NUMBER_OF_BITS_PER_AUDIO_SAMPLE<br/>
+            24    DETAILED_ERROR_INVALID_NUMBER_OF_AUDIO_SOURCES<br/>
+            25    DETAILED_ERROR_EXPORT_EXCEEDS_MAXIMUM_AVI_FILE_SIZE<br/>
+            26    DETAILED_ERROR_NO_STREAMS_TO_EXPORT<br/>
+            27    DETAILED_ERROR_ILLEGAL_EXPORT_TIME_INTERVAL<br/>
+            28    DETAILED_ERROR_CANNOT_DETERMINE_VIDEO_FRAME_RATE_AND_DIMENSION<br/>
+            29    DETAILED_ERROR_VIDEO_DIMENSION_NOT_SUPPORTED<br/>
+            30    DETAILED_ERROR_UNEXPECTED_FAILURE<br/>
+            
+            </summary>
+            <value>The last error.</value>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.AVIExporter.EndExport">
+            <summary>
+            Cancels and cleans up the current export operation
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKInternalCommandService.AsyncAlertsGetAroundWithSpan(VideoOS.Platform.FQID,System.Object,System.DateTime,System.TimeSpan,System.Int32,System.TimeSpan,System.Int32,VideoOS.Platform.Data.AsyncCallbackHandler)">
+            <summary>
+            </summary>
+            <param name="alertFQID"></param>
+            <param name="asyncState"></param>
+            <param name="dateTime"></param>
+            <param name="timeBefore"></param>
+            <param name="maxCountBefore"></param>
+            <param name="timeAfter"></param>
+            <param name="maxCountAfter"></param>
+            <param name="resultCallbackHandler"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKInternalCommandService.AsyncSequencesGetAroundWithSpan(VideoOS.Platform.FQID,System.Object,System.Guid,System.DateTime,System.TimeSpan,System.Int32,System.TimeSpan,System.Int32,VideoOS.Platform.Data.AsyncCallbackHandler)">
+            <summary>
+            </summary>
+            <param name="deviceFQID"></param>
+            <param name="asyncState"></param>
+            <param name="sequenceType"></param>
+            <param name="centerTime"></param>
+            <param name="maxTimeBefore"></param>
+            <param name="maxCountBefore"></param>
+            <param name="maxTimeAfter"></param>
+            <param name="maxCountAfter"></param>
+            <param name="resultCallbackHandler"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKInternalCommandService.ImageExporterCommand(System.Object,System.String)">
+            <summary>
+            For internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKInternalCommandService.ImageExporterBitmapCommand(System.Object,System.String)">
+            <summary>
+            For internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKInternalCommandService.ImageExporterRawCommand(System.Object,System.String)">
+            <summary>
+            For internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKInternalCommandService.ImageExporterRawCommand(System.Object,System.String,System.Boolean)">
+            <summary>
+            For internal use only
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKInternalCommandService.SetDecoderWidthHeight(System.Object,System.Int32,System.Int32)">
+            <summary>
+            For internal use only
+            </summary>
+            <param name="sessionId"></param>
+            <param name="width"></param>
+            <param name="height"></param>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.Export.Resources.Strings">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.AVIExporterError_ExportAlreadyRunning">
+            <summary>
+              Looks up a localized string similar to Export already running.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.AVIExporterError_FailedToCreateCameraConfigurationXML">
+            <summary>
+              Looks up a localized string similar to Failed to create camera configuration XML.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.AVIExporterError_FilenameNotSet">
+            <summary>
+              Looks up a localized string similar to Filename not set.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.AVIExporterError_NoExportSourcesSet">
+            <summary>
+              Looks up a localized string similar to No export sources set.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.AVIExporterError_NoSequencesProvided">
+            <summary>
+              Looks up a localized string similar to No sequences provided.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.AVIExporterError_NotAuthorized">
+            <summary>
+              Looks up a localized string similar to You are not authorized to make an export for one or more of the provided devices.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.AVIExporterError_NoVideoInSelectedTimePeriod">
+            <summary>
+              Looks up a localized string similar to No video in selected time period.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.AVIExporterError_NoVideoInSelectedTimePeriodForCamera">
+            <summary>
+              Looks up a localized string similar to No video in selected time period for camera: {0}.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.AVIExporterError_OverlayImageInvalidPosition">
+            <summary>
+              Looks up a localized string similar to Invalid position specified for the custom overlay image.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.AVIExporterError_OverlayImageNotSet">
+            <summary>
+              Looks up a localized string similar to Custom overlay image not defined.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.AVIExporterError_RecorderOffline">
+            <summary>
+              Looks up a localized string similar to Recording server is offline.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.AVIExporterError_RecorderOfflineForCamera">
+            <summary>
+              Looks up a localized string similar to Recording server is offline for camera: {0}.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.BookmarkExporterError_ServerCommunicationErrorDuringBookmarkExport">
+            <summary>
+              Looks up a localized string similar to Server communication error occurred during bookmark export.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.BookmarkExporterError_UnknownErrorDuringBookmarkExport">
+            <summary>
+              Looks up a localized string similar to Unknown error occurred during bookmark export.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.Resources.Strings.BookmarkExporterError_WriteErrorDuringBookmarkExport">
+            <summary>
+              Looks up a localized string similar to Write error occurred during bookmark export.
+            </summary>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.Export.ToolkitXmlProviders.CommonSourceXmlProvider">
+            <summary>
+            Class wrapping the common source depending the FQID
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.ToolkitXmlProviders.CommonSourceXmlProvider.#ctor(VideoOS.Platform.FQID,System.Guid)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="fqid">FQID of the selected item</param>
+            <param name="streamId">srteam ID - track d of the selected stream, Guid.Empty if no selected</param>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.Export.ToolkitXmlProviders.DbSourceXmlProvider">
+            <summary>
+            Class wrapping the DB source (.PQZ or .INI files)
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.ToolkitXmlProviders.DbSourceXmlProvider.Fqid">
+            <summary>
+            FQID of the item data that will be used
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.ToolkitXmlProviders.DbSourceXmlProvider.ToolkitProvider">
+            <summary>
+            IToolkitXmlProvider property
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.ToolkitXmlProviders.DbSourceXmlProvider.ToolkitType">
+            <summary>
+            IToolkitXmlProvider property
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.ToolkitXmlProviders.DbSourceXmlProvider.WriteTransformationStart(System.Xml.XmlWriter)">
+            <summary>
+            BaseToolkitXmlProvider method
+            </summary>
+            <param name="xw"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.ToolkitXmlProviders.DbSourceXmlProvider.WriteTransformationEnd(System.Xml.XmlWriter)">
+            <summary>
+            BaseToolkitXmlProvider method
+            </summary>
+            <param name="xw"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.ToolkitXmlProviders.DbSourceXmlProvider.UpdateConfiguration(System.Action{System.String,System.String})">
+            <summary>
+            BaseToolkitXmlProvider method - should never been called !
+            </summary>
+            <param name="configurationUpdater"></param>
+        </member>
+        <member name="T:VideoOS.Platform.SDK.Export.SDKWAVExporter">
+            <summary>
+            This implementation of a WAVExporter function should not be used directly, but through 
+            the VideoOS.Platform.Data.WAVExporter class.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKWAVExporter.#ctor">
+            <summary>
+            Initialized Properties with default values
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKWAVExporter.Init">
+            <summary>
+            Initialize managed wrapper. Must be called by application before StartExport()
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKWAVExporter.Close">
+            <summary>
+            Uninitialize managed wrapper. Should be called when done using any instance of Exporter, for example at exit.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.SDKWAVExporter.AudioList">
+            <summary>
+            The list of Audio sources to export. Can be both microphones and Speakers.
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.SDKWAVExporter.CodecList">
+            <summary>
+            Look at AviCodecHelper in SC
+            Returne all available codecs, relevant for current width and Height parameters
+            </summary>
+            <exception cref="T:VideoOS.Platform.MIPException">When a codec throws an exception, could be a codec that is not supported in executing 32/64 bit configuration</exception>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.SDKWAVExporter.Progress">
+            <summary>
+            Gets the updated progress in percent
+            </summary>
+            <value>The percent done. Out of range 0-100 means error. -2 means uninitialized.</value>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKWAVExporter.Cancel">
+            <summary>
+            Cancels the current export operation
+            </summary>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.SDKWAVExporter.LastError">
+            <summary>
+            Gets the last export error as a number.<br/>
+            0     NO_ERROR_OCCURRED                     No error occurred.<br/>
+            1     ERROR_OPENING_VIDEO_STREAM            Error opening video stream from image server.<br/>
+            2     ERROR_OPENING_AUDIO_STREAM            Error opening audio stream from image server.<br/>
+            3     ERROR_INITIALIZING_EXPORT             Error initializing export (parameters are wrong).<br/>
+            4     ERROR_STARTING_AVI_ENCODER            Error starting AVI encoder.<br/>
+            5     ERROR_GETTING_NEXT_IMAGE_FROM_STREAM  Error getting next image from image stream.<br/>
+            6     ERROR_GETTING_AUDIO_FROM_STREAM       Error getting audio from audio stream.<br/>
+            7     ERROR_ADDING_IMAGE_TO_AVI_ENCODER     Error adding image to AVI encoder.<br/>
+            8     ERROR_ADDING_AUDIO_TO_AVI_ENCODER     Error adding audio to AVI encoder.<br/>
+            9     EXPORT_CANCELLED                      Export has been cancelled.<br/>
+            10    UNKNOWN_ERROR                         Unknown error. This should never happen.<br/>
+            </summary>
+            <value>The last error.</value>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.SDKWAVExporter.LastDetailedError">
+            <summary>
+            Gets the last export error as a number.<br/>
+            0     DETAILED_ERROR_OK<br/>
+            1     DETAILED_ERROR_EXPORT_CANCELLED<br/>
+            2     DETAILED_ERROR_CANNOT_WRITE_FILE<br/>
+            3     DETAILED_ERROR_CANNOT_OVERWRITE_EXISTING_FILE<br/>
+            4     DETAILED_ERROR_CANNOT_CREATE_DESTINATION_FOLDER<br/>
+            5     DETAILED_ERROR_INVALID_FILE_NAME<br/>
+            6     DETAILED_ERROR_GETTING_VIDEO_FROM_SOURCE<br/>
+            7     DETAILED_ERROR_SETTING_VIDEO_FORMAT<br/>
+            8     DETAILED_ERROR_SETTING_VIDEO_DIMENSIONS<br/>
+            9     DETAILED_ERROR_STARTING_VIDEO_ENCODER<br/>
+            10    DETAILED_ERROR_ENCODING_VIDEO<br/>
+            11    DETAILED_ERROR_UNEXPECTED_FAILURE_DURING_VIDEO_EXPORT<br/>
+            12    DETAILED_ERROR_VIDEO_STREAM_ALREADY_OPEN<br/>
+            13    DETAILED_ERROR_CANNOT_CONNECT_TO_VIDEO_SOURCE<br/>
+            14    DETAILED_ERROR_SETTING_AUDIO_FORMAT<br/>
+            15    DETAILED_ERROR_STARTING_AUDIO_ENCODER<br/>
+            16    DETAILED_ERROR_GETTING_AUDIO_FROM_SOURCE<br/>
+            17    DETAILED_ERROR_ENCODING_AUDIO<br/>
+            18    DETAILED_ERROR_UNEXPECTED_FAILURE_DURING_AUDIO_EXPORT<br/>
+            19    DETAILED_ERROR_AUDIO_STREAM_ALREADY_OPEN<br/>
+            20    DETAILED_ERROR_CANNOT_CONNECT_TO_AUDIO_SOURCE<br/>
+            21    DETAILED_ERROR_INVALID_NUMBER_OF_AUDIO_CHANNELS<br/>
+            22    DETAILED_ERROR_INVALID_AUDIO_SAMPLING_RATE<br/>
+            23    DETAILED_ERROR_INVALID_NUMBER_OF_BITS_PER_AUDIO_SAMPLE<br/>
+            24    DETAILED_ERROR_INVALID_NUMBER_OF_AUDIO_SOURCES<br/>
+            25    DETAILED_ERROR_EXPORT_EXCEEDS_MAXIMUM_AVI_FILE_SIZE<br/>
+            26    DETAILED_ERROR_NO_STREAMS_TO_EXPORT<br/>
+            27    DETAILED_ERROR_ILLEGAL_EXPORT_TIME_INTERVAL<br/>
+            28    DETAILED_ERROR_CANNOT_DETERMINE_VIDEO_FRAME_RATE_AND_DIMENSION<br/>
+            29    DETAILED_ERROR_VIDEO_DIMENSION_NOT_SUPPORTED<br/>
+            30    DETAILED_ERROR_UNEXPECTED_FAILURE<br/>
+            
+            </summary>
+            <value>The last error.</value>
+        </member>
+        <member name="P:VideoOS.Platform.SDK.Export.SDKWAVExporter.LastErrorString">
+            <summary>
+            Gets the last export error as a string. The format is the error in text form from the LastError : A detailed error text as described below:<br/>
+            0     DETAILED_ERROR_OK<br/>
+            1     DETAILED_ERROR_EXPORT_CANCELLED<br/>
+            2     DETAILED_ERROR_CANNOT_WRITE_FILE<br/>
+            3     DETAILED_ERROR_CANNOT_OVERWRITE_EXISTING_FILE<br/>
+            4     DETAILED_ERROR_CANNOT_CREATE_DESTINATION_FOLDER<br/>
+            5     DETAILED_ERROR_INVALID_FILE_NAME<br/>
+            6     DETAILED_ERROR_GETTING_VIDEO_FROM_SOURCE<br/>
+            7     DETAILED_ERROR_SETTING_VIDEO_FORMAT<br/>
+            8     DETAILED_ERROR_SETTING_VIDEO_DIMENSIONS<br/>
+            9     DETAILED_ERROR_STARTING_VIDEO_ENCODER<br/>
+            10    DETAILED_ERROR_ENCODING_VIDEO<br/>
+            11    DETAILED_ERROR_UNEXPECTED_FAILURE_DURING_VIDEO_EXPORT<br/>
+            12    DETAILED_ERROR_VIDEO_STREAM_ALREADY_OPEN<br/>
+            13    DETAILED_ERROR_CANNOT_CONNECT_TO_VIDEO_SOURCE<br/>
+            14    DETAILED_ERROR_SETTING_AUDIO_FORMAT<br/>
+            15    DETAILED_ERROR_STARTING_AUDIO_ENCODER<br/>
+            16    DETAILED_ERROR_GETTING_AUDIO_FROM_SOURCE<br/>
+            17    DETAILED_ERROR_ENCODING_AUDIO<br/>
+            18    DETAILED_ERROR_UNEXPECTED_FAILURE_DURING_AUDIO_EXPORT<br/>
+            19    DETAILED_ERROR_AUDIO_STREAM_ALREADY_OPEN<br/>
+            20    DETAILED_ERROR_CANNOT_CONNECT_TO_AUDIO_SOURCE<br/>
+            21    DETAILED_ERROR_INVALID_NUMBER_OF_AUDIO_CHANNELS<br/>
+            22    DETAILED_ERROR_INVALID_AUDIO_SAMPLING_RATE<br/>
+            23    DETAILED_ERROR_INVALID_NUMBER_OF_BITS_PER_AUDIO_SAMPLE<br/>
+            24    DETAILED_ERROR_INVALID_NUMBER_OF_AUDIO_SOURCES<br/>
+            25    DETAILED_ERROR_EXPORT_EXCEEDS_MAXIMUM_AVI_FILE_SIZE<br/>
+            26    DETAILED_ERROR_NO_STREAMS_TO_EXPORT<br/>
+            27    DETAILED_ERROR_ILLEGAL_EXPORT_TIME_INTERVAL<br/>
+            28    DETAILED_ERROR_CANNOT_DETERMINE_VIDEO_FRAME_RATE_AND_DIMENSION<br/>
+            29    DETAILED_ERROR_VIDEO_DIMENSION_NOT_SUPPORTED<br/>
+            30    DETAILED_ERROR_UNEXPECTED_FAILURE<br/>
+            
+            </summary>
+            <value>The last error.</value>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKWAVExporter.EndExport">
+            <summary>
+            Cancels and cleans up the current export operation
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Export.SDKWAVExporter.StartExport(System.DateTime,System.DateTime)">
+            <summary>
+            Exports the currently defined devices as an WAV file. Returns error if already in progress.
+            </summary>
+            <value>True if export was started. Is finished when Progress >= 100.</value>
+            <param name="start">The start time.</param>
+            <param name="end">The end time.</param>
+        </member>
+    </members>
+</doc>

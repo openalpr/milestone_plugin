@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VideoOS.Platform.SDK.Media</name>
+    </assembly>
+    <members>
+        <member name="T:VideoOS.Platform.SDK.Media.Environment">
+            <summary>
+            The environment to be used for live sources as well as exports
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Media.Environment.Initialize">
+            <summary>
+            Initialize support for JPEGVideoSource, BitmapVideoSource, RawVideoSource and all 
+            sequence for video, alarts.  Also all exports need this class to be initialized.
+            </summary>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Media.SDKInternalMediaService.SetDecoderWidthHeight(System.Object,System.Int32,System.Int32)">
+            <summary>
+            For internal use only
+            </summary>
+            <param name="sessionId"></param>
+            <param name="width"></param>
+            <param name="height"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Media.SDKInternalMediaService.SetStreamSelectionParams(System.Object,VideoOS.Platform.Util.AdaptiveStreaming.IStreamSelectionParams)">
+            <summary>
+            
+            </summary>
+            <param name="sessionId"></param>
+            <param name="streamSelectionParams"></param>
+        </member>
+        <member name="M:VideoOS.Platform.SDK.Media.SDKInternalMediaService.BuildIsSourceToolkitXml(VideoOS.Platform.FQID,System.Guid,VideoOS.Platform.SDK.Media.SDKInternalMediaService.MediaSessionInfo,System.Boolean)">
+            <summary>
+            Build toolkit for IS and Arcus
+            </summary>
+            <param name="fqid"></param>
+            <param name="streamId"></param>
+            <param name="enableMulticast"></param>
+            <param name="sessionInfo"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
