@@ -258,7 +258,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         bookmarkFQID = AddNewBookmark_New(palteInfo, cameras);
 
                     if (cameras.Count != 0)
-                        SendAlarm_New(palteInfo, cameras[cameras.Count - 1].OpenALPRname, bookmarkFQID); // Send Alert for the last Camera since we recieved the bookmarkFQID for the last camera used in AddNewBookmark.
+                        SendAlarm_New(palteInfo, cameras[cameras.Count - 1].MilestoneName, bookmarkFQID); // Send Alert for the last Camera since we recieved the bookmarkFQID for the last camera used in AddNewBookmark.
                 }
                 else
                     Program.Log.Warn("Best_plate_number is empty or Camera_id == 0");
@@ -278,7 +278,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 Program.Log.Info("Reload camera mapping list");
             }
 
-            List<OpenALPRmilestoneCameraName> cameras = cameraList.Where(c => c.MilestoneName == cameraId).ToList();
+            List<OpenALPRmilestoneCameraName> cameras = cameraList.Where(c => c.OpenALPRId == cameraId).ToList();
             if (cameras.Count == 0)
                 Program.Log.Warn($"{cameraId} not found in the local camera list");
 
@@ -428,7 +428,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             {
                 try
                 {
-                    FQID fqid = MilestoneServer.GetCameraByName(camera.OpenALPRname);
+                    FQID fqid = MilestoneServer.GetCameraByName(camera.MilestoneName);
 
                     if (fqid == null)
                     {
@@ -628,6 +628,9 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 string descFromAlertList = dicBlack[plateFromAlertList];
 
                 Program.Log.Info($"Sending an alert for {plateInfo.Best_plate_number}");
+
+                if (fqid == null)
+                    fqid = MilestoneServer.GetCameraByName(milestoneCameraName);
 
                 string cameraName = MilestoneServer.GetCameraName(fqid.ObjectId);
 
