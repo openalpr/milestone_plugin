@@ -1,12 +1,15 @@
 ﻿// Copyright OpenALPR Technology, Inc. 2018
 
+using OpenALPRPlugin.Client;
 using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Windows.Forms;
+using VideoOS.Platform;
 
 namespace OpenALPRPlugin.Utility
 {
@@ -20,6 +23,25 @@ namespace OpenALPRPlugin.Utility
 
             dtString = dispDt.ToString(datePatt);
             Debug.WriteLine("{0} {1}, Kind = {2}", title, dtString, dispDt.Kind);
+        }
+
+        public static BookmarkDescription ParseBookmarkDescription(string description)
+        {
+            BookmarkDescription bookmarkDescription = new BookmarkDescription();
+
+            string[] items = description.Split(';');
+
+            bookmarkDescription.Make = items[0].Split('=').LastOrDefault();
+            bookmarkDescription.BodyType = items[1].Split('=').LastOrDefault();
+            bookmarkDescription.Color = items[2].Split('=').LastOrDefault();
+            bookmarkDescription.BestRegion = items[3].Split('=').LastOrDefault();
+            bookmarkDescription.Candidates = items[4].Split('=').LastOrDefault();
+            bookmarkDescription.TravelDirection = Convert.ToDouble(items[5].Split('=').LastOrDefault());
+            bookmarkDescription.PlateNumber = items[6].Split('=').LastOrDefault();
+            bookmarkDescription.Coordinates = items[7].Replace("Coordinates=", "");
+            bookmarkDescription.Timestamp = Convert.ToDateTime(items[8].Split('=').LastOrDefault());
+
+            return bookmarkDescription;
         }
 
         public static void SetDirectoryNetworkServiceAccessControl(string path)

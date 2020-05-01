@@ -1,5 +1,6 @@
 ﻿// Copyright OpenALPR Technology, Inc. 2018
 
+using Newtonsoft.Json;
 using OpenALPRPlugin.Background;
 using OpenALPRPlugin.Forms;
 using OpenALPRPlugin.Properties;
@@ -269,29 +270,39 @@ namespace OpenALPRPlugin.Client
 
             for (int i = 0; i < limit; i++)
             {
-                Bookmark bookmark = bookmarks[i];
+                try
+                {
+                    Bookmark bookmark = bookmarks[i];
 
-                string[] row = new string[]
-                                    {
+                    BookmarkDescription bookmarkDescription = Helper.ParseBookmarkDescription(bookmark.Description);
+
+                    string[] row = new string[]
+                                        {
                                         (i+1).ToString(),
                                         bookmark.TimeBegin.ToLocalTime().ToString(),
                                         bookmark.TimeEnd.ToLocalTime().ToString (),
                                         bookmark.Header,
-                                        bookmark.Description
-                                    };
-                //MessageBox.Show($"{bookmark.TimeBegin.ToLocalTime()} | {bookmark.TimeEnd.ToLocalTime()} | {bookmark.Header} | {bookmark.Description}");
-                ListViewItem listViewItem = new ListViewItem(row)
+                                        bookmark.Description,
+                                        bookmarkDescription.PlateNumber,
+                                        bookmarkDescription.Make,
+                                        bookmarkDescription.Timestamp.ToString(),
+                                        bookmarkDescription.BestRegion
+                                        };
+                    ListViewItem listViewItem = new ListViewItem(row)
+                    {
+                        Tag = bookmark.BookmarkFQID
+                    };
+
+                    lsvBookmarks.Items.Add(listViewItem);
+
+                    if (OpenALPRBackgroundPlugin.Stop)
+                        break;
+                }
+                catch (Exception ex)
                 {
-                    Tag = bookmark.BookmarkFQID
-                };
-
-                lsvBookmarks.Items.Add(listViewItem);
-
-                if (OpenALPRBackgroundPlugin.Stop)
-                    break;
+                    Logger.Log.Error(null, ex);
+                }
             }
-
-            //MessageBox.Show(lsvBookmarks.Items.Count.ToString());
 
             string plus = bookmarks.Length > bookmarksCount ? "+" : string.Empty;
             
