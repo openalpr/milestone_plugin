@@ -121,6 +121,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BeanstalkWorker\BookmarkItem.cs" />
     <Compile Include="BeanstalkWorker\HttpAsyncServer.cs" />
     <Compile Include="BeanstalkWorker\OpenALPRmilestoneCameraName.cs" />
     <Compile Include="Chat\ChatServer.cs" />

@@ -279,6 +279,7 @@ namespace OpenALPRPlugin.Client
                                         bookmark.Header,
                                         bookmark.Description
                                     };
+                //MessageBox.Show($"{bookmark.TimeBegin.ToLocalTime()} | {bookmark.TimeEnd.ToLocalTime()} | {bookmark.Header} | {bookmark.Description}");
                 ListViewItem listViewItem = new ListViewItem(row)
                 {
                     Tag = bookmark.BookmarkFQID
@@ -289,6 +290,8 @@ namespace OpenALPRPlugin.Client
                 if (OpenALPRBackgroundPlugin.Stop)
                     break;
             }
+
+            //MessageBox.Show(lsvBookmarks.Items.Count.ToString());
 
             string plus = bookmarks.Length > bookmarksCount ? "+" : string.Empty;
             

@@ -170,6 +170,8 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 }
             }
 
+            //************
+
             return done;
         }
 
@@ -255,7 +257,10 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     IList<OpenALPRmilestoneCameraName> cameras = GetCameraFromMapping(palteInfo.Camera_id.ToString());
 
                     if (AddBookmarks)
-                        bookmarkFQID = AddNewBookmark_New(palteInfo, cameras);
+                    {
+                        List<BookmarkItem> bookmarkItems = CreateBookmarkItem(palteInfo, cameras);
+                        bookmarkFQID = AddNewBookmark_New(bookmarkItems);
+                    }
 
                     if (cameras.Count != 0)
                         SendAlarm_New(palteInfo, cameras[cameras.Count - 1].MilestoneName, bookmarkFQID); // Send Alert for the last Camera since we recieved the bookmarkFQID for the last camera used in AddNewBookmark.
@@ -419,10 +424,9 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             return bookmark?.BookmarkFQID; // bookmark for the last camera used.
         }
 
-        private FQID AddNewBookmark_New(OpenALPRData plateInfo, IList<OpenALPRmilestoneCameraName> cameras)
+        private List<BookmarkItem> CreateBookmarkItem(OpenALPRData plateInfo, IList<OpenALPRmilestoneCameraName> cameras)
         {
-            Bookmark bookmark = null;
-            VideoOS.Platform.SDK.Environment.Initialize();
+            List<BookmarkItem> bookmarkItem = new List<BookmarkItem>();
 
             foreach (OpenALPRmilestoneCameraName camera in cameras)
             {
@@ -441,9 +445,9 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     StringBuilder description = new StringBuilder();
 
                     DateTime timeBegin = Epoch2LocalDateTime(plateInfo.Epoch_start).AddSeconds(-EpochStartSecondsBefore);
-                    DateTime timrTrigged = Epoch2LocalDateTime(plateInfo.Epoch_start);                                   
-                    DateTime timeEnd = Epoch2LocalDateTime(plateInfo.Epoch_end).AddSeconds(EpochEndSecondsAfter);        
-                    reference.AppendFormat("openalpr");                                                                  
+                    DateTime timrTrigged = Epoch2LocalDateTime(plateInfo.Epoch_start);
+                    DateTime timeEnd = Epoch2LocalDateTime(plateInfo.Epoch_end).AddSeconds(EpochEndSecondsAfter);
+                    reference.AppendFormat("openalpr");
                     header.AppendFormat(plateInfo.Best_plate_number);
 
                     string candidates = string.Join(",", plateInfo.Candidates.GroupBy(candidate => candidate.Plate)
@@ -453,7 +457,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
                     string coordinates = string.Empty;
 
-                    foreach(Coordinate coordinate in plateInfo.Best_plate.Coordinates)
+                    foreach (Coordinate coordinate in plateInfo.Best_plate.Coordinates)
                     {
                         coordinates += $"(X={coordinate.X},Y={coordinate.Y}),";
                     }
@@ -473,25 +477,17 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
                     description.AppendFormat(desc);
 
-                    bookmark = null;
+                    bookmarkItem.Add(new BookmarkItem() {
+                        FQID = fqid,
+                        TimeBegin = timeBegin,
+                        TimrTrigged = timrTrigged,
+                        TimeEnd = timeEnd,
+                        Reference = reference,
+                        Header = header,
+                        Description = description,
+                        PlateInfo = plateInfo
+                    });
 
-                    try
-                    {
-                        bookmark = BookmarkService.Instance.BookmarkCreate(
-                                            fqid,
-                                            timeBegin,
-                                            timrTrigged,
-                                            timeEnd,
-                                            reference.ToString(),
-                                            header.ToString(),
-                                            description.ToString());
-                        Program.Log.Info($"Created Bookmark for Plate number: {plateInfo.Best_plate_number}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Program.Log.Warn($"Failed to create a Bookmark for Plate number: {plateInfo.Best_plate_number}{Environment.NewLine}");
-                        Program.Log.Warn($"Bookmark Failed Message: {ex.Message}");
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -499,9 +495,39 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 }
             }
 
-            return bookmark?.BookmarkFQID;
+            return bookmarkItem;
         }
 
+        private FQID AddNewBookmark_New(List<BookmarkItem> bookmarkItem)
+        {
+            Bookmark bookmark = null;
+            VideoOS.Platform.SDK.Environment.Initialize();
+
+            foreach(BookmarkItem item in bookmarkItem)
+            {
+                bookmark = null;
+
+                try
+                {
+                    bookmark = BookmarkService.Instance.BookmarkCreate(
+                                        item.FQID,
+                                        item.TimeBegin,
+                                        item.TimrTrigged,
+                                        item.TimeEnd,
+                                        item.Reference.ToString(),
+                                        item.Header.ToString(),
+                                        item.Description.ToString());
+                    Program.Log.Info($"Created Bookmark for Plate number: {item.PlateInfo.Best_plate_number}");
+                }
+                catch (Exception ex)
+                {
+                    Program.Log.Warn($"Failed to create a Bookmark for Plate number: {item.PlateInfo.Best_plate_number}{Environment.NewLine}");
+                    Program.Log.Warn($"Bookmark Failed Message: {ex.Message}");
+                }
+            }
+
+            return bookmark?.BookmarkFQID;
+        }
 
         private void SendAlarm(PlateInfo plateInfo, string milestoneCameraName, FQID bookmarkFQID)//, string plateFromAlertList, string descFromAlertList)
         {
