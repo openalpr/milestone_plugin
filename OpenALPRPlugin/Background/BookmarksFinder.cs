@@ -9,6 +9,8 @@
 
 using OpenALPRPlugin.Utility;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using VideoOS.Platform;
 using VideoOS.Platform.Data;
@@ -55,21 +57,54 @@ namespace OpenALPRPlugin.Background
         private async Task<Bookmark[]> BookmarkSearch(DateTime startTime, long period, int bookmarksCount)
         {
             string searchStr = optSearchStr;
+            List<Bookmark> bookmarks = new List<Bookmark>();
+
             if (string.IsNullOrEmpty(optSearchStr))
                 searchStr = OpenALPRBackgroundPlugin.openalprRefrence;
 
             try
             {
+                Logger.Log.Info("*********Search bookmark queries*********");
+                foreach (string query in Helper.Queries(searchStr.Split(' ')))
+                {
+                    bookmarks.AddRange(BookmarkService.Instance.BookmarkSearchTime(
+                        items[0].FQID.ServerId,
+                        startTime,
+                        period,
+                        bookmarksCount + 1,
+                        kinds,
+                        new FQID[] { items[0].FQID },
+                        optUsers,
+                        query).ToList());
+
+                    Logger.Log.Info(query);
+                }
+
+                Logger.Log.Info("*********Search bookmarks result*********");
+                foreach (Bookmark bookmark in bookmarks.ToArray())
+                {
+                    Logger.Log.Info($"{bookmark.BookmarkFQID} - {bookmark.Description}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.Error("Search bookmarks error", ex);
+            }
+
+            try
+            {
                 return await Task.Run(() =>
-                    BookmarkService.Instance.BookmarkSearchTime(
-                    items[0].FQID.ServerId,         //The ServerId of the management server to be searched for Bookmarks.
-                    startTime,                      //Start time of the search interval. Mandatory
-                    period,                         //Period of time to search within (in microseconds). Mandatory
-                    bookmarksCount + 1,             //Maximum number of bookmarks to be returned in the result. Mandatory
-                    kinds,                          //The Kinds to be searched for. Null => all kinds
-                    new FQID[] { items[0].FQID },   //Array of Item identifications to search. Null => Any
-                    optUsers,                       //Array of User names (the users that created the bookmark). Null => Ignored
-                    searchStr));                    //Search string. To appear in either of the fields 'Reference', 'Header', 'Description'. Null => Ignored
+                        bookmarks.ToArray()
+                    );
+                    //BookmarkService.Instance.BookmarkSearchTime(
+                    //items[0].FQID.ServerId,         //The ServerId of the management server to be searched for Bookmarks.
+                    //startTime,                      //Start time of the search interval. Mandatory
+                    //period,                         //Period of time to search within (in microseconds). Mandatory
+                    //bookmarksCount + 1,             //Maximum number of bookmarks to be returned in the result. Mandatory
+                    //kinds,                          //The Kinds to be searched for. Null => all kinds
+                    //new FQID[] { items[0].FQID },   //Array of Item identifications to search. Null => Any
+                    //optUsers,                       //Array of User names (the users that created the bookmark). Null => Ignored
+                    //searchStr.Replace(" ", "%")));                    //Search string. To appear in either of the fields 'Reference', 'Header', 'Description'. Null => Ignored
             }
             catch (Exception ex)
             {

@@ -2,6 +2,7 @@
 
 using OpenALPRPlugin.Client;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -13,6 +14,14 @@ using VideoOS.Platform;
 
 namespace OpenALPRPlugin.Utility
 {
+    public static class PublicHelper
+    {
+        public static List<string> Queries(IReadOnlyList<string> words)
+        {
+            return Helper.Queries(words);
+        }
+    }
+
     internal static class Helper
     {
         public static string datePatt = @"d/m/yyyy hh:mm:ss tt";
@@ -178,6 +187,70 @@ namespace OpenALPRPlugin.Utility
             }
         }
 
+        internal static List<string> Queries(IReadOnlyList<string> words)
+        {
+            List<string> queries = new List<string>();
+            IEnumerable<int[]> permutations = Permutations(0, words.Count);
+            foreach (int[] permutation in permutations)
+            {
+                string[] nextCase = new string[permutation.Length];
+                for (int i = 0; i < permutation.Length; i++)
+                    nextCase[i] = words[permutation[i]];
 
+                string result = string.Join("%", nextCase);
+                queries.Add(result);
+            }
+            return queries;
+        }
+
+        private static IEnumerable<int[]> Permutations(int start, int count)
+        {
+            if (count == 0)
+                yield break;
+
+            int[] array = Enumerable.Range(start, count)
+                                .ToArray();
+
+            if (count > 1)
+            {
+                do
+                    yield return array;
+                while (NextPermutation(ref array));
+            }
+            else
+                yield return array;
+        }
+
+        private static bool NextPermutation(ref int[] array)
+        {
+            int k = array.Length - 2;
+            while (k >= 0)
+            {
+                if (array[k] < array[k + 1])
+                    break;
+
+                k--;
+            }
+
+            if (k < 0)
+                return false;
+
+            int l = array.Length - 1;
+            while (l > k)
+            {
+                if (array[k] < array[l])
+                    break;
+
+                l--;
+            }
+
+            int tmp = array[k];
+            array[k] = array[l];
+            array[l] = tmp;
+
+            Array.Reverse(array, k + 1, array.Length - k - 1);
+
+            return true;
+        }
     }
 }
