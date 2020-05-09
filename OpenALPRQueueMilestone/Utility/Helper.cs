@@ -11,6 +11,21 @@ using System.Threading;
 
 namespace OpenALPRQueueConsumer.Utility
 {
+    public static class PublicHelper
+    {
+        public static string ReadConfigKey(string key)
+        {
+            return Helper.ReadConfigKey(key);
+        }
+        public static void AddUpdateAppSettings(string key, string value)
+        {
+            Helper.AddUpdateAppSettings(key, value);
+        }
+        public static void SetDirectoryNetworkServiceAccessControl(string path)
+        {
+            Helper.SetDirectoryNetworkServiceAccessControl(path);
+        }
+    }
     internal static class Helper
     {
         public static void SetDirectoryNetworkServiceAccessControl(string path)

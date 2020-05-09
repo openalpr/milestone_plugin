@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Chat\Chatting.cs" />
+    <Compile Include="SystemTrayAppDefinition.cs" />
     <Compile Include="PowershellScript.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +102,7 @@
     <Compile Include="STAApplicationContext.cs" />
     <Compile Include="Utility\Common.cs" />
     <Compile Include="Utility\Helper.cs" />
+    <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\Logging.cs" />
     <Compile Include="ViewManager.cs" />
     <Compile Include="WindowsService .cs" />

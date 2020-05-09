@@ -58,7 +58,6 @@
             // 
             // btnLogin
             // 
-            this.btnLogin.Enabled = false;
             this.btnLogin.Location = new System.Drawing.Point(12, 121);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(75, 23);
@@ -72,7 +71,7 @@
             this.lblLogin.AutoSize = true;
             this.lblLogin.Location = new System.Drawing.Point(12, 9);
             this.lblLogin.Name = "lblLogin";
-            this.lblLogin.Size = new System.Drawing.Size(33, 13);
+            this.lblLogin.Size = new System.Drawing.Size(38, 15);
             this.lblLogin.TabIndex = 3;
             this.lblLogin.Text = "Login";
             // 
@@ -81,7 +80,7 @@
             this.lblPassword.AutoSize = true;
             this.lblPassword.Location = new System.Drawing.Point(12, 79);
             this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(112, 13);
+            this.lblPassword.Size = new System.Drawing.Size(130, 15);
             this.lblPassword.TabIndex = 4;
             this.lblPassword.Text = "Current user password";
             // 
@@ -90,7 +89,7 @@
             this.chkNetworkService.AutoSize = true;
             this.chkNetworkService.Location = new System.Drawing.Point(12, 51);
             this.chkNetworkService.Name = "chkNetworkService";
-            this.chkNetworkService.Size = new System.Drawing.Size(15, 14);
+            this.chkNetworkService.Size = new System.Drawing.Size(18, 17);
             this.chkNetworkService.TabIndex = 5;
             this.chkNetworkService.UseVisualStyleBackColor = true;
             this.chkNetworkService.CheckedChanged += new System.EventHandler(this.chkNetworkService_CheckedChanged);
@@ -100,7 +99,7 @@
             this.lblUse.AutoSize = true;
             this.lblUse.Location = new System.Drawing.Point(27, 52);
             this.lblUse.Name = "lblUse";
-            this.lblUse.Size = new System.Drawing.Size(26, 13);
+            this.lblUse.Size = new System.Drawing.Size(29, 15);
             this.lblUse.TabIndex = 6;
             this.lblUse.Text = "Use";
             this.lblUse.Click += new System.EventHandler(this.lblUse_Click);
@@ -111,7 +110,7 @@
             this.lblNetworkService.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNetworkService.Location = new System.Drawing.Point(50, 52);
             this.lblNetworkService.Name = "lblNetworkService";
-            this.lblNetworkService.Size = new System.Drawing.Size(101, 13);
+            this.lblNetworkService.Size = new System.Drawing.Size(125, 17);
             this.lblNetworkService.TabIndex = 7;
             this.lblNetworkService.Text = "Network Service";
             this.lblNetworkService.Click += new System.EventHandler(this.lblNetworkService_Click);

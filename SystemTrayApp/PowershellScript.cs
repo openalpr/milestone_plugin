@@ -31,9 +31,10 @@ namespace SystemTrayApp
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-
             using (ViewManager manager = new ViewManager(serviceManager))
             {
+                Helper.AddUpdateAppSettings("MilestoneUserName", (chkNetworkService.Checked) ? "" : txtLogin.Text, "OpenALPRQueueMilestone.exe");
+                Helper.AddUpdateAppSettings("MilestonePassword", (chkNetworkService.Checked) ? "" : txtPassword.Text, "OpenALPRQueueMilestone.exe");
                 manager.RunPowershellScrip((chkNetworkService.Checked) ? "Network Service" : txtLogin.Text, txtPassword.Text);
                 this.Close();
             }
@@ -52,10 +53,18 @@ namespace SystemTrayApp
         private void chkNetworkService_CheckedChanged(object sender, EventArgs e)
         {
             txtLogin.Enabled = !chkNetworkService.Checked;
+            txtPassword.Enabled = !chkNetworkService.Checked;
         }
 
         private void PowershellScript_Activated(object sender, EventArgs e)
         {
+            txtLogin.Text = Helper.ReadConfigKey("MilestoneUserName", "OpenALPRQueueMilestone.exe");
+            txtPassword.Text = Helper.ReadConfigKey("MilestonePassword", "OpenALPRQueueMilestone.exe");
+            chkNetworkService.Checked = (string.IsNullOrEmpty(txtLogin.Text) || string.IsNullOrWhiteSpace(txtLogin.Text)) &&
+                (string.IsNullOrEmpty(txtPassword.Text) || string.IsNullOrWhiteSpace(txtPassword.Text));
+            txtLogin.Enabled = !chkNetworkService.Checked;
+            txtPassword.Enabled = !chkNetworkService.Checked;
+
             btnLogin.Focus();
         }
 
@@ -69,8 +78,8 @@ namespace SystemTrayApp
 
         private void txtPassword_KeyUp(object sender, KeyEventArgs e)
         {
-            string password = (sender as TextBox).Text;
-            btnLogin.Enabled = (!string.IsNullOrEmpty(password) && !string.IsNullOrWhiteSpace(password));
+            //string password = (sender as TextBox).Text;
+            //btnLogin.Enabled = (!string.IsNullOrEmpty(password) && !string.IsNullOrWhiteSpace(password));
         }
     }
 }

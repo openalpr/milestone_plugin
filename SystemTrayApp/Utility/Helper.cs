@@ -1,5 +1,6 @@
 ﻿// Copyright OpenALPR Technology, Inc. 2018
 
+using log4net.Repository.Hierarchy;
 using System;
 using System.Configuration;
 using System.Globalization;
@@ -17,7 +18,7 @@ namespace OpenALPR.SystemTrayApp.Utility
         {
             if (!Directory.Exists(path))
             {
-                //Program.Logger.Log.Warn($"Path does not exists: {path}");
+                Program.Log.Warn($"Path does not exists: {path}");
                 return;
             }
 
@@ -57,13 +58,13 @@ namespace OpenALPR.SystemTrayApp.Utility
                     dirInfo.Refresh();
                 }
             }
-            catch //(Exception ex)
+            catch (Exception ex)
             {
-                //Program.Logger.Log.Error(path, ex);
+                Program.Log.Error(path, ex);
             }
 
-            //if (!SetAcl(path))
-            //    Program.Logger.Log.Warn($"Failed to set acl for path: {path}");
+            if (!SetAcl(path))
+                Program.Log.Warn($"Failed to set acl for path: {path}");
         }
 
         private static bool SetAcl(string path)
@@ -107,33 +108,55 @@ namespace OpenALPR.SystemTrayApp.Utility
 
                 return true;
             }
-            catch //(Exception ex)
+            catch (Exception ex)
             {
-                //Program.Logger.Log.Error(path, ex);
+                Program.Log.Error(null, ex);
             }
 
             return false;
         }
 
-        internal static string ReadConfigKey(string key)
+        internal static string ReadConfigKey(string key, string file = null)
         {
             try
             {
-                return ConfigurationManager.AppSettings[key];
-            }
-            catch //(Exception ex)
-            {
-                //Program.Logger.Log.Error(key, ex);
-            }
+                string fullPath = $"{OpenALPRQueueMilestoneDefinition.applicationPath}\\{file}";
 
-            return string.Empty;
+                if (string.IsNullOrEmpty(fullPath) || string.IsNullOrWhiteSpace(fullPath))
+                {
+                    return ConfigurationManager.AppSettings[key];
+                }
+                else
+                {
+                    Configuration configFile = ConfigurationManager.OpenExeConfiguration(fullPath);
+                    return configFile.AppSettings.Settings[key].Value;
+                }
+            }
+            catch (Exception ex)
+            {
+                Program.Log.Error(null, ex);
+
+                return string.Empty;
+            }
         }
 
-        internal static void AddUpdateAppSettings(string key, string value)
+        internal static void AddUpdateAppSettings(string key, string value, string file = "")
         {
             try
             {
-                Configuration configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                Configuration configFile;
+                
+                string fullPath = $"{OpenALPRQueueMilestoneDefinition.applicationPath}\\{file}";
+
+                if (string.IsNullOrEmpty(fullPath) || string.IsNullOrWhiteSpace(fullPath))
+                {
+                    configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                }
+                else
+                {
+                    configFile = ConfigurationManager.OpenExeConfiguration(fullPath);
+                }
+
                 KeyValueConfigurationCollection settings = configFile.AppSettings.Settings;
 
                 if (settings[key] == null)
@@ -144,9 +167,9 @@ namespace OpenALPR.SystemTrayApp.Utility
                 configFile.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
             }
-            catch //(Exception ex)
+            catch (Exception ex)
             {
-                //Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
             }
         }
 
@@ -165,9 +188,9 @@ namespace OpenALPR.SystemTrayApp.Utility
 
                 return (T)Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
             }
-            catch //(Exception ex)
+            catch (Exception ex)
             {
-                //Program.Logger.Log.Error(null, ex);
+                Program.Log.Error(null, ex);
                 return default(T);
             }
         }
