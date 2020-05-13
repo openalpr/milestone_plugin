@@ -121,6 +121,7 @@ namespace OpenALPR.SystemTrayApp.Utility
             try
             {
                 string fullPath = $"{OpenALPRQueueMilestoneDefinition.applicationPath}\\{file}";
+                //string fullPath = $"{file}";
 
                 if (string.IsNullOrEmpty(fullPath) || string.IsNullOrWhiteSpace(fullPath))
                 {
@@ -147,6 +148,8 @@ namespace OpenALPR.SystemTrayApp.Utility
                 Configuration configFile;
                 
                 string fullPath = $"{OpenALPRQueueMilestoneDefinition.applicationPath}\\{file}";
+                //string fullPath = $"{file}";
+
 
                 if (string.IsNullOrEmpty(fullPath) || string.IsNullOrWhiteSpace(fullPath))
                 {

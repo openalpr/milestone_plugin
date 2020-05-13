@@ -374,7 +374,8 @@ namespace SystemTrayApp
                 stopServiceMenuItem = ToolStripMenuItemWithHandler("Stop OpenALPRMilestone service", "Stops the service", Resources.Stop, StartStopReaderItem_Click);
                 notifyIcon.ContextMenuStrip.Items.Add(stopServiceMenuItem);
                 notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-                serviceAccessMenuItem = ToolStripMenuItemWithHandler("Run service access script", "Run service access script", Resources.powershell, RunServiceAccessScript_Click);
+                //********************
+                serviceAccessMenuItem = ToolStripMenuItemWithHandler("Settings", "Settings", Resources.powershell, RunServiceAccessScript_Click);
                 notifyIcon.ContextMenuStrip.Items.Add(serviceAccessMenuItem);
                 serviceAccessMenuItem = ToolStripMenuItemWithHandler("Restart Xprotect Recording Server", "Restart Xprotect Recording Server", Resources.Recorder, RunRestartRecordingServerScript_Click);
                 notifyIcon.ContextMenuStrip.Items.Add(serviceAccessMenuItem);
