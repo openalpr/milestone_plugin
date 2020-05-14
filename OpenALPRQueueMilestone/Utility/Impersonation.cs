@@ -260,6 +260,75 @@ namespace OpenALPRQueueConsumer.Utility
         NetworkService
     }
 
+    public enum MipVersion
+    {
+        Unknown = 000,
+        Go = 100,
+        Essential = 200,
+        Express = 250,
+        Professional = 300,
+        Enterprise = 400,
+        EssentialPlus  = 440,
+        ExpressPlus = 460,
+        ProfessionalPlus = 480,
+        Expert = 500,
+        Corporate = 600,
+    }
+
+    public enum MipFeatures
+    {
+        Audio, 
+        DeviceChannels, 
+        DLKQuota, 
+        Sites, 
+        Metadata,
+        FederatedSites,InterconnectedProducts,
+        AddToFederatedHierarchy, 
+        AACAudioSupport, 
+        RemoteConnectedServices, 
+        AxisOneClick, 
+        HardwareLicensing, 
+        RecordingServerFailover, 
+        SmartClientProfiles, 
+        ManagementClientProfiles, 
+        DifferentiatedAdministratorSecurity, 
+        SNMP, 
+        TimeControlledAccessRights, 
+        EvidenceLock, 
+        MultiStageVideoStorage, 
+        ArchiveReducedFrameRate, 
+        RecordingStorageEncryption, 
+        RecordingStorageSigning, 
+        MarkedData, 
+        Bookmarking, 
+        RuleBasedBookmarking, 
+        LiveMultiStreaming, 
+        Multicast, 
+        ManageAlarms, 
+        DualAuthorization, 
+        PTZPriority, 
+        EdgeStorage, 
+        ConfigurationReports, 
+        SystemMonitor, 
+        SmartClientLogin, 
+        MobileLogin, 
+        MIPUseInternally, 
+        MIPUseExternally, 
+        SmartMap, 
+        ExtendedPtz, 
+        CustomerDashboard, 
+        HardwareAcceleratedVMD, 
+        TwoStepVerification, 
+        DLNAOutServer, 
+        ExtendedPrivacyMasking, 
+        NvidiaVMD, 
+        DevicePasswordManagement, 
+        SearchCategories, 
+        SaveSearches, 
+        AdaptiveStreaming, 
+        SmartWall
+    }
+
     #endregion
 
 }

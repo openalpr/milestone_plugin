@@ -10,6 +10,9 @@ using VideoOS.Platform;
 using VideoOS.Platform.Login;
 using VideoOS.Platform.SDK.Proxy.Server;
 using VideoOS.Platform.Data;
+using VideoOS.Platform.License;
+using VideoOS.Platform.Messaging;
+
 using SDKEnvironment = VideoOS.Platform.SDK.Environment;
 
 namespace OpenALPRQueueConsumer.Milestone
@@ -21,6 +24,7 @@ namespace OpenALPRQueueConsumer.Milestone
         internal static string Token;
         internal static ServerCommandService scs;
         internal static int ProductCode;
+        internal static string license;
 
         private static IDictionary<Guid, Item> AllCameras = new Dictionary<Guid, Item>();
         private static LoginSettings loginSettings;
@@ -29,8 +33,12 @@ namespace OpenALPRQueueConsumer.Milestone
         private static bool connectedToMilestone;
 
         private static readonly object LoginLock = new object();
+
+        private static ConfigManager _configManager;
+
         public MilestoneServer()
         {
+
         }
 
         public static bool ConnectedToMilestone
@@ -192,6 +200,7 @@ namespace OpenALPRQueueConsumer.Milestone
 
             if (connectedToMilestone)
             {
+                license = GetLicense();
                 scs.Url = $"{ServerName}ServerAPI/ServerCommandService.asmx";
                 MilestoneInfo();
                 string msg = $"Connected to Milestone server: {ServerName}";
@@ -279,6 +288,33 @@ namespace OpenALPRQueueConsumer.Milestone
             }
 
             return list.ToArray();
+        }
+
+        internal static string GetLicense()
+        {
+            _configManager = new ConfigManager();
+            _configManager.Init();
+
+            bool isFeatureEnabled = EnvironmentManager.Instance.SystemLicense.IsFeatureEnabled(
+                MipFeatures.Bookmarking.ToString());
+
+            MipVersion mipVersion = (MipVersion)Enum.ToObject(typeof(MipVersion),
+                EnvironmentManager.Instance.SystemLicense.ProductCode);
+
+            string bookmarking = isFeatureEnabled ? "enabled" : "disabled";
+
+            return $"{mipVersion} license, bookmarking { bookmarking }";
+        }
+
+        private static object LocalConfigUpdatedHandler(VideoOS.Platform.Messaging.Message message, FQID dest, FQID source)
+        {
+            // Update UI - if name changed
+            return null;
+        }
+
+        private static object ConfigUpdatedHandler(VideoOS.Platform.Messaging.Message message, FQID dest, FQID source)
+        {
+            return null;
         }
 
         internal static string GetCameraName(Guid objectId)
