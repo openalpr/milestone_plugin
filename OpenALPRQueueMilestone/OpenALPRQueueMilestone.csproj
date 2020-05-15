@@ -157,6 +157,7 @@
     <Compile Include="Utility\JsonHelper.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\Logging.cs" />
+    <Compile Include="Utility\MappingHelper.cs" />
     <Compile Include="Utility\OpenALPRLNameHelper.cs" />
   </ItemGroup>
   <ItemGroup>

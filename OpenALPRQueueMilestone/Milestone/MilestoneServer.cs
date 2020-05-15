@@ -24,7 +24,6 @@ namespace OpenALPRQueueConsumer.Milestone
         internal static string Token;
         internal static ServerCommandService scs;
         internal static int ProductCode;
-        internal static string license;
 
         private static IDictionary<Guid, Item> AllCameras = new Dictionary<Guid, Item>();
         private static LoginSettings loginSettings;
@@ -33,8 +32,6 @@ namespace OpenALPRQueueConsumer.Milestone
         private static bool connectedToMilestone;
 
         private static readonly object LoginLock = new object();
-
-        private static ConfigManager _configManager;
 
         public MilestoneServer()
         {
@@ -200,7 +197,10 @@ namespace OpenALPRQueueConsumer.Milestone
 
             if (connectedToMilestone)
             {
-                license = GetLicense();
+                MilestoneVersion milestoneVersion = new MilestoneVersion();
+
+                //OpenALPRPlugin.Utility.Milestone.Version = (OpenALPRPlugin.Utility.MilestoneVersion)(new MappingHelper(milestoneVersion, new OpenALPRPlugin.Utility.MilestoneVersion()).Value);
+
                 scs.Url = $"{ServerName}ServerAPI/ServerCommandService.asmx";
                 MilestoneInfo();
                 string msg = $"Connected to Milestone server: {ServerName}";
@@ -288,22 +288,6 @@ namespace OpenALPRQueueConsumer.Milestone
             }
 
             return list.ToArray();
-        }
-
-        internal static string GetLicense()
-        {
-            _configManager = new ConfigManager();
-            _configManager.Init();
-
-            bool isFeatureEnabled = EnvironmentManager.Instance.SystemLicense.IsFeatureEnabled(
-                MipFeatures.Bookmarking.ToString());
-
-            MipVersion mipVersion = (MipVersion)Enum.ToObject(typeof(MipVersion),
-                EnvironmentManager.Instance.SystemLicense.ProductCode);
-
-            string bookmarking = isFeatureEnabled ? "enabled" : "disabled";
-
-            return $"{mipVersion} license, bookmarking { bookmarking }";
         }
 
         private static object LocalConfigUpdatedHandler(VideoOS.Platform.Messaging.Message message, FQID dest, FQID source)
