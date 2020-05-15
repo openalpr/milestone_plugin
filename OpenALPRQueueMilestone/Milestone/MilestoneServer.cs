@@ -14,6 +14,7 @@ using VideoOS.Platform.License;
 using VideoOS.Platform.Messaging;
 
 using SDKEnvironment = VideoOS.Platform.SDK.Environment;
+using System.IO;
 
 namespace OpenALPRQueueConsumer.Milestone
 {
@@ -197,10 +198,18 @@ namespace OpenALPRQueueConsumer.Milestone
 
             if (connectedToMilestone)
             {
-                MilestoneVersion milestoneVersion = new MilestoneVersion();
+                try
+                {
+                    string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                    File.WriteAllText($"{path}\\Milestone.json",
+                        JsonHelper.FromClass(
+                        new MilestoneVersion()));
 
-                //OpenALPRPlugin.Utility.Milestone.Version = (OpenALPRPlugin.Utility.MilestoneVersion)(new MappingHelper(milestoneVersion, new OpenALPRPlugin.Utility.MilestoneVersion()).Value);
-
+                }
+                catch (Exception ex)
+                {
+                    Program.Log.Error(null, ex);
+                }
                 scs.Url = $"{ServerName}ServerAPI/ServerCommandService.asmx";
                 MilestoneInfo();
                 string msg = $"Connected to Milestone server: {ServerName}";

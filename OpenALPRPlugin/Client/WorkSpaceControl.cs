@@ -8,6 +8,7 @@ using OpenALPRPlugin.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
@@ -65,6 +66,20 @@ namespace OpenALPRPlugin.Client
                     txtCameraName.Text = camera.Name;
                     selectedCameraItem = camera;
                 }
+            }
+
+            try
+            {
+                string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                MilestoneVersion milestoneVersion = JsonConvert.DeserializeObject<MilestoneVersion>(
+                    File.ReadAllText($"{path}\\Service\\Milestone.json"));
+                lblMilestone.Text = $"License type: { milestoneVersion.Name }, Bookmarking: { (milestoneVersion.Bookmarking ? "enabled" : "disabled") }";
+                if (!milestoneVersion.Bookmarking)
+                    lblMilestone.ForeColor = Color.Red;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.Error(null, ex);
             }
 
             OpenALPRBackgroundPlugin.ServiceEvent += OpenALPRBackgroundPlugin_ServiceEvent;

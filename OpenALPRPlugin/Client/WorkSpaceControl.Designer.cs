@@ -64,6 +64,7 @@ namespace OpenALPRPlugin.Client
             this.lblMainMessage = new System.Windows.Forms.Label();
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lblVersion = new System.Windows.Forms.Label();
+            this.lblMilestone = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,6 +107,7 @@ namespace OpenALPRPlugin.Client
             this.hdrTimestamp,
             this.hdrSiteName});
             this.lsvBookmarks.FullRowSelect = true;
+            this.lsvBookmarks.HideSelection = false;
             this.lsvBookmarks.Location = new System.Drawing.Point(24, 190);
             this.lsvBookmarks.Name = "lsvBookmarks";
             this.lsvBookmarks.Size = new System.Drawing.Size(935, 585);
@@ -316,6 +318,15 @@ namespace OpenALPRPlugin.Client
             this.lblVersion.TabIndex = 19;
             this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // lblMilestone
+            // 
+            this.lblMilestone.AutoSize = true;
+            this.lblMilestone.Location = new System.Drawing.Point(13, 160);
+            this.lblMilestone.Name = "lblMilestone";
+            this.lblMilestone.Size = new System.Drawing.Size(61, 15);
+            this.lblMilestone.TabIndex = 20;
+            this.lblMilestone.Text = "Milestone";
+            // 
             // WorkSpaceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -325,6 +336,7 @@ namespace OpenALPRPlugin.Client
             this.AutoScrollMinSize = new System.Drawing.Size(956, 844);
             this.BackColor = System.Drawing.SystemColors.Window;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.lblMilestone);
             this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.lblMainMessage);
             this.Controls.Add(this.btnAlertList);
@@ -347,7 +359,7 @@ namespace OpenALPRPlugin.Client
             this.Controls.Add(this.btnSearch);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Name = "WorkSpaceControl";
-            this.Size = new System.Drawing.Size(870, 752);
+            this.Size = new System.Drawing.Size(849, 731);
             this.Load += new System.EventHandler(this.BookmarkViewItemManager_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).EndInit();
             this.ResumeLayout(false);
@@ -387,5 +399,6 @@ namespace OpenALPRPlugin.Client
         private ColumnHeader hdrVehicle;
         private ColumnHeader hdrTimestamp;
         private ColumnHeader hdrSiteName;
+        private Label lblMilestone;
     }
 }
