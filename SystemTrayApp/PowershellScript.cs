@@ -9,6 +9,8 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Database;
+using OpenALPR.SystemTrayApp;
 using OpenALPR.SystemTrayApp.Utility;
 
 namespace SystemTrayApp
@@ -33,6 +35,24 @@ namespace SystemTrayApp
         {
             using (ViewManager manager = new ViewManager(serviceManager))
             {
+                using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
+                {
+                    db.SaveSettings("Settings", new Settings()
+                    {
+                        EventExpireAfterDays = Convert.ToInt32(nudEventExpireAfterDays.Value),
+                        AddBookmarks = chkAddBookmarks.Checked,
+                        AutoMapping = chkAutoMapping.Checked,
+                        ClientSettingsProviderServiceUri = txtServiceUrl.Text,
+                        EpochEndSecondsAfter = Convert.ToInt32(nudEpochEndSecondsAfter.Value),
+                        EpochStartSecondsBefore = Convert.ToInt32(nudEpochStartSecondsBefore.Value),
+                        MilestonePassword = txtPassword.Text,
+                        MilestoneServerName = "http://localhost:80/",
+                        MilestoneUserName = txtLogin.Text,
+                        OpenALPRServerUrl = "http://localhost:48125/",
+                        ServicePort = Convert.ToInt32(nudServicePort.Value)
+                    });
+                }
+
                 Helper.AddUpdateAppSettings("MilestoneUserName", (chkNetworkService.Checked) ? "" : txtLogin.Text, "OpenALPRQueueMilestone.exe");
                 Helper.AddUpdateAppSettings("MilestonePassword", (chkNetworkService.Checked) ? "" : txtPassword.Text, "OpenALPRQueueMilestone.exe");
 
@@ -69,6 +89,12 @@ namespace SystemTrayApp
 
         private void PowershellScript_Activated(object sender, EventArgs e)
         {
+            using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
+            {
+                db.CreateTable("Settings");
+                Settings settings = db.GetSettings("Settings").LastOrDefault();
+            }
+
             txtLogin.Text = Helper.ReadConfigKey("MilestoneUserName", "OpenALPRQueueMilestone.exe");
             txtPassword.Text = Helper.ReadConfigKey("MilestonePassword", "OpenALPRQueueMilestone.exe");
             txtServiceUrl.Text = Helper.ReadConfigKey("ClientSettingsProvider.ServiceUri", "OpenALPRQueueMilestone.exe");

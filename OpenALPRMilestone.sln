@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemTrayApp", "SystemTray
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatter", "Chatter\Chatter.csproj", "{84BCF238-F124-48AA-A388-0050F66E36E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,18 @@ Global
 		{84BCF238-F124-48AA-A388-0050F66E36E3}.Release|x64.Build.0 = Release|x64
 		{84BCF238-F124-48AA-A388-0050F66E36E3}.Release|x86.ActiveCfg = Release|x86
 		{84BCF238-F124-48AA-A388-0050F66E36E3}.Release|x86.Build.0 = Release|x86
+		{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}.Debug|x64.Build.0 = Debug|Any CPU
+		{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}.Debug|x86.Build.0 = Debug|Any CPU
+		{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}.Release|x64.ActiveCfg = Release|Any CPU
+		{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}.Release|x64.Build.0 = Release|Any CPU
+		{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}.Release|x86.ActiveCfg = Release|Any CPU
+		{2F1BA65A-B0AD-4454-B5A8-CC465230DD2C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

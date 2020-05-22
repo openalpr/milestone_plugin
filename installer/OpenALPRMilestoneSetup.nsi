@@ -96,6 +96,10 @@ Section "Files (required)"
   File "..\build\Microsoft.Bcl.AsyncInterfaces.dll"
   File "..\build\System.Threading.Tasks.Extensions.dll"
   ;File "..\build\Autofac.xml"
+  File "..\build\System.Data.SQLite.EF6.dll"
+  File "..\build\System.Data.SQLite.Linq.dll"
+  File "..\build\System.Data.SQLite.dll"
+  File "..\build\Database.dll"
   
   SetOutPath "$INSTDIR\Service\ar-SA"
   File "..\build\ar-SA\VideoOS.Platform.resources.dll"
@@ -216,6 +220,12 @@ Section "Files (required)"
   SetOutPath "$INSTDIR\zh-TW"
   File "..\build\zh-TW\VideoOS.Platform.resources.dll"
   File "..\build\zh-TW\VideoOS.Platform.SDK.resources.dll"
+
+  SetOutPath "$INSTDIR\x64"
+  File "..\build\x64\SQLite.Interop.dll"
+
+  SetOutPath "$INSTDIR\x86"
+  File "..\build\x86\SQLite.Interop.dll"
   
   ; Set output path to the installation directory (Plug-in).
   SetOutPath $INSTDIR
@@ -250,6 +260,11 @@ Section "Files (required)"
   File "..\build\Microsoft.Bcl.AsyncInterfaces.dll"
   File "..\build\System.Threading.Tasks.Extensions.dll"
   ;File "..\build\Autofac.xml"
+  File "..\build\System.Data.SQLite.EF6.dll"
+  File "..\build\System.Data.SQLite.Linq.dll"
+  File "..\build\System.Data.SQLite.dll"
+  File "..\build\Database.dll"
+
   
   SetOutPath "$INSTDIR\ar-SA"
   File "..\build\ar-SA\VideoOS.Platform.resources.dll"
@@ -370,7 +385,13 @@ Section "Files (required)"
   SetOutPath "$INSTDIR\zh-TW"
   File "..\build\zh-TW\VideoOS.Platform.resources.dll"
   File "..\build\zh-TW\VideoOS.Platform.SDK.resources.dll"
-  
+
+  SetOutPath "$INSTDIR\x64"
+  File "..\build\x64\SQLite.Interop.dll"
+
+  SetOutPath "$INSTDIR\x86"
+  File "..\build\x86\SQLite.Interop.dll"
+
   ; Install a service - ServiceType own process - StartType automatic - NoDependencies - Logon as System Account
   SimpleSC::InstallService "OpenALPRMilestone" "OpenALPR Milestone" "16" "2" "$PROGRAMFILES64\VideoOS\MIPPlugins\OpenALPR\Service\OpenALPRQueueMilestone.exe" "" "" ""
   Pop $0 ; returns an errorcode (<>0) otherwise success (0)
@@ -489,6 +510,11 @@ Section "Uninstall"
   Delete $INSTDIR\Service\VideoOS.Platform.SDK.dll
   ;Delete $INSTDIR\Service\VideoOS.Platform.xml
   ;Delete $INSTDIR\Service\VideoOS.Platform.SDK.xml
+  Delete $INSTDIR\Service\System.Data.SQLite.EF6.dll
+  Delete $INSTDIR\Service\System.Data.SQLite.Linq.dll
+  Delete $INSTDIR\Service\System.Data.SQLite.dll
+  Delete $INSTDIR\Service\Database.dll
+
   
   Delete $INSTDIR\service_access.ps1
   Delete $INSTDIR\recording_server.ps1

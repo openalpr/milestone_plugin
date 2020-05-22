@@ -211,8 +211,10 @@ namespace OpenALPRQueueConsumer.Milestone
                     Program.Log.Error(null, ex);
                 }
                 scs.Url = $"{ServerName}ServerAPI/ServerCommandService.asmx";
-                MilestoneInfo();
                 string msg = $"Connected to Milestone server: {ServerName}";
+
+                MilestoneInfo();
+
                 Console.WriteLine(msg);
                 Program.Log.Info(msg);
             }
