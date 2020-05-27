@@ -323,9 +323,9 @@ namespace OpenALPRPlugin.Client
             this.lblMilestone.AutoSize = true;
             this.lblMilestone.Location = new System.Drawing.Point(13, 160);
             this.lblMilestone.Name = "lblMilestone";
-            this.lblMilestone.Size = new System.Drawing.Size(61, 15);
+            this.lblMilestone.Size = new System.Drawing.Size(107, 15);
             this.lblMilestone.TabIndex = 20;
-            this.lblMilestone.Text = "Milestone";
+            this.lblMilestone.Text = "Milestone License";
             // 
             // WorkSpaceControl
             // 
@@ -359,7 +359,7 @@ namespace OpenALPRPlugin.Client
             this.Controls.Add(this.btnSearch);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Name = "WorkSpaceControl";
-            this.Size = new System.Drawing.Size(849, 731);
+            this.Size = new System.Drawing.Size(828, 710);
             this.Load += new System.EventHandler(this.BookmarkViewItemManager_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).EndInit();
             this.ResumeLayout(false);

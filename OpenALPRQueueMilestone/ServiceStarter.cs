@@ -1,5 +1,6 @@
 ﻿// Copyright OpenALPR Technology, Inc. 2018
 
+using Database;
 using OpenALPRQueueConsumer.BeanstalkWorker;
 using OpenALPRQueueConsumer.Chat;
 using OpenALPRQueueConsumer.Chatter;
@@ -9,6 +10,7 @@ using OpenALPRQueueConsumer.Utility;
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Principal;
@@ -34,11 +36,18 @@ namespace OpenALPRQueueConsumer
         private const string AddBookmarksString = "AddBookmarks";
         private const string AutoMappingString = "AutoMapping";
         private readonly User currentPerson;
+        Settings settings = new Settings();
 
         public ServiceStarter()
         {
+            using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
+            {
+                settings = db.GetSettings("Settings").LastOrDefault();
+            }
+
             currentPerson = new User(User.AutoExporterServiceName);
-            ProxySingleton.Port = Helper.ReadConfigKey("ServicePort");
+            //ProxySingleton.Port = Helper.ReadConfigKey("ServicePort");
+            ProxySingleton.Port = settings.ServicePort.ToString();
             ProxySingleton.HostName = Dns.GetHostName();
             Chatting.Initialize(currentPerson);
             Chatting.UserEnter += ServerConnection_UserEnter;
@@ -101,13 +110,16 @@ namespace OpenALPRQueueConsumer
                 return;
 
             if (string.IsNullOrEmpty(serverName))
-                serverName = Helper.ReadConfigKey(MilestoneServerNameString);
+                serverName = settings.MilestoneServerName;
+                //serverName = Helper.ReadConfigKey(MilestoneServerNameString);
 
             if (string.IsNullOrEmpty(userName))
-                userName = Helper.ReadConfigKey("MilestoneUserName");
+                userName = settings.MilestoneUserName;
+                //userName = Helper.ReadConfigKey("MilestoneUserName");
 
             if (string.IsNullOrEmpty(password))
-                password = Helper.ReadConfigKey("MilestonePassword");
+                password = settings.MilestonePassword;
+                //password = Helper.ReadConfigKey("MilestonePassword");
 
             if (string.IsNullOrEmpty(serverName))
                 serverName = "http://localhost:80/";
@@ -124,24 +136,38 @@ namespace OpenALPRQueueConsumer
             {
                 IsConnectedToMilestoneServer = true;
 
-                string temp = Helper.ReadConfigKey(MilestoneServerNameString);
+                //string temp = Helper.ReadConfigKey(MilestoneServerNameString);
+                string temp = settings.MilestoneServerName;
                 if (temp != serverName)
-                    Helper.AddUpdateAppSettings(MilestoneServerNameString, serverName);
+                {
+                    using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
+                    {
+                        settings.MilestoneServerName = serverName;
+                        db.UpdateSettings("Settings", settings);
+                    }
+                    
+                    //Helper.AddUpdateAppSettings(MilestoneServerNameString, serverName);
+                }
 
-                temp = Helper.ReadConfigKey(AddBookmarksString);
-                bool.TryParse(temp, out Worker.AddBookmarks);
+                Worker.AddBookmarks = settings.AddBookmarks;
+                //temp = Helper.ReadConfigKey(AddBookmarksString);
+                //bool.TryParse(temp, out Worker.AddBookmarks);
 
-                temp = Helper.ReadConfigKey(AutoMappingString);
-                bool.TryParse(temp, out Worker.AutoMapping);
+                Worker.AutoMapping = settings.AutoMapping;
+                //temp = Helper.ReadConfigKey(AutoMappingString);
+                //bool.TryParse(temp, out Worker.AutoMapping);
 
-                temp = Helper.ReadConfigKey(EventExpireAfterDaysString);
-                int.TryParse(temp, out Worker.EventExpireAfterDays);
+                Worker.EventExpireAfterDays = settings.EventExpireAfterDays;
+                //temp = Helper.ReadConfigKey(EventExpireAfterDaysString);
+                //int.TryParse(temp, out Worker.EventExpireAfterDays);
 
-                temp = Helper.ReadConfigKey(EpochStartSecondsBeforeString);
-                int.TryParse(temp, out Worker.EpochStartSecondsBefore);
+                Worker.EpochStartSecondsBefore = settings.EpochStartSecondsBefore;
+                //temp = Helper.ReadConfigKey(EpochStartSecondsBeforeString);
+                //int.TryParse(temp, out Worker.EpochStartSecondsBefore);
 
-                temp = Helper.ReadConfigKey(EpochEndSecondsAfterString);
-                int.TryParse(temp, out Worker.EpochEndSecondsAfter);
+                Worker.EpochEndSecondsAfter = settings.EpochEndSecondsAfter;
+                //temp = Helper.ReadConfigKey(EpochEndSecondsAfterString);
+                //int.TryParse(temp, out Worker.EpochEndSecondsAfter);
 
                 if (worker == null)
                 {

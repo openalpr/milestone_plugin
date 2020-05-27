@@ -48,16 +48,17 @@ namespace Database
         private int Check(string table)
         {
             string sql = $"SELECT count(name) as Count FROM sqlite_master WHERE type='table' AND name='{table}'";
-
+            int count = 0;
             SQLiteCommand command = new SQLiteCommand(sql, _db);
             SQLiteDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
             {
-                return Convert.ToInt32(reader["Count"]);
+                count = Convert.ToInt32(reader["Count"]);
+                return count;
             }
 
-            return 0;
+            return count;
         }
 
         public List<Settings> GetSettings(string table)
@@ -125,8 +126,38 @@ namespace Database
             }
         }
 
+        public void UpdateSettings(string table, Settings settings)
+        {
+            string query = $"UPDATE {table} SET OpenALPRServerUrl = '{ settings.OpenALPRServerUrl }', MilestoneServerName = '{ settings.MilestoneServerName }', MilestoneUserName = '{ settings.MilestoneUserName }', MilestonePassword = '{ settings.MilestonePassword }', EventExpireAfterDays = { settings.EventExpireAfterDays }, EpochStartSecondsBefore = { settings.EpochStartSecondsBefore }, EpochEndSecondsAfter = { settings.EpochEndSecondsAfter }, AddBookmarks = { Convert.ToInt32(settings.AddBookmarks) }, AutoMapping = { Convert.ToInt32(settings.AutoMapping) }, ServicePort = { settings.ServicePort }, ClientSettingsProviderServiceUri = '{ settings.ClientSettingsProviderServiceUri }' WHERE Id = { settings.Id } ";
+            SQLiteCommand updateSQL = new SQLiteCommand(query, _db);
+            try
+            {
+                updateSQL.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Settings Defaults()
+        {
+            Settings settings = new Settings() {
+                OpenALPRServerUrl = "http://localhost:48125/",
+                MilestoneServerName = "http://localhost:80/",
+                EventExpireAfterDays = 7,
+                EpochStartSecondsBefore = 3,
+                EpochEndSecondsAfter = 3,
+                AddBookmarks = true,
+                AutoMapping = true,
+                ServicePort = 22019
+            };
+            return settings;
+        }
+
         public void Dispose()
         {
+            _db.Close();
             Dispose(true);
             GC.SuppressFinalize(this);
         }

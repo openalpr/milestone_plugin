@@ -1,5 +1,6 @@
 ﻿// Copyright OpenALPR Technology, Inc. 2018
 
+using Database;
 using OpenALPRQueueConsumer.Milestone;
 using OpenALPRQueueConsumer.Utility;
 using System;
@@ -47,8 +48,15 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
         public void DoWork()
         {
-            string openALPRServerUrl = Helper.ReadConfigKey("OpenALPRServerUrl");
-            if (string.IsNullOrEmpty(openALPRServerUrl))
+            Settings settings = new Settings();
+            using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
+            {
+                settings = db.GetSettings("Settings").LastOrDefault();
+            }
+
+            //string openALPRServerUrl = Helper.ReadConfigKey("OpenALPRServerUrl");
+            string openALPRServerUrl = settings.OpenALPRServerUrl;
+            if (string.IsNullOrEmpty(openALPRServerUrl) || string.IsNullOrWhiteSpace(openALPRServerUrl))
                 openALPRServerUrl = "http://localhost:48125/";
 
             Program.Log.Info($"OpenALPR Server url used: {openALPRServerUrl}");

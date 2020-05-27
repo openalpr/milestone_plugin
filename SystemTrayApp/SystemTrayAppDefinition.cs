@@ -23,14 +23,14 @@ namespace OpenALPR.SystemTrayApp
 
 #if DEBUG
             assembly = Assembly.GetExecutingAssembly();
-            //applicationPath = assembly.Location.Replace("\\OpenALPR.SystemTrayApp.exe", "");
-            applicationPath = $"{assembly.Location.Replace("\\OpenALPR.SystemTrayApp.exe", "")}\\Service";
+            applicationPath = assembly.Location.Replace("\\OpenALPR.SystemTrayApp.exe", "");
             if (assembly != null)
                 fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
 #else
             
             string path = @"C:\Program Files\VideoOS\MIPPlugins\OpenALPR\OpenALPR.SystemTrayApp.exe";
-            applicationPath = @"C:\Program Files\VideoOS\MIPPlugins\OpenALPR\Service";
+            //applicationPath = @"C:\Program Files\VideoOS\MIPPlugins\OpenALPR\Service";
+            applicationPath = $"{assembly.Location.Replace("\\OpenALPR.SystemTrayApp.exe", "")}\\Service";
             fileVersion = File.Exists(path) ?
                 FileVersionInfo.GetVersionInfo(path) :
                 FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule.FileName);

@@ -74,7 +74,7 @@ namespace OpenALPRPlugin.Client
                 MilestoneVersion milestoneVersion = JsonConvert.DeserializeObject<MilestoneVersion>(
                     File.ReadAllText($"{path}\\Service\\Milestone.json"));
                 lblMilestone.Text = $"License type: { milestoneVersion.Name }, Bookmarking: { (milestoneVersion.Bookmarking ? "enabled" : "disabled") }";
-                if (!milestoneVersion.Bookmarking)
+                if (!milestoneVersion.Bookmarking || EnvironmentManager.Instance.MasterSite.ServerId.ServerType == ServerId.EnterpriseServerType)
                     lblMilestone.ForeColor = Color.Red;
             }
             catch (Exception ex)

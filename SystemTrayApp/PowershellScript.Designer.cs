@@ -49,22 +49,38 @@
             this.chkAutoMapping = new System.Windows.Forms.CheckBox();
             this.lblServiceUrl = new System.Windows.Forms.Label();
             this.txtServiceUrl = new System.Windows.Forms.TextBox();
+            this.gbAuth = new System.Windows.Forms.GroupBox();
+            this.gbTimeout = new System.Windows.Forms.GroupBox();
+            this.gbService = new System.Windows.Forms.GroupBox();
+            this.gbFeature = new System.Windows.Forms.GroupBox();
+            this.lblMilestoneServer = new System.Windows.Forms.Label();
+            this.txtMilestoneServer = new System.Windows.Forms.TextBox();
+            this.lblOpenALPRServer = new System.Windows.Forms.Label();
+            this.txtOpenALPRServer = new System.Windows.Forms.TextBox();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.ssMain = new System.Windows.Forms.StatusStrip();
+            this.tsslAlert = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.nudEventExpireAfterDays)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEpochStartSecondsBefore)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEpochEndSecondsAfter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudServicePort)).BeginInit();
+            this.gbAuth.SuspendLayout();
+            this.gbTimeout.SuspendLayout();
+            this.gbService.SuspendLayout();
+            this.gbFeature.SuspendLayout();
+            this.ssMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtLogin
             // 
-            this.txtLogin.Location = new System.Drawing.Point(12, 25);
+            this.txtLogin.Location = new System.Drawing.Point(18, 45);
             this.txtLogin.Name = "txtLogin";
             this.txtLogin.Size = new System.Drawing.Size(210, 20);
             this.txtLogin.TabIndex = 0;
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(12, 95);
+            this.txtPassword.Location = new System.Drawing.Point(18, 115);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '•';
             this.txtPassword.Size = new System.Drawing.Size(210, 20);
@@ -74,18 +90,18 @@
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(12, 452);
+            this.btnLogin.Location = new System.Drawing.Point(442, 363);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(75, 23);
             this.btnLogin.TabIndex = 2;
-            this.btnLogin.Text = "Save";
+            this.btnLogin.Text = "&Save";
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // lblLogin
             // 
             this.lblLogin.AutoSize = true;
-            this.lblLogin.Location = new System.Drawing.Point(12, 7);
+            this.lblLogin.Location = new System.Drawing.Point(18, 27);
             this.lblLogin.Name = "lblLogin";
             this.lblLogin.Size = new System.Drawing.Size(38, 15);
             this.lblLogin.TabIndex = 3;
@@ -94,16 +110,16 @@
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(12, 77);
+            this.lblPassword.Location = new System.Drawing.Point(18, 97);
             this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(130, 15);
+            this.lblPassword.Size = new System.Drawing.Size(61, 15);
             this.lblPassword.TabIndex = 4;
-            this.lblPassword.Text = "Current user password";
+            this.lblPassword.Text = "Password";
             // 
             // chkNetworkService
             // 
             this.chkNetworkService.AutoSize = true;
-            this.chkNetworkService.Location = new System.Drawing.Point(12, 51);
+            this.chkNetworkService.Location = new System.Drawing.Point(18, 71);
             this.chkNetworkService.Name = "chkNetworkService";
             this.chkNetworkService.Size = new System.Drawing.Size(18, 17);
             this.chkNetworkService.TabIndex = 5;
@@ -113,7 +129,7 @@
             // lblUse
             // 
             this.lblUse.AutoSize = true;
-            this.lblUse.Location = new System.Drawing.Point(31, 52);
+            this.lblUse.Location = new System.Drawing.Point(37, 72);
             this.lblUse.Name = "lblUse";
             this.lblUse.Size = new System.Drawing.Size(29, 15);
             this.lblUse.TabIndex = 6;
@@ -124,7 +140,7 @@
             // 
             this.lblNetworkService.AutoSize = true;
             this.lblNetworkService.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNetworkService.Location = new System.Drawing.Point(59, 52);
+            this.lblNetworkService.Location = new System.Drawing.Point(65, 72);
             this.lblNetworkService.Name = "lblNetworkService";
             this.lblNetworkService.Size = new System.Drawing.Size(125, 17);
             this.lblNetworkService.TabIndex = 7;
@@ -134,7 +150,7 @@
             // lblEventExpireAfterDays
             // 
             this.lblEventExpireAfterDays.AutoSize = true;
-            this.lblEventExpireAfterDays.Location = new System.Drawing.Point(12, 127);
+            this.lblEventExpireAfterDays.Location = new System.Drawing.Point(15, 26);
             this.lblEventExpireAfterDays.Name = "lblEventExpireAfterDays";
             this.lblEventExpireAfterDays.Size = new System.Drawing.Size(132, 15);
             this.lblEventExpireAfterDays.TabIndex = 8;
@@ -142,7 +158,7 @@
             // 
             // nudEventExpireAfterDays
             // 
-            this.nudEventExpireAfterDays.Location = new System.Drawing.Point(12, 145);
+            this.nudEventExpireAfterDays.Location = new System.Drawing.Point(15, 44);
             this.nudEventExpireAfterDays.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -155,7 +171,7 @@
             // nudEpochStartSecondsBefore
             // 
             this.nudEpochStartSecondsBefore.InterceptArrowKeys = false;
-            this.nudEpochStartSecondsBefore.Location = new System.Drawing.Point(12, 196);
+            this.nudEpochStartSecondsBefore.Location = new System.Drawing.Point(15, 95);
             this.nudEpochStartSecondsBefore.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -168,7 +184,7 @@
             // lblEpochStartSecondsBefore
             // 
             this.lblEpochStartSecondsBefore.AutoSize = true;
-            this.lblEpochStartSecondsBefore.Location = new System.Drawing.Point(12, 178);
+            this.lblEpochStartSecondsBefore.Location = new System.Drawing.Point(15, 77);
             this.lblEpochStartSecondsBefore.Name = "lblEpochStartSecondsBefore";
             this.lblEpochStartSecondsBefore.Size = new System.Drawing.Size(160, 15);
             this.lblEpochStartSecondsBefore.TabIndex = 10;
@@ -176,7 +192,7 @@
             // 
             // nudEpochEndSecondsAfter
             // 
-            this.nudEpochEndSecondsAfter.Location = new System.Drawing.Point(12, 247);
+            this.nudEpochEndSecondsAfter.Location = new System.Drawing.Point(15, 146);
             this.nudEpochEndSecondsAfter.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -189,7 +205,7 @@
             // lblEpochEndSecondsAfter
             // 
             this.lblEpochEndSecondsAfter.AutoSize = true;
-            this.lblEpochEndSecondsAfter.Location = new System.Drawing.Point(12, 229);
+            this.lblEpochEndSecondsAfter.Location = new System.Drawing.Point(15, 128);
             this.lblEpochEndSecondsAfter.Name = "lblEpochEndSecondsAfter";
             this.lblEpochEndSecondsAfter.Size = new System.Drawing.Size(145, 15);
             this.lblEpochEndSecondsAfter.TabIndex = 12;
@@ -197,7 +213,7 @@
             // 
             // nudServicePort
             // 
-            this.nudServicePort.Location = new System.Drawing.Point(12, 297);
+            this.nudServicePort.Location = new System.Drawing.Point(18, 45);
             this.nudServicePort.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -210,7 +226,7 @@
             // lblServicePort
             // 
             this.lblServicePort.AutoSize = true;
-            this.lblServicePort.Location = new System.Drawing.Point(12, 279);
+            this.lblServicePort.Location = new System.Drawing.Point(18, 27);
             this.lblServicePort.Name = "lblServicePort";
             this.lblServicePort.Size = new System.Drawing.Size(72, 15);
             this.lblServicePort.TabIndex = 14;
@@ -219,7 +235,7 @@
             // chkAddBookmarks
             // 
             this.chkAddBookmarks.AutoSize = true;
-            this.chkAddBookmarks.Location = new System.Drawing.Point(12, 383);
+            this.chkAddBookmarks.Location = new System.Drawing.Point(15, 28);
             this.chkAddBookmarks.Name = "chkAddBookmarks";
             this.chkAddBookmarks.Size = new System.Drawing.Size(115, 19);
             this.chkAddBookmarks.TabIndex = 20;
@@ -229,7 +245,7 @@
             // chkAutoMapping
             // 
             this.chkAutoMapping.AutoSize = true;
-            this.chkAutoMapping.Location = new System.Drawing.Point(12, 417);
+            this.chkAutoMapping.Location = new System.Drawing.Point(15, 62);
             this.chkAutoMapping.Name = "chkAutoMapping";
             this.chkAutoMapping.Size = new System.Drawing.Size(105, 19);
             this.chkAutoMapping.TabIndex = 21;
@@ -239,7 +255,7 @@
             // lblServiceUrl
             // 
             this.lblServiceUrl.AutoSize = true;
-            this.lblServiceUrl.Location = new System.Drawing.Point(12, 330);
+            this.lblServiceUrl.Location = new System.Drawing.Point(18, 78);
             this.lblServiceUrl.Name = "lblServiceUrl";
             this.lblServiceUrl.Size = new System.Drawing.Size(75, 15);
             this.lblServiceUrl.TabIndex = 22;
@@ -247,36 +263,140 @@
             // 
             // txtServiceUrl
             // 
-            this.txtServiceUrl.Location = new System.Drawing.Point(12, 348);
+            this.txtServiceUrl.Location = new System.Drawing.Point(18, 96);
             this.txtServiceUrl.Name = "txtServiceUrl";
             this.txtServiceUrl.Size = new System.Drawing.Size(210, 20);
             this.txtServiceUrl.TabIndex = 23;
+            // 
+            // gbAuth
+            // 
+            this.gbAuth.Controls.Add(this.txtPassword);
+            this.gbAuth.Controls.Add(this.txtLogin);
+            this.gbAuth.Controls.Add(this.lblLogin);
+            this.gbAuth.Controls.Add(this.lblPassword);
+            this.gbAuth.Controls.Add(this.chkNetworkService);
+            this.gbAuth.Controls.Add(this.lblUse);
+            this.gbAuth.Controls.Add(this.lblNetworkService);
+            this.gbAuth.Location = new System.Drawing.Point(12, 12);
+            this.gbAuth.Name = "gbAuth";
+            this.gbAuth.Size = new System.Drawing.Size(249, 154);
+            this.gbAuth.TabIndex = 24;
+            this.gbAuth.TabStop = false;
+            this.gbAuth.Text = "Authentication";
+            // 
+            // gbTimeout
+            // 
+            this.gbTimeout.Controls.Add(this.lblEventExpireAfterDays);
+            this.gbTimeout.Controls.Add(this.nudEventExpireAfterDays);
+            this.gbTimeout.Controls.Add(this.lblEpochStartSecondsBefore);
+            this.gbTimeout.Controls.Add(this.nudEpochStartSecondsBefore);
+            this.gbTimeout.Controls.Add(this.lblEpochEndSecondsAfter);
+            this.gbTimeout.Controls.Add(this.nudEpochEndSecondsAfter);
+            this.gbTimeout.Location = new System.Drawing.Point(12, 172);
+            this.gbTimeout.Name = "gbTimeout";
+            this.gbTimeout.Size = new System.Drawing.Size(250, 185);
+            this.gbTimeout.TabIndex = 25;
+            this.gbTimeout.TabStop = false;
+            this.gbTimeout.Text = "Timeout";
+            // 
+            // gbService
+            // 
+            this.gbService.Controls.Add(this.lblOpenALPRServer);
+            this.gbService.Controls.Add(this.nudServicePort);
+            this.gbService.Controls.Add(this.txtOpenALPRServer);
+            this.gbService.Controls.Add(this.lblServicePort);
+            this.gbService.Controls.Add(this.lblMilestoneServer);
+            this.gbService.Controls.Add(this.txtMilestoneServer);
+            this.gbService.Controls.Add(this.lblServiceUrl);
+            this.gbService.Controls.Add(this.txtServiceUrl);
+            this.gbService.Location = new System.Drawing.Point(268, 12);
+            this.gbService.Name = "gbService";
+            this.gbService.Size = new System.Drawing.Size(249, 239);
+            this.gbService.TabIndex = 14;
+            this.gbService.TabStop = false;
+            this.gbService.Text = "Service";
+            // 
+            // gbFeature
+            // 
+            this.gbFeature.Controls.Add(this.chkAddBookmarks);
+            this.gbFeature.Controls.Add(this.chkAutoMapping);
+            this.gbFeature.Location = new System.Drawing.Point(268, 257);
+            this.gbFeature.Name = "gbFeature";
+            this.gbFeature.Size = new System.Drawing.Size(249, 100);
+            this.gbFeature.TabIndex = 14;
+            this.gbFeature.TabStop = false;
+            this.gbFeature.Text = "Features";
+            // 
+            // lblMilestoneServer
+            // 
+            this.lblMilestoneServer.AutoSize = true;
+            this.lblMilestoneServer.Location = new System.Drawing.Point(18, 125);
+            this.lblMilestoneServer.Name = "lblMilestoneServer";
+            this.lblMilestoneServer.Size = new System.Drawing.Size(61, 15);
+            this.lblMilestoneServer.TabIndex = 24;
+            this.lblMilestoneServer.Text = "Milestone";
+            // 
+            // txtMilestoneServer
+            // 
+            this.txtMilestoneServer.Location = new System.Drawing.Point(18, 143);
+            this.txtMilestoneServer.Name = "txtMilestoneServer";
+            this.txtMilestoneServer.Size = new System.Drawing.Size(210, 20);
+            this.txtMilestoneServer.TabIndex = 25;
+            // 
+            // lblOpenALPRServer
+            // 
+            this.lblOpenALPRServer.AutoSize = true;
+            this.lblOpenALPRServer.Location = new System.Drawing.Point(18, 175);
+            this.lblOpenALPRServer.Name = "lblOpenALPRServer";
+            this.lblOpenALPRServer.Size = new System.Drawing.Size(68, 15);
+            this.lblOpenALPRServer.TabIndex = 26;
+            this.lblOpenALPRServer.Text = "OpenALPR";
+            // 
+            // txtOpenALPRServer
+            // 
+            this.txtOpenALPRServer.Location = new System.Drawing.Point(18, 193);
+            this.txtOpenALPRServer.Name = "txtOpenALPRServer";
+            this.txtOpenALPRServer.Size = new System.Drawing.Size(210, 20);
+            this.txtOpenALPRServer.TabIndex = 27;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(361, 363);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 26;
+            this.btnCancel.Text = "&Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // ssMain
+            // 
+            this.ssMain.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.ssMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsslAlert});
+            this.ssMain.Location = new System.Drawing.Point(0, 388);
+            this.ssMain.Name = "ssMain";
+            this.ssMain.Size = new System.Drawing.Size(529, 26);
+            this.ssMain.TabIndex = 28;
+            // 
+            // tsslAlert
+            // 
+            this.tsslAlert.Name = "tsslAlert";
+            this.tsslAlert.Size = new System.Drawing.Size(493, 20);
+            this.tsslAlert.Text = "This is the first launch of the application, make changes and/or click Save.";
             // 
             // PowershellScript
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(234, 491);
-            this.Controls.Add(this.txtServiceUrl);
-            this.Controls.Add(this.lblServiceUrl);
-            this.Controls.Add(this.chkAutoMapping);
-            this.Controls.Add(this.chkAddBookmarks);
-            this.Controls.Add(this.nudServicePort);
-            this.Controls.Add(this.lblServicePort);
-            this.Controls.Add(this.nudEpochEndSecondsAfter);
-            this.Controls.Add(this.lblEpochEndSecondsAfter);
-            this.Controls.Add(this.nudEpochStartSecondsBefore);
-            this.Controls.Add(this.lblEpochStartSecondsBefore);
-            this.Controls.Add(this.nudEventExpireAfterDays);
-            this.Controls.Add(this.lblEventExpireAfterDays);
-            this.Controls.Add(this.lblNetworkService);
-            this.Controls.Add(this.lblUse);
-            this.Controls.Add(this.chkNetworkService);
-            this.Controls.Add(this.lblPassword);
-            this.Controls.Add(this.lblLogin);
+            this.ClientSize = new System.Drawing.Size(529, 414);
+            this.Controls.Add(this.ssMain);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.gbFeature);
+            this.Controls.Add(this.gbService);
+            this.Controls.Add(this.gbTimeout);
+            this.Controls.Add(this.gbAuth);
             this.Controls.Add(this.btnLogin);
-            this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.txtLogin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -289,6 +409,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudEpochStartSecondsBefore)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEpochEndSecondsAfter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudServicePort)).EndInit();
+            this.gbAuth.ResumeLayout(false);
+            this.gbAuth.PerformLayout();
+            this.gbTimeout.ResumeLayout(false);
+            this.gbTimeout.PerformLayout();
+            this.gbService.ResumeLayout(false);
+            this.gbService.PerformLayout();
+            this.gbFeature.ResumeLayout(false);
+            this.gbFeature.PerformLayout();
+            this.ssMain.ResumeLayout(false);
+            this.ssMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -316,5 +446,16 @@
         private System.Windows.Forms.CheckBox chkAutoMapping;
         private System.Windows.Forms.Label lblServiceUrl;
         private System.Windows.Forms.TextBox txtServiceUrl;
+        private System.Windows.Forms.GroupBox gbAuth;
+        private System.Windows.Forms.GroupBox gbTimeout;
+        private System.Windows.Forms.GroupBox gbService;
+        private System.Windows.Forms.GroupBox gbFeature;
+        private System.Windows.Forms.Label lblOpenALPRServer;
+        private System.Windows.Forms.TextBox txtOpenALPRServer;
+        private System.Windows.Forms.Label lblMilestoneServer;
+        private System.Windows.Forms.TextBox txtMilestoneServer;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.StatusStrip ssMain;
+        private System.Windows.Forms.ToolStripStatusLabel tsslAlert;
     }
 }
