@@ -1,6 +1,6 @@
 ﻿// Copyright OpenALPR Technology, Inc. 2018
 
-//using Database;
+using Database;
 using OpenALPRQueueConsumer.BeanstalkWorker;
 using OpenALPRQueueConsumer.Chat;
 using OpenALPRQueueConsumer.Chatter;
@@ -36,18 +36,20 @@ namespace OpenALPRQueueConsumer
         private const string AddBookmarksString = "AddBookmarks";
         private const string AutoMappingString = "AutoMapping";
         private readonly User currentPerson;
-        //Settings settings = new Settings();
+        Settings settings = new Settings();
 
         public ServiceStarter()
         {
+            #region Use SQLite
             //using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
             //{
             //    settings = db.GetSettings("Settings").LastOrDefault();
             //}
+            //ProxySingleton.Port = settings.ServicePort.ToString();
+            #endregion
 
             currentPerson = new User(User.AutoExporterServiceName);
             ProxySingleton.Port = Helper.ReadConfigKey("ServicePort");
-            //ProxySingleton.Port = settings.ServicePort.ToString();
             ProxySingleton.HostName = Dns.GetHostName();
             Chatting.Initialize(currentPerson);
             Chatting.UserEnter += ServerConnection_UserEnter;
@@ -109,17 +111,27 @@ namespace OpenALPRQueueConsumer
             if (MilestoneServer.ConnectedToMilestone)
                 return;
 
+            #region Use SQLite
+            //if (string.IsNullOrEmpty(serverName))
+            //    serverName = settings.MilestoneServerName;
+
+            //if (string.IsNullOrEmpty(userName))
+            //    userName = settings.MilestoneUserName;
+
+            //if (string.IsNullOrEmpty(password))
+            //    password = settings.MilestonePassword;
+            #endregion
+
+            #region Use AppConfig
             if (string.IsNullOrEmpty(serverName))
-                //serverName = settings.MilestoneServerName;
                 serverName = Helper.ReadConfigKey(MilestoneServerNameString);
 
             if (string.IsNullOrEmpty(userName))
-                //userName = settings.MilestoneUserName;
                 userName = Helper.ReadConfigKey("MilestoneUserName");
 
             if (string.IsNullOrEmpty(password))
-                //password = settings.MilestonePassword;
                 password = Helper.ReadConfigKey("MilestonePassword");
+            #endregion
 
             if (string.IsNullOrEmpty(serverName))
                 serverName = "http://localhost:80/";
@@ -136,59 +148,51 @@ namespace OpenALPRQueueConsumer
             {
                 IsConnectedToMilestoneServer = true;
 
-                string temp = Helper.ReadConfigKey(MilestoneServerNameString);
+                #region Use SQLite
                 //string temp = settings.MilestoneServerName;
-                if (temp != serverName)
-                {
-                    //using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
-                    //{
-                    //    settings.MilestoneServerName = serverName;
-                    //    db.UpdateSettings("Settings", settings);
-                    //}
-                    
-                    //Helper.AddUpdateAppSettings(MilestoneServerNameString, serverName);
-                }
+                //if (temp != serverName)
+                //{
+                //    using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
+                //    {
+                //        settings.MilestoneServerName = serverName;
+                //        db.UpdateSettings("Settings", settings);
+                //    }
+                //}
 
                 //Worker.AddBookmarks = settings.AddBookmarks;
+                //Worker.AutoMapping = settings.AutoMapping;
+                //Worker.EventExpireAfterDays = settings.EventExpireAfterDays;
+                //Worker.EpochStartSecondsBefore = settings.EpochStartSecondsBefore;
+                //Worker.EpochEndSecondsAfter = settings.EpochEndSecondsAfter;
+                #endregion
+
+                #region Use AppConfig
+                string temp = Helper.ReadConfigKey(MilestoneServerNameString);
+                if (temp != serverName)
+                {
+                    Helper.AddUpdateAppSettings(MilestoneServerNameString, serverName);
+                }
+
                 temp = Helper.ReadConfigKey(AddBookmarksString);
                 bool.TryParse(temp, out Worker.AddBookmarks);
 
-                //Worker.AutoMapping = settings.AutoMapping;
                 temp = Helper.ReadConfigKey(AutoMappingString);
                 bool.TryParse(temp, out Worker.AutoMapping);
 
-                //Worker.EventExpireAfterDays = settings.EventExpireAfterDays;
                 temp = Helper.ReadConfigKey(EventExpireAfterDaysString);
                 int.TryParse(temp, out Worker.EventExpireAfterDays);
 
-                //Worker.EpochStartSecondsBefore = settings.EpochStartSecondsBefore;
                 temp = Helper.ReadConfigKey(EpochStartSecondsBeforeString);
                 int.TryParse(temp, out Worker.EpochStartSecondsBefore);
 
-                //Worker.EpochEndSecondsAfter = settings.EpochEndSecondsAfter;
                 temp = Helper.ReadConfigKey(EpochEndSecondsAfterString);
                 int.TryParse(temp, out Worker.EpochEndSecondsAfter);
+                #endregion
 
                 if (worker == null)
                 {
                     worker = new Worker();
                     workerTask = Task.Run(() => worker.DoWork());
-
-                    //comment the above line to test using json files
-                    //worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\heartbeat.json");
-                    //while (!IsClosing)
-                    //{
-                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group1.json");
-                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group2.json");
-                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group3.json");
-                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group4.json");
-                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group1.json");
-                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group2.json");
-                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group3.json");
-                    //    worker.Test(@"C:\OpenALPR\OpenALPRMilestone\JsonTestFiles\alpr_group4.json");
-                    //    Thread.Sleep(5000);
-                    //}
-                    //Console.WriteLine("Done...");
                 }
             }
         }

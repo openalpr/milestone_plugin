@@ -35,6 +35,7 @@ namespace SystemTrayApp
         {
             using (ViewManager manager = new ViewManager(serviceManager))
             {
+                #region Use SQLite
                 using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
                 {
                     db.SaveSettings("Settings", new Settings()
@@ -51,10 +52,27 @@ namespace SystemTrayApp
                         OpenALPRServerUrl = txtOpenALPRServer.Text,
                         ServicePort = Convert.ToInt32(nudServicePort.Value)
                     });
+                    
                     tsslAlert.Text = "Please wait for the restart of the service!";
-                    manager.RunPowershellScrip((chkNetworkService.Checked) ? "Network Service" : txtLogin.Text, txtPassword.Text);
-                    this.Close();
                 }
+                #endregion
+
+                #region Use AppConfig
+                Helper.AddUpdateAppSettings("MilestoneUserName", (chkNetworkService.Checked) ? "" : txtLogin.Text, "OpenALPRQueueMilestone.exe");
+                Helper.AddUpdateAppSettings("MilestonePassword", (chkNetworkService.Checked) ? "" : txtPassword.Text, "OpenALPRQueueMilestone.exe");
+                Helper.AddUpdateAppSettings("ClientSettingsProvider.ServiceUri", txtServiceUrl.Text, "OpenALPRQueueMilestone.exe");
+                Helper.AddUpdateAppSettings("EventExpireAfterDays", nudEventExpireAfterDays.Value.ToString(), "OpenALPRQueueMilestone.exe");
+                Helper.AddUpdateAppSettings("EpochStartSecondsBefore", nudEpochStartSecondsBefore.Value.ToString(), "OpenALPRQueueMilestone.exe");
+                Helper.AddUpdateAppSettings("EpochEndSecondsAfter", nudEpochEndSecondsAfter.Value.ToString(), "OpenALPRQueueMilestone.exe");
+                Helper.AddUpdateAppSettings("ServicePort", nudServicePort.Value.ToString(), "OpenALPRQueueMilestone.exe");
+                Helper.AddUpdateAppSettings("AddBookmarks", chkAddBookmarks.Checked.ToString(), "OpenALPRQueueMilestone.exe");
+                Helper.AddUpdateAppSettings("AutoMapping", chkAutoMapping.Checked.ToString(), "OpenALPRQueueMilestone.exe");
+                Helper.AddUpdateAppSettings("OpenALPRServerUrl", txtOpenALPRServer.Text, "OpenALPRQueueMilestone.exe");
+                Helper.AddUpdateAppSettings("MilestoneServerName", txtMilestoneServer.Text, "OpenALPRQueueMilestone.exe");
+                #endregion
+                manager.RunPowershellScrip((chkNetworkService.Checked) ? "Network Service" : txtLogin.Text, txtPassword.Text);
+                this.Close();
+
             }
         }
 
@@ -78,6 +96,7 @@ namespace SystemTrayApp
 
         private void PowershellScript_Activated(object sender, EventArgs e)
         {
+            #region Use SQLite
             using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
             {
                 db.CreateTable("Settings");
@@ -105,14 +124,39 @@ namespace SystemTrayApp
                 nudServicePort.Value = settings.ServicePort;
                 chkAddBookmarks.Checked = settings.AddBookmarks;
                 chkAutoMapping.Checked = settings.AutoMapping;
-                
-                chkNetworkService.Checked = (string.IsNullOrEmpty(txtLogin.Text) || string.IsNullOrWhiteSpace(txtLogin.Text)) &&
-                    (string.IsNullOrEmpty(txtPassword.Text) || string.IsNullOrWhiteSpace(txtPassword.Text));
-                txtLogin.Enabled = !chkNetworkService.Checked;
-                txtPassword.Enabled = !chkNetworkService.Checked;
-
-                btnLogin.Focus();
             }
+            #endregion
+
+            #region Use AppConfig
+            txtLogin.Text = Helper.ReadConfigKey("MilestoneUserName", "OpenALPRQueueMilestone.exe");
+            txtPassword.Text = Helper.ReadConfigKey("MilestonePassword", "OpenALPRQueueMilestone.exe");
+            txtServiceUrl.Text = Helper.ReadConfigKey("ClientSettingsProvider.ServiceUri", "OpenALPRQueueMilestone.exe");
+
+            int.TryParse(Helper.ReadConfigKey("EventExpireAfterDays", "OpenALPRQueueMilestone.exe"), out int eventExpireAfterDays);
+            nudEventExpireAfterDays.Value = eventExpireAfterDays;
+
+            int.TryParse(Helper.ReadConfigKey("EpochStartSecondsBefore", "OpenALPRQueueMilestone.exe"), out int epochStartSecondsBefore);
+            nudEpochStartSecondsBefore.Value = epochStartSecondsBefore;
+
+            int.TryParse(Helper.ReadConfigKey("EpochEndSecondsAfter", "OpenALPRQueueMilestone.exe"), out int epochEndSecondsAfter);
+            nudEpochEndSecondsAfter.Value = epochEndSecondsAfter;
+
+            int.TryParse(Helper.ReadConfigKey("ServicePort", "OpenALPRQueueMilestone.exe"), out int servicePort);
+            nudServicePort.Value = servicePort;
+
+            bool.TryParse(Helper.ReadConfigKey("AddBookmarks", "OpenALPRQueueMilestone.exe"), out bool addBookmarks);
+            chkAddBookmarks.Checked = addBookmarks;
+
+            bool.TryParse(Helper.ReadConfigKey("AutoMapping", "OpenALPRQueueMilestone.exe"), out bool autoMapping);
+            chkAutoMapping.Checked = autoMapping;
+            #endregion
+
+            chkNetworkService.Checked = (string.IsNullOrEmpty(txtLogin.Text) || string.IsNullOrWhiteSpace(txtLogin.Text)) &&
+                (string.IsNullOrEmpty(txtPassword.Text) || string.IsNullOrWhiteSpace(txtPassword.Text));
+            txtLogin.Enabled = !chkNetworkService.Checked;
+            txtPassword.Enabled = !chkNetworkService.Checked;
+
+            btnLogin.Focus();
         }
 
         private void txtPassword_KeyDown(object sender, KeyEventArgs e)

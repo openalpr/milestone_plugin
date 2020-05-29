@@ -217,14 +217,14 @@ Section "Files (required)"
   File "..\build\zh-CN\VideoOS.Platform.resources.dll"
   File "..\build\zh-CN\VideoOS.Platform.SDK.resources.dll"
   
-  SetOutPath "$INSTDIR\zh-TW"
+  SetOutPath "$INSTDIR\Service\zh-TW"
   File "..\build\zh-TW\VideoOS.Platform.resources.dll"
   File "..\build\zh-TW\VideoOS.Platform.SDK.resources.dll"
 
-  SetOutPath "$INSTDIR\x64"
+  SetOutPath "$INSTDIR\Service\x64"
   File "..\build\x64\SQLite.Interop.dll"
 
-  SetOutPath "$INSTDIR\x86"
+  SetOutPath "$INSTDIR\Service\x86"
   File "..\build\x86\SQLite.Interop.dll"
   
   ; Set output path to the installation directory (Plug-in).
