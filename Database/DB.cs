@@ -1,6 +1,8 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,14 +11,15 @@ namespace Database
 {
     public class DB : IDisposable
     {
+        internal static ILog Log { get; private set; }
         bool disposed = false;
         private SQLiteConnection _db;
         private string _dbName;
         private int _version;
 
-        public DB(string path, string dbName, int version)
+        public DB(string dbName, int version)
         {
-            _dbName = $"{path}\\{dbName}.db";
+            _dbName = $"{DatabaseDefinition.applicationPath}\\{dbName}.db";
             _version = version;
             Connect(_dbName);
         }

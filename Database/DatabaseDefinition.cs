@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using OpenALPRQueueConsumer.Utility;
 
-namespace OpenALPRQueueConsumer
+namespace Database
 {
-    public class OpenALPRQueueMilestoneDefinition
+    public class DatabaseDefinition
     {
         internal static string PlugName = "OpenALPRMilestone";
         internal static string ProductName = "OpenALPR Milestone Plug-in";
@@ -14,7 +13,7 @@ namespace OpenALPRQueueConsumer
         internal static FileVersionInfo fileVersion;
         public static string applicationPath;
 
-        static OpenALPRQueueMilestoneDefinition()
+        static DatabaseDefinition()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             string name = assembly.GetName().Name;
@@ -22,7 +21,7 @@ namespace OpenALPRQueueConsumer
 
 #if DEBUG
             assembly = Assembly.GetExecutingAssembly();
-            applicationPath = assembly.Location.Replace("\\OpenALPRQueueMilestone.exe", "");
+            applicationPath = assembly.Location.Replace("\\Database.dll", "");
             if (assembly != null)
                 fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
 #else

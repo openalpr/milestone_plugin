@@ -52,11 +52,11 @@
             this.gbAuth = new System.Windows.Forms.GroupBox();
             this.gbTimeout = new System.Windows.Forms.GroupBox();
             this.gbService = new System.Windows.Forms.GroupBox();
-            this.gbFeature = new System.Windows.Forms.GroupBox();
-            this.lblMilestoneServer = new System.Windows.Forms.Label();
-            this.txtMilestoneServer = new System.Windows.Forms.TextBox();
             this.lblOpenALPRServer = new System.Windows.Forms.Label();
             this.txtOpenALPRServer = new System.Windows.Forms.TextBox();
+            this.lblMilestoneServer = new System.Windows.Forms.Label();
+            this.txtMilestoneServer = new System.Windows.Forms.TextBox();
+            this.gbFeature = new System.Windows.Forms.GroupBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.ssMain = new System.Windows.Forms.StatusStrip();
             this.tsslAlert = new System.Windows.Forms.ToolStripStatusLabel();
@@ -316,16 +316,21 @@
             this.gbService.TabStop = false;
             this.gbService.Text = "Service";
             // 
-            // gbFeature
+            // lblOpenALPRServer
             // 
-            this.gbFeature.Controls.Add(this.chkAddBookmarks);
-            this.gbFeature.Controls.Add(this.chkAutoMapping);
-            this.gbFeature.Location = new System.Drawing.Point(268, 257);
-            this.gbFeature.Name = "gbFeature";
-            this.gbFeature.Size = new System.Drawing.Size(249, 100);
-            this.gbFeature.TabIndex = 14;
-            this.gbFeature.TabStop = false;
-            this.gbFeature.Text = "Features";
+            this.lblOpenALPRServer.AutoSize = true;
+            this.lblOpenALPRServer.Location = new System.Drawing.Point(18, 175);
+            this.lblOpenALPRServer.Name = "lblOpenALPRServer";
+            this.lblOpenALPRServer.Size = new System.Drawing.Size(68, 15);
+            this.lblOpenALPRServer.TabIndex = 26;
+            this.lblOpenALPRServer.Text = "OpenALPR";
+            // 
+            // txtOpenALPRServer
+            // 
+            this.txtOpenALPRServer.Location = new System.Drawing.Point(18, 193);
+            this.txtOpenALPRServer.Name = "txtOpenALPRServer";
+            this.txtOpenALPRServer.Size = new System.Drawing.Size(210, 20);
+            this.txtOpenALPRServer.TabIndex = 27;
             // 
             // lblMilestoneServer
             // 
@@ -343,21 +348,16 @@
             this.txtMilestoneServer.Size = new System.Drawing.Size(210, 20);
             this.txtMilestoneServer.TabIndex = 25;
             // 
-            // lblOpenALPRServer
+            // gbFeature
             // 
-            this.lblOpenALPRServer.AutoSize = true;
-            this.lblOpenALPRServer.Location = new System.Drawing.Point(18, 175);
-            this.lblOpenALPRServer.Name = "lblOpenALPRServer";
-            this.lblOpenALPRServer.Size = new System.Drawing.Size(68, 15);
-            this.lblOpenALPRServer.TabIndex = 26;
-            this.lblOpenALPRServer.Text = "OpenALPR";
-            // 
-            // txtOpenALPRServer
-            // 
-            this.txtOpenALPRServer.Location = new System.Drawing.Point(18, 193);
-            this.txtOpenALPRServer.Name = "txtOpenALPRServer";
-            this.txtOpenALPRServer.Size = new System.Drawing.Size(210, 20);
-            this.txtOpenALPRServer.TabIndex = 27;
+            this.gbFeature.Controls.Add(this.chkAddBookmarks);
+            this.gbFeature.Controls.Add(this.chkAutoMapping);
+            this.gbFeature.Location = new System.Drawing.Point(268, 257);
+            this.gbFeature.Name = "gbFeature";
+            this.gbFeature.Size = new System.Drawing.Size(249, 100);
+            this.gbFeature.TabIndex = 14;
+            this.gbFeature.TabStop = false;
+            this.gbFeature.Text = "Features";
             // 
             // btnCancel
             // 
@@ -405,6 +405,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
             this.Activated += new System.EventHandler(this.PowershellScript_Activated);
+            this.Load += new System.EventHandler(this.PowershellScript_Load);
             ((System.ComponentModel.ISupportInitialize)(this.nudEventExpireAfterDays)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEpochStartSecondsBefore)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEpochEndSecondsAfter)).EndInit();

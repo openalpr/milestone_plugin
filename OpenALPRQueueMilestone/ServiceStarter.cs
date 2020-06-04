@@ -41,11 +41,17 @@ namespace OpenALPRQueueConsumer
         public ServiceStarter()
         {
             #region Use SQLite
-            //using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
-            //{
-            //    settings = db.GetSettings("Settings").LastOrDefault();
-            //}
-            //ProxySingleton.Port = settings.ServicePort.ToString();
+            using (DB db = new DB("OpenALPRQueueMilestone", 3))
+            {
+                db.CreateTable("Settings");
+                settings = db.GetSettings("Settings").LastOrDefault();
+                if (settings == null)
+                {
+                    settings = db.Defaults();
+                    db.SaveSettings("Settings", db.Defaults());
+                }
+            }
+            ProxySingleton.Port = settings.ServicePort.ToString();
             #endregion
 
             currentPerson = new User(User.AutoExporterServiceName);
@@ -112,25 +118,25 @@ namespace OpenALPRQueueConsumer
                 return;
 
             #region Use SQLite
-            //if (string.IsNullOrEmpty(serverName))
-            //    serverName = settings.MilestoneServerName;
+            if (string.IsNullOrEmpty(serverName))
+                serverName = settings.MilestoneServerName;
 
-            //if (string.IsNullOrEmpty(userName))
-            //    userName = settings.MilestoneUserName;
+            if (string.IsNullOrEmpty(userName))
+                userName = settings.MilestoneUserName;
 
-            //if (string.IsNullOrEmpty(password))
-            //    password = settings.MilestonePassword;
+            if (string.IsNullOrEmpty(password))
+                password = settings.MilestonePassword;
             #endregion
 
             #region Use AppConfig
-            if (string.IsNullOrEmpty(serverName))
-                serverName = Helper.ReadConfigKey(MilestoneServerNameString);
+            //if (string.IsNullOrEmpty(serverName))
+            //    serverName = Helper.ReadConfigKey(MilestoneServerNameString);
 
-            if (string.IsNullOrEmpty(userName))
-                userName = Helper.ReadConfigKey("MilestoneUserName");
+            //if (string.IsNullOrEmpty(userName))
+            //    userName = Helper.ReadConfigKey("MilestoneUserName");
 
-            if (string.IsNullOrEmpty(password))
-                password = Helper.ReadConfigKey("MilestonePassword");
+            //if (string.IsNullOrEmpty(password))
+            //    password = Helper.ReadConfigKey("MilestonePassword");
             #endregion
 
             if (string.IsNullOrEmpty(serverName))
@@ -149,44 +155,44 @@ namespace OpenALPRQueueConsumer
                 IsConnectedToMilestoneServer = true;
 
                 #region Use SQLite
-                //string temp = settings.MilestoneServerName;
-                //if (temp != serverName)
-                //{
-                //    using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
-                //    {
-                //        settings.MilestoneServerName = serverName;
-                //        db.UpdateSettings("Settings", settings);
-                //    }
-                //}
+                string temp = settings.MilestoneServerName;
+                if (temp != serverName)
+                {
+                    using (DB db = new DB("OpenALPRQueueMilestone", 3))
+                    {
+                        settings.MilestoneServerName = serverName;
+                        db.UpdateSettings("Settings", settings);
+                    }
+                }
 
-                //Worker.AddBookmarks = settings.AddBookmarks;
-                //Worker.AutoMapping = settings.AutoMapping;
-                //Worker.EventExpireAfterDays = settings.EventExpireAfterDays;
-                //Worker.EpochStartSecondsBefore = settings.EpochStartSecondsBefore;
-                //Worker.EpochEndSecondsAfter = settings.EpochEndSecondsAfter;
+                Worker.AddBookmarks = settings.AddBookmarks;
+                Worker.AutoMapping = settings.AutoMapping;
+                Worker.EventExpireAfterDays = settings.EventExpireAfterDays;
+                Worker.EpochStartSecondsBefore = settings.EpochStartSecondsBefore;
+                Worker.EpochEndSecondsAfter = settings.EpochEndSecondsAfter;
                 #endregion
 
                 #region Use AppConfig
-                string temp = Helper.ReadConfigKey(MilestoneServerNameString);
-                if (temp != serverName)
-                {
-                    Helper.AddUpdateAppSettings(MilestoneServerNameString, serverName);
-                }
+                //string temp = Helper.ReadConfigKey(MilestoneServerNameString);
+                //if (temp != serverName)
+                //{
+                //    Helper.AddUpdateAppSettings(MilestoneServerNameString, serverName);
+                //}
 
-                temp = Helper.ReadConfigKey(AddBookmarksString);
-                bool.TryParse(temp, out Worker.AddBookmarks);
+                //temp = Helper.ReadConfigKey(AddBookmarksString);
+                //bool.TryParse(temp, out Worker.AddBookmarks);
 
-                temp = Helper.ReadConfigKey(AutoMappingString);
-                bool.TryParse(temp, out Worker.AutoMapping);
+                //temp = Helper.ReadConfigKey(AutoMappingString);
+                //bool.TryParse(temp, out Worker.AutoMapping);
 
-                temp = Helper.ReadConfigKey(EventExpireAfterDaysString);
-                int.TryParse(temp, out Worker.EventExpireAfterDays);
+                //temp = Helper.ReadConfigKey(EventExpireAfterDaysString);
+                //int.TryParse(temp, out Worker.EventExpireAfterDays);
 
-                temp = Helper.ReadConfigKey(EpochStartSecondsBeforeString);
-                int.TryParse(temp, out Worker.EpochStartSecondsBefore);
+                //temp = Helper.ReadConfigKey(EpochStartSecondsBeforeString);
+                //int.TryParse(temp, out Worker.EpochStartSecondsBefore);
 
-                temp = Helper.ReadConfigKey(EpochEndSecondsAfterString);
-                int.TryParse(temp, out Worker.EpochEndSecondsAfter);
+                //temp = Helper.ReadConfigKey(EpochEndSecondsAfterString);
+                //int.TryParse(temp, out Worker.EpochEndSecondsAfter);
                 #endregion
 
                 if (worker == null)

@@ -49,7 +49,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         public void DoWork()
         {
             Settings settings = new Settings();
-            using (DB db = new DB(OpenALPRQueueMilestoneDefinition.applicationPath, "OpenALPRQueueMilestone", 3))
+            using (DB db = new DB("OpenALPRQueueMilestone", 3))
             {
                 settings = db.GetSettings("Settings").LastOrDefault();
             }
