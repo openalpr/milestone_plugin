@@ -251,7 +251,11 @@ namespace SystemTrayApp
 
         private void ShowAlerListing_Click(object sender, EventArgs e)
         {
-            ShowAlerListing();
+            //ShowAlerListing();
+            using (AlertList alertList = new AlertList())
+            {
+                alertList.ShowDialog();
+            }
         }
 
         private void ShowAlerListing()
