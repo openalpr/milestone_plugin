@@ -21,5 +21,6 @@ namespace Database
 	    public bool AutoMapping { get; set; }
 		public int ServicePort { get; set; }
 		public string ClientSettingsProviderServiceUri { get; set; }
+		public bool UseUTC { get; set; }
 	}
 }

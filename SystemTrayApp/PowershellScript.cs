@@ -50,7 +50,8 @@ namespace SystemTrayApp
                         MilestoneServerName = txtMilestoneServer.Text,
                         MilestoneUserName = txtLogin.Text,
                         OpenALPRServerUrl = txtOpenALPRServer.Text,
-                        ServicePort = Convert.ToInt32(nudServicePort.Value)
+                        ServicePort = Convert.ToInt32(nudServicePort.Value),
+                        UseUTC = chkUseUTC.Checked
                     });
                     
                     tsslAlert.Text = "Please wait for the restart of the service!";
@@ -143,6 +144,7 @@ namespace SystemTrayApp
                 nudServicePort.Value = settings.ServicePort;
                 chkAddBookmarks.Checked = settings.AddBookmarks;
                 chkAutoMapping.Checked = settings.AutoMapping;
+                chkUseUTC.Checked = settings.UseUTC;
             }
             #endregion
 

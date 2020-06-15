@@ -48,11 +48,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
         public void DoWork()
         {
-            Settings settings = new Settings();
-            using (DB db = new DB("OpenALPRQueueMilestone", 3))
-            {
-                settings = db.GetSettings("Settings").LastOrDefault();
-            }
+            Settings settings = GetSettings();
 
             //string openALPRServerUrl = Helper.ReadConfigKey("OpenALPRServerUrl");
             string openALPRServerUrl = settings.OpenALPRServerUrl;
@@ -377,11 +373,36 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             return true;
         }
 
+        private static Settings GetSettings()
+        {
+            Settings settings = new Settings();
+
+            using (DB db = new DB("OpenALPRQueueMilestone", 3))
+            {
+                db.CreateTable("Settings");
+                settings = db.GetSettings("Settings").LastOrDefault();
+                if (settings == null)
+                {
+                    settings = db.Defaults();
+                    db.SaveSettings("Settings", db.Defaults());
+                }
+            }
+
+            return settings;
+        }
+
         private static DateTime Epoch2LocalDateTime(long epoch)
         {
             try
             {
-                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(epoch).ToLocalTime();
+                Settings settings = GetSettings();
+
+                //return new DateTime(1970, 1, 1, 0, 0, 0, (settings.UseUTC) ? DateTimeKind.Utc : DateTimeKind.Local).AddMilliseconds(epoch).ToLocalTime();
+
+                if (settings.UseUTC)
+                    return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local).AddMilliseconds(epoch).ToLocalTime();
+                else
+                    return DateTime.Now;
             }
             catch (Exception ex)
             {
@@ -495,7 +516,6 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         Description = description,
                         PlateInfo = plateInfo
                     });
-
                 }
                 catch (Exception ex)
                 {

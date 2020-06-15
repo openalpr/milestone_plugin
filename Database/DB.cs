@@ -45,7 +45,8 @@ namespace Database
 	                                        'AddBookmarks'	INTEGER,
 	                                        'AutoMapping'	INTEGER,
 	                                        'ServicePort'	INTEGER,
-	                                        'ClientSettingsProviderServiceUri'	TEXT");
+	                                        'ClientSettingsProviderServiceUri'	TEXT,
+                                            'UseUTC'	INTEGER");
         }
 
         private int Check(string table)
@@ -89,7 +90,8 @@ namespace Database
                         MilestonePassword = Convert.ToString(reader["MilestonePassword"]),
                         MilestoneServerName = Convert.ToString(reader["MilestoneServerName"]),
                         MilestoneUserName = Convert.ToString(reader["MilestoneUserName"]),
-                        OpenALPRServerUrl = Convert.ToString(reader["OpenALPRServerUrl"])
+                        OpenALPRServerUrl = Convert.ToString(reader["OpenALPRServerUrl"]),
+                        UseUTC = Convert.ToBoolean(reader["UseUTC"])
                     });
                 }
                 catch (Exception ex)
@@ -117,7 +119,7 @@ namespace Database
 
         public void SaveSettings(string table, Settings settings)
         {
-            string query = $"INSERT INTO {table} (Created, OpenALPRServerUrl, MilestoneServerName, MilestoneUserName, MilestonePassword, EventExpireAfterDays, EpochStartSecondsBefore, EpochEndSecondsAfter, AddBookmarks, AutoMapping, ServicePort, ClientSettingsProviderServiceUri) VALUES ('{settings.Created}', '{settings.OpenALPRServerUrl}', '{settings.MilestoneServerName}', '{settings.MilestoneUserName}', '{settings.MilestonePassword}', {settings.EventExpireAfterDays}, {settings.EpochStartSecondsBefore}, {settings.EpochEndSecondsAfter}, {Convert.ToInt32(settings.AddBookmarks)}, {Convert.ToInt32(settings.AutoMapping)}, {settings.ServicePort}, '{settings.ClientSettingsProviderServiceUri}');";
+            string query = $"INSERT INTO {table} (Created, OpenALPRServerUrl, MilestoneServerName, MilestoneUserName, MilestonePassword, EventExpireAfterDays, EpochStartSecondsBefore, EpochEndSecondsAfter, AddBookmarks, AutoMapping, ServicePort, ClientSettingsProviderServiceUri, UseUTC) VALUES ('{settings.Created}', '{settings.OpenALPRServerUrl}', '{settings.MilestoneServerName}', '{settings.MilestoneUserName}', '{settings.MilestonePassword}', {settings.EventExpireAfterDays}, {settings.EpochStartSecondsBefore}, {settings.EpochEndSecondsAfter}, {Convert.ToInt32(settings.AddBookmarks)}, {Convert.ToInt32(settings.AutoMapping)}, {settings.ServicePort}, '{settings.ClientSettingsProviderServiceUri}', {Convert.ToInt32(settings.UseUTC)});";
             SQLiteCommand insertSQL = new SQLiteCommand(query, _db);
             try
             {
@@ -131,7 +133,7 @@ namespace Database
 
         public void UpdateSettings(string table, Settings settings)
         {
-            string query = $"UPDATE {table} SET OpenALPRServerUrl = '{ settings.OpenALPRServerUrl }', MilestoneServerName = '{ settings.MilestoneServerName }', MilestoneUserName = '{ settings.MilestoneUserName }', MilestonePassword = '{ settings.MilestonePassword }', EventExpireAfterDays = { settings.EventExpireAfterDays }, EpochStartSecondsBefore = { settings.EpochStartSecondsBefore }, EpochEndSecondsAfter = { settings.EpochEndSecondsAfter }, AddBookmarks = { Convert.ToInt32(settings.AddBookmarks) }, AutoMapping = { Convert.ToInt32(settings.AutoMapping) }, ServicePort = { settings.ServicePort }, ClientSettingsProviderServiceUri = '{ settings.ClientSettingsProviderServiceUri }' WHERE Id = { settings.Id } ";
+            string query = $"UPDATE {table} SET OpenALPRServerUrl = '{ settings.OpenALPRServerUrl }', MilestoneServerName = '{ settings.MilestoneServerName }', MilestoneUserName = '{ settings.MilestoneUserName }', MilestonePassword = '{ settings.MilestonePassword }', EventExpireAfterDays = { settings.EventExpireAfterDays }, EpochStartSecondsBefore = { settings.EpochStartSecondsBefore }, EpochEndSecondsAfter = { settings.EpochEndSecondsAfter }, AddBookmarks = { Convert.ToInt32(settings.AddBookmarks) }, AutoMapping = { Convert.ToInt32(settings.AutoMapping) }, ServicePort = { settings.ServicePort }, ClientSettingsProviderServiceUri = '{ settings.ClientSettingsProviderServiceUri }', UseUTC = { Convert.ToInt32(settings.UseUTC) } WHERE Id = { settings.Id } ";
             SQLiteCommand updateSQL = new SQLiteCommand(query, _db);
             try
             {
@@ -153,7 +155,8 @@ namespace Database
                 EpochEndSecondsAfter = 3,
                 AddBookmarks = true,
                 AutoMapping = true,
-                ServicePort = 22019
+                ServicePort = 22019,
+                UseUTC = true
             };
             return settings;
         }

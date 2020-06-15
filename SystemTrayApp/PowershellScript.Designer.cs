@@ -52,6 +52,7 @@
             this.gbAuth = new System.Windows.Forms.GroupBox();
             this.gbTimeout = new System.Windows.Forms.GroupBox();
             this.gbService = new System.Windows.Forms.GroupBox();
+            this.chkUseUTC = new System.Windows.Forms.CheckBox();
             this.lblOpenALPRServer = new System.Windows.Forms.Label();
             this.txtOpenALPRServer = new System.Windows.Forms.TextBox();
             this.lblMilestoneServer = new System.Windows.Forms.Label();
@@ -301,6 +302,7 @@
             // 
             // gbService
             // 
+            this.gbService.Controls.Add(this.chkUseUTC);
             this.gbService.Controls.Add(this.lblOpenALPRServer);
             this.gbService.Controls.Add(this.nudServicePort);
             this.gbService.Controls.Add(this.txtOpenALPRServer);
@@ -315,6 +317,16 @@
             this.gbService.TabIndex = 14;
             this.gbService.TabStop = false;
             this.gbService.Text = "Service";
+            // 
+            // chkUseUTC
+            // 
+            this.chkUseUTC.AutoSize = true;
+            this.chkUseUTC.Location = new System.Drawing.Point(105, 45);
+            this.chkUseUTC.Name = "chkUseUTC";
+            this.chkUseUTC.Size = new System.Drawing.Size(123, 19);
+            this.chkUseUTC.TabIndex = 28;
+            this.chkUseUTC.Text = "Use EPOCH time";
+            this.chkUseUTC.UseVisualStyleBackColor = true;
             // 
             // lblOpenALPRServer
             // 
@@ -458,5 +470,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.StatusStrip ssMain;
         private System.Windows.Forms.ToolStripStatusLabel tsslAlert;
+        private System.Windows.Forms.CheckBox chkUseUTC;
     }
 }
