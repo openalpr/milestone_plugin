@@ -321,11 +321,11 @@
             // chkUseUTC
             // 
             this.chkUseUTC.AutoSize = true;
-            this.chkUseUTC.Location = new System.Drawing.Point(105, 45);
+            this.chkUseUTC.Location = new System.Drawing.Point(150, 45);
             this.chkUseUTC.Name = "chkUseUTC";
-            this.chkUseUTC.Size = new System.Drawing.Size(123, 19);
+            this.chkUseUTC.Size = new System.Drawing.Size(78, 19);
             this.chkUseUTC.TabIndex = 28;
-            this.chkUseUTC.Text = "Use EPOCH time";
+            this.chkUseUTC.Text = "Use UTC";
             this.chkUseUTC.UseVisualStyleBackColor = true;
             // 
             // lblOpenALPRServer

@@ -156,7 +156,7 @@ namespace Database
                 AddBookmarks = true,
                 AutoMapping = true,
                 ServicePort = 22019,
-                UseUTC = true
+                UseUTC = false
             };
             return settings;
         }

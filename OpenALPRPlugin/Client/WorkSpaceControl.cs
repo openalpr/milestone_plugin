@@ -288,7 +288,6 @@ namespace OpenALPRPlugin.Client
                 try
                 {
                     Bookmark bookmark = bookmarks[i];
-
                     BookmarkDescription bookmarkDescription = Helper.ParseBookmarkDescription(bookmark.Description);
 
                     string[] row = new string[]
