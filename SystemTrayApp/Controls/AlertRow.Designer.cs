@@ -30,6 +30,7 @@
         {
             this.txtPlate = new System.Windows.Forms.TextBox();
             this.txtName = new System.Windows.Forms.TextBox();
+            this.btnDelete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtPlate
@@ -46,14 +47,25 @@
             this.txtName.Size = new System.Drawing.Size(200, 20);
             this.txtName.TabIndex = 1;
             // 
+            // btnDelete
+            // 
+            this.btnDelete.Location = new System.Drawing.Point(315, 2);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(22, 22);
+            this.btnDelete.TabIndex = 2;
+            this.btnDelete.Text = "X";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            //this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
             // AlertRow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.txtPlate);
             this.Name = "AlertRow";
-            this.Size = new System.Drawing.Size(312, 27);
+            this.Size = new System.Drawing.Size(341, 27);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -63,5 +75,6 @@
 
         public System.Windows.Forms.TextBox txtPlate;
         public System.Windows.Forms.TextBox txtName;
+        private System.Windows.Forms.Button btnDelete;
     }
 }

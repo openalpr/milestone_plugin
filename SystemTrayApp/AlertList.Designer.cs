@@ -59,14 +59,14 @@
             this.pnlAlertList.AutoScroll = true;
             this.pnlAlertList.Location = new System.Drawing.Point(12, 12);
             this.pnlAlertList.Name = "pnlAlertList";
-            this.pnlAlertList.Size = new System.Drawing.Size(320, 397);
+            this.pnlAlertList.Size = new System.Drawing.Size(345, 397);
             this.pnlAlertList.TabIndex = 2;
             // 
             // AlertList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(344, 450);
+            this.ClientSize = new System.Drawing.Size(369, 450);
             this.Controls.Add(this.pnlAlertList);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnAdd);

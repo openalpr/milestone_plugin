@@ -12,11 +12,17 @@ namespace SystemTrayApp.Controls
 {
     public partial class AlertRow : UserControl
     {
-        public AlertRow(string plate, string name)
+        public AlertRow(string plate, string name, int row)
         {
             InitializeComponent();
             txtName.Text = name;
             txtPlate.Text = plate;
+            btnDelete.Tag = row;
         }
+
+        //private void btnDelete_Click(object sender, EventArgs e)
+        //{
+        //    this.Dispose();
+        //}
     }
 }

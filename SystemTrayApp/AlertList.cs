@@ -23,6 +23,8 @@ namespace SystemTrayApp
 
         private void LoadGrid()
         {
+            this.pnlAlertList.Controls.Clear();
+
             if (lines == null)
             {
                 lines = File.ReadAllLines(FilePath()).ToList();
@@ -33,12 +35,20 @@ namespace SystemTrayApp
 
             foreach (string row in lines)
             {
-                this.pnlAlertList.Controls.Add(new AlertRow(row.Split(',').FirstOrDefault(), row.Split(',').LastOrDefault())
+                this.pnlAlertList.Controls.Add(new AlertRow(row.Split(',').FirstOrDefault(), row.Split(',').LastOrDefault(), rowNum)
                 {
                     Top = (rowNum++ * 25) + 5,
                     Left = 5,
                     Name = "Line"
                 });
+            }
+
+            List<Control> controls = this.Controls.Find("Line", true).ToList();
+
+            foreach (Control control in controls)
+            {
+                Button btnDelete = (control.Controls.Find("btnDelete", true).FirstOrDefault() as Button);
+                btnDelete.Click += new EventHandler(btnDelete_Click);
             }
         }
 
@@ -56,7 +66,23 @@ namespace SystemTrayApp
             LoadGrid();
         }
 
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            ((sender as Button).Parent as AlertRow).Dispose();
+            lines.RemoveRange(Convert.ToInt32((sender as Button).Tag), 1);
+
+            ParseControls();
+
+            LoadGrid();
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
+        {
+            ParseControls();
+            this.Close();
+        }
+
+        private void ParseControls()
         {
             List<Control> controls = this.Controls.Find("Line", true).ToList();
             string result = $"# Edit this file to add alerts.{Environment.NewLine}# Each line represents one alert and a description separated by a comma.{Environment.NewLine}# For example (Do not use a \"#\" symbol for your alerts):{Environment.NewLine}# ABC123,Walter Smith's Truck{Environment.NewLine}Plate Number, Description{Environment.NewLine}{Environment.NewLine}";
@@ -74,7 +100,6 @@ namespace SystemTrayApp
             }
 
             File.WriteAllText(FilePath(), result);
-            this.Close();
         }
     }
 }
