@@ -502,18 +502,35 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         coordinates,
                         timrTrigged);
 
-                    description.AppendFormat(desc);
+                    List<Bookmark> bookmarks = BookmarkService.Instance.BookmarkSearchTime(
+                                                    fqid.ServerId,
+                                                    timeBegin.Date,
+                                                    (timeBegin.Date.AddDays(1).AddSeconds(-1).Ticks - timeBegin.Date.Ticks) / 10,
+                                                    999,
+                                                    new Guid[] { Kind.Camera, Kind.Microphone, Kind.Speaker },
+                                                    new FQID[] { fqid },
+                                                    null,
+                                                    "openalpr"
+                                                ).ToList();
 
-                    bookmarkItem.Add(new BookmarkItem() {
-                        FQID = fqid,
-                        TimeBegin = timeBegin,
-                        TimrTrigged = timrTrigged,
-                        TimeEnd = timeEnd,
-                        Reference = reference,
-                        Header = header,
-                        Description = description,
-                        PlateInfo = plateInfo
-                    });
+                    Bookmark bookmark = bookmarks.FirstOrDefault(b => b.Description == desc);
+
+                    if (bookmark == null)
+                    {
+                        description.AppendFormat(desc);
+
+                        bookmarkItem.Add(new BookmarkItem()
+                        {
+                            FQID = fqid,
+                            TimeBegin = timeBegin,
+                            TimrTrigged = timrTrigged,
+                            TimeEnd = timeEnd,
+                            Reference = reference,
+                            Header = header,
+                            Description = description,
+                            PlateInfo = plateInfo
+                        });
+                    }
                 }
                 catch (Exception ex)
                 {

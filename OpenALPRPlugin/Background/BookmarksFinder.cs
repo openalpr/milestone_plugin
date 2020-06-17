@@ -7,6 +7,7 @@
  */
 
 
+using Newtonsoft.Json;
 using OpenALPRPlugin.Utility;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,9 @@ using VideoOS.Platform.Data;
 
 namespace OpenALPRPlugin.Background
 {
-    internal class BookmarksFinder
+    public class BookmarksFinder : IDisposable
     {
+        bool disposed = false;
         private readonly string optSearchStr;
         private readonly string[] optUsers;
         private readonly Item[] items;
@@ -36,10 +38,6 @@ namespace OpenALPRPlugin.Background
             optUsers = myOwnBookmarks ? new string[] { $@"{Environment.MachineName}\{Environment.UserName}" } : null;
         }
 
-        ~BookmarksFinder()
-        {
-        }
-
         internal async Task<Bookmark[]> Search(DateTime startTime, DateTime endTime, int bookmarksCount)
         {
             if (startTime <= endTime)
@@ -54,7 +52,7 @@ namespace OpenALPRPlugin.Background
         //BookmarkSearchTime searches for bookmarks within a specific time interval
         //Search for bookmarks in a time interval. The call is synchronous, so it may take some time to return. 
         //Returns:    Array of Bookmarks found. Null indicates an error 
-        private async Task<Bookmark[]> BookmarkSearch(DateTime startTime, long period, int bookmarksCount)
+        public async Task<Bookmark[]> BookmarkSearch(DateTime startTime, long period, int bookmarksCount)
         {
             string searchStr = optSearchStr;
             List<Bookmark> bookmarks = new List<Bookmark>();
@@ -67,15 +65,42 @@ namespace OpenALPRPlugin.Background
                 Logger.Log.Info("*********Search bookmark queries*********");
                 foreach (string query in Helper.Queries(searchStr.Split(' ')))
                 {
-                    bookmarks.AddRange(BookmarkService.Instance.BookmarkSearchTime(
-                        items[0].FQID.ServerId,
+                    List<Bookmark> bookmarksList = BookmarkService.Instance.BookmarkSearchTime(
+                        items.FirstOrDefault().FQID.ServerId,
                         startTime,
                         period,
                         bookmarksCount + 1,
                         kinds,
-                        new FQID[] { items[0].FQID },
+                        new FQID[] { items.FirstOrDefault().FQID },
                         optUsers,
-                        query).ToList());
+                        query
+                    ).ToList();
+
+                    try
+                    {
+                        Logger.Log.Info($"JSON: {JsonConvert.SerializeObject(bookmarksList)}{Environment.NewLine}");
+                    }
+                    catch { }
+
+                    try
+                    {
+                        Logger.Log.Info($"FQID: {JsonConvert.SerializeObject(items.FirstOrDefault().FQID)}{Environment.NewLine}");
+                    }
+                    catch { }
+
+                    Logger.Log.Info($"StartTime: {startTime}{Environment.NewLine}");
+                    Logger.Log.Info($"Period: {period}{Environment.NewLine}");
+                    Logger.Log.Info($"BookmarksCount: {bookmarksCount + 1}{Environment.NewLine}");
+
+                    try
+                    {
+                        Logger.Log.Info($"OptUsers: {JsonConvert.SerializeObject(optUsers.ToList())}{Environment.NewLine}");
+                    }
+                    catch { }
+
+                    Logger.Log.Info($"Query: {query}{Environment.NewLine}");
+
+                    bookmarks.AddRange(bookmarksList);
 
                     Logger.Log.Info(query);
                 }
@@ -221,6 +246,29 @@ namespace OpenALPRPlugin.Background
             }
 
             return null;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            if (disposing)
+            {
+            }
+
+            disposed = true;
+        }
+
+        ~BookmarksFinder()
+        {
+            Dispose(false);
         }
     }
 }
