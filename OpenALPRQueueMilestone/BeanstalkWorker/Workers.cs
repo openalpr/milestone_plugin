@@ -397,7 +397,10 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             {
                 Settings settings = GetSettings();
 
-                return new DateTime(1970, 1, 1, 0, 0, 0, (settings.UseUTC) ? DateTimeKind.Utc : DateTimeKind.Local).AddMilliseconds(epoch).ToLocalTime();
+                if(settings.UseUTC)
+                    return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(epoch);
+                else
+                    return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(epoch).ToLocalTime();
             }
             catch (Exception ex)
             {
