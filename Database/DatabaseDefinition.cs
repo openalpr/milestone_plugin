@@ -28,7 +28,7 @@ namespace Database
             
             string path = @"C:\Program Files\VideoOS\MIPPlugins\OpenALPR\OpenALPRQueueMilestone.exe";
             applicationPath = $"{assembly.Location.Replace("\\OpenALPRQueueMilestone.exe", "")}\\Service";
-            fileVersion = File.Exists(path) ?
+            fileVersion = System.IO.File.Exists(path) ?
                 FileVersionInfo.GetVersionInfo(path) :
                 FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule.FileName);
 #endif
