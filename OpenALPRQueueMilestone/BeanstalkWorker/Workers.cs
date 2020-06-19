@@ -257,17 +257,18 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             {
                 if (!string.IsNullOrEmpty(palteInfo.Best_plate_number) && palteInfo.Camera_id != 0)
                 {
-                    FQID bookmarkFQID = null;
                     IList<OpenALPRmilestoneCameraName> cameras = GetCameraFromMapping(palteInfo.Camera_id.ToString());
 
                     if (AddBookmarks)
                     {
+                        FQID bookmarkFQID = null;
+
                         List<BookmarkItem> bookmarkItems = CreateBookmarkItem(palteInfo, cameras);
                         bookmarkFQID = AddNewBookmark_New(bookmarkItems);
-                    }
 
-                    if (cameras.Count != 0)
-                        SendAlarm_New(palteInfo, cameras[cameras.Count - 1].MilestoneName, bookmarkFQID); // Send Alert for the last Camera since we recieved the bookmarkFQID for the last camera used in AddNewBookmark.
+                        if (cameras.Count != 0 && bookmarkFQID != null)
+                            SendAlarm_New(palteInfo, cameras[cameras.Count - 1].MilestoneName, bookmarkFQID); // Send Alert for the last Camera since we recieved the bookmarkFQID for the last camera used in AddNewBookmark.
+                    }
                 }
                 else
                     Program.Log.Warn("Best_plate_number is empty or Camera_id == 0");
@@ -502,10 +503,13 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                         coordinates,
                         timrTrigged);
 
+                    DateTime endTime = timeBegin.Date.AddDays(2).AddSeconds(-1);
+                    DateTime startTime = timeBegin.Date;
+
                     List<Bookmark> bookmarks = BookmarkService.Instance.BookmarkSearchTime(
                                                     fqid.ServerId,
                                                     timeBegin.Date,
-                                                    (timeBegin.Date.AddDays(1).AddSeconds(-1).Ticks - timeBegin.Date.Ticks) / 10,
+                                                    (endTime.Ticks - startTime.Ticks) / 10,
                                                     999,
                                                     new Guid[] { Kind.Camera, Kind.Microphone, Kind.Speaker },
                                                     new FQID[] { fqid },
