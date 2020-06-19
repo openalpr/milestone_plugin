@@ -31,7 +31,7 @@ namespace OpenALPR.SystemTrayApp
             string path = @"C:\Program Files\VideoOS\MIPPlugins\OpenALPR\OpenALPR.SystemTrayApp.exe";
             //applicationPath = @"C:\Program Files\VideoOS\MIPPlugins\OpenALPR\Service";
             applicationPath = $"{assembly.Location.Replace("\\OpenALPR.SystemTrayApp.exe", "")}\\Service";
-            fileVersion = File.Exists(path) ?
+            fileVersion = System.IO.File.Exists(path) ?
                 FileVersionInfo.GetVersionInfo(path) :
                 FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule.FileName);
 #endif
