@@ -83,6 +83,18 @@
     <Compile Include="Background\BookmarksFinder.cs" />
     <Compile Include="Background\OpenALPRBackgroundPlugin.cs" />
     <Compile Include="Client\BookmarkDescription.cs" />
+    <Compile Include="Controls\AlertRow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AlertRow.Designer.cs">
+      <DependentUpon>AlertRow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AlertList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AlertList.Designer.cs">
+      <DependentUpon>AlertList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CameraMetadata.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,6 +179,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Client\WorkSpaceControl.resx">
       <DependentUpon>WorkSpaceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\AlertRow.resx">
+      <DependentUpon>AlertRow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AlertList.resx">
+      <DependentUpon>AlertList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CameraMapping.resx">
       <DependentUpon>CameraMapping.cs</DependentUpon>

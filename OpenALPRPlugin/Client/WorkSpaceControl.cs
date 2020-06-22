@@ -653,38 +653,9 @@ namespace OpenALPRPlugin.Client
 
         private void BtnAlertList_Click(object sender, EventArgs e)
         {
-            const string PlugName = "OpenALPR";
-
-            try
+            using (AlertList alertList = new AlertList())
             {
-                string mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Mapping");
-
-                if (!Directory.Exists(mappingPath))
-                {
-                    Directory.CreateDirectory(mappingPath);
-                    Helper.SetDirectoryNetworkServiceAccessControl(mappingPath);
-                }
-
-                string filePath = Path.Combine(mappingPath, "AlertList.txt");
-
-                if (!File.Exists(filePath))
-                {
-                    using (StreamWriter outputFile = new StreamWriter(filePath, false))
-                    {
-                        outputFile.WriteLine("# Edit this file to add alerts.");
-                        outputFile.WriteLine("# Each line represents one alert and a description separated by a comma.");
-                        outputFile.WriteLine("# For example (Do not use a \"#\" symbol for your alerts):");
-                        outputFile.WriteLine("# ABC123,Walter Smith's Truck");
-                        outputFile.WriteLine("Plate Number, Description\n");
-                    }
-                }
-
-                if (File.Exists(filePath))
-                    Process.Start("explorer.exe", filePath);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log.Error(null, ex);
+                alertList.ShowDialog();
             }
         }
     }

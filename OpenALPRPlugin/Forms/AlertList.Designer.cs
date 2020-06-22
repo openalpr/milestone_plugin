@@ -1,4 +1,4 @@
-﻿namespace SystemTrayApp
+﻿namespace OpenALPRPlugin.Forms
 {
     partial class AlertList
     {
