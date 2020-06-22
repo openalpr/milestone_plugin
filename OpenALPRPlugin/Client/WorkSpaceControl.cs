@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VideoOS.Platform;
@@ -30,7 +31,7 @@ namespace OpenALPRPlugin.Client
         private const string Edit = "Edit";
         private const string Delete = "Delete";
         private const string View = "View";
-        private const int bookmarksCount = 32;
+        private const int bookmarksCount = 999;
         
         public WorkSpaceControl(OpenALPRViewItemManager viewItemManager)
         {
@@ -274,6 +275,8 @@ namespace OpenALPRPlugin.Client
 
             BookmarksFinder searcher = new BookmarksFinder(items, kinds, myOwnBookmarksOnly, searchString);
             Bookmark[] bookmarks = await searcher.Search(startLocalTime, endLocalTime, bookmarksCount);
+
+            bookmarks = bookmarks.OrderByDescending(b => b.TimeTrigged).ToArray();
 
             AddToListView(bookmarks);
             OpenALPRBackgroundPlugin.Bookmarks = bookmarks;

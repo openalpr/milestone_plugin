@@ -77,7 +77,7 @@ namespace OpenALPRPlugin.Client
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(560, 801);
+            this.btnSearch.Location = new System.Drawing.Point(698, 801);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(110, 36);
             this.btnSearch.TabIndex = 11;
@@ -243,12 +243,13 @@ namespace OpenALPRPlugin.Client
             // btnNext
             // 
             this.btnNext.Enabled = false;
-            this.btnNext.Location = new System.Drawing.Point(698, 801);
+            this.btnNext.Location = new System.Drawing.Point(560, 801);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(110, 36);
             this.btnNext.TabIndex = 12;
             this.btnNext.Text = "Next";
             this.btnNext.UseVisualStyleBackColor = true;
+            this.btnNext.Visible = false;
             this.btnNext.Click += new System.EventHandler(this.BtnNext_Click);
             // 
             // btnMapCameras
@@ -359,7 +360,7 @@ namespace OpenALPRPlugin.Client
             this.Controls.Add(this.btnSearch);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Name = "WorkSpaceControl";
-            this.Size = new System.Drawing.Size(828, 710);
+            this.Size = new System.Drawing.Size(807, 689);
             this.Load += new System.EventHandler(this.BookmarkViewItemManager_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).EndInit();
             this.ResumeLayout(false);
