@@ -90,7 +90,6 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 }
 
                 HttpListenerRequest request = context.Request;
-                HttpListenerResponse response = context.Response;
 
                 string json;
 
@@ -104,28 +103,30 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
                 if (json != null)
                 {
-                    try
-                    {
-
-                        byte[] buffer = Encoding.UTF8.GetBytes(response.StatusDescription);
-                        response.ContentLength64 = buffer.Length;
-                        Stream output = response.OutputStream;
-                        output.Write(buffer, 0, buffer.Length);
-                        output.Close();
-                        Thread.Sleep(1);
-                        
-                        Program.Log.Info($"JSON: {json}");
-                        Console.WriteLine($"Recived request for {request.Url}");
-                        ProcessJob(json);
-                    }
-                    catch (Exception ex)
-                    {
-                        Program.Log.Error(null, ex);
-                    }
+                    Program.Log.Info($"JSON: {json}");
+                    Console.WriteLine($"Recived request for {request.Url}");
+                    ProcessJob(json);
                 }
                 else
                 {
                     Program.Log.Warn("json received was null.");
+                }
+
+                try
+                {
+                    HttpListenerResponse response = context.Response;
+
+                    string responseString = "OK";
+                    byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+                    response.ContentLength64 = buffer.Length;
+                    Stream output = response.OutputStream;
+                    output.Write(buffer, 0, buffer.Length);
+                    output.Close();
+                    Thread.Sleep(1);
+                }
+                catch (Exception ex)
+                {
+                    Program.Log.Error(null, ex);
                 }
             }
 
