@@ -63,17 +63,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 return;
             }
 
-            listener = new HttpListener();
-
-            try
-            {
-                listener.Prefixes.Add(openALPRServerUrl);
-                listener.Start();
-            }
-            catch (Exception ex)
-            {
-                Program.Log.Error(null, ex);
-            }
+            Listener(openALPRServerUrl);
 
             listening = true;
             HttpListenerContext context = null;
@@ -86,8 +76,11 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     {
                         context = listener.GetContext();
                     }
-                    catch (HttpListenerException)
+                    catch /*(HttpListenerException)*/
                     {
+                        if (listener == null)
+                            Listener(openALPRServerUrl);
+
                         if (ServiceStarter.IsClosing)
                             break;
                     }
@@ -116,25 +109,38 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
                     HttpListenerResponse response = context.Response;
                     string responseString = "OK";
-                    byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+                    byte[] buffer = Encoding.UTF8.GetBytes(responseString);
                     response.ContentLength64 = buffer.Length;
-                    System.IO.Stream output = response.OutputStream;
+                    Stream output = response.OutputStream;
                     output.Write(buffer, 0, buffer.Length);
-                    // You must close the output stream.
                     output.Close();
                 }
-
                 catch (Exception ex)
                 {
                     Console.WriteLine("Exception during processing " + ex.ToString());
                     Program.Log.Error(null, ex);
                 }
 
-                System.Threading.Thread.Sleep(1);
+                Thread.Sleep(1);
             }
 
             listening = false;
             Program.Log.Info("Stop listening.");
+        }
+
+        private void Listener(string openALPRServerUrl)
+        {
+            listener = new HttpListener();
+
+            try
+            {
+                listener.Prefixes.Add(openALPRServerUrl);
+                listener.Start();
+            }
+            catch (Exception ex)
+            {
+                Program.Log.Error(null, ex);
+            }
         }
 
         public bool Test(string filePath)
