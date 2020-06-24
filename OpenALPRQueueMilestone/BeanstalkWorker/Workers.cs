@@ -46,6 +46,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             lastAlertUpdateTime = AlertListHelper.GetLastWriteTime();
         }
 
+
         public void DoWork()
         {
             Settings settings = GetSettings();
@@ -81,53 +82,55 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
             {
                 try
                 {
-                    context = listener.GetContext();
-                }
-                catch (HttpListenerException)
-                {
-                    if (ServiceStarter.IsClosing)
-                        break;
-                }
-
-                HttpListenerRequest request = context.Request;
-
-                string json;
-
-                using (Stream receiveStream = request.InputStream)
-                {
-                    using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
+                    try
                     {
-                        json = readStream.ReadToEnd();
+                        context = listener.GetContext();
                     }
-                }
+                    catch (HttpListenerException)
+                    {
+                        if (ServiceStarter.IsClosing)
+                            break;
+                    }
 
-                if (json != null)
-                {
-                    Program.Log.Info($"JSON: {json}");
-                    Console.WriteLine($"Recived request for {request.Url}");
-                    ProcessJob(json);
-                }
-                else
-                {
-                    Program.Log.Warn("json received was null.");
-                }
+                    HttpListenerRequest request = context.Request;
+                    string json;
 
-                try
-                {
+                    using (Stream receiveStream = request.InputStream)
+                    {
+                        using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
+                        {
+                            json = readStream.ReadToEnd();
+                        }
+                    }
+
+                    if (json != null)
+                    {
+                        Program.Log.Info($"JSON: {json}");
+                        Console.WriteLine($"Recived request for {request.Url}");
+                        ProcessJob(json);
+                    }
+                    else
+                    {
+                        Program.Log.Warn("json received was null.");
+                    }
+
                     HttpListenerResponse response = context.Response;
-
                     string responseString = "OK";
-                    byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+                    byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
                     response.ContentLength64 = buffer.Length;
-                    Stream output = response.OutputStream;
+                    System.IO.Stream output = response.OutputStream;
                     output.Write(buffer, 0, buffer.Length);
+                    // You must close the output stream.
                     output.Close();
-                    Thread.Sleep(1);
                 }
+
                 catch (Exception ex)
                 {
+                    Console.WriteLine("Exception during processing " + ex.ToString());
                     Program.Log.Error(null, ex);
                 }
+
+                System.Threading.Thread.Sleep(1);
             }
 
             listening = false;
