@@ -90,6 +90,8 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                 }
 
                 HttpListenerRequest request = context.Request;
+                HttpListenerResponse response = context.Response;
+
                 string json;
 
                 using (Stream receiveStream = request.InputStream)
@@ -102,9 +104,24 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
 
                 if (json != null)
                 {
-                    Program.Log.Info($"JSON: {json}");
-                    Console.WriteLine($"Recived request for {request.Url}");
-                    ProcessJob(json);
+                    try
+                    {
+
+                        byte[] buffer = Encoding.UTF8.GetBytes(response.StatusDescription);
+                        response.ContentLength64 = buffer.Length;
+                        Stream output = response.OutputStream;
+                        output.Write(buffer, 0, buffer.Length);
+                        output.Close();
+                        Thread.Sleep(1);
+                        
+                        Program.Log.Info($"JSON: {json}");
+                        Console.WriteLine($"Recived request for {request.Url}");
+                        ProcessJob(json);
+                    }
+                    catch (Exception ex)
+                    {
+                        Program.Log.Error(null, ex);
+                    }
                 }
                 else
                 {
