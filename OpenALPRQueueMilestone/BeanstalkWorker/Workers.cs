@@ -76,10 +76,10 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     {
                         context = listener.GetContext();
                     }
-                    catch /*(HttpListenerException)*/
+                    catch (HttpListenerException)
                     {
-                        if (listener == null)
-                            Listener(openALPRServerUrl);
+                        //if (listener == null)
+                        //    Listener(openALPRServerUrl);
 
                         if (ServiceStarter.IsClosing)
                             break;
@@ -754,7 +754,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     Type = null,
 
                     //The time of the event.
-                    Timestamp = Epoch2LocalDateTime(plateInfo.Epoch_start),
+                    Timestamp = Epoch2LocalDateTime(plateInfo.Epoch_start).AddSeconds(-EpochStartSecondsBefore),
 
                     //The event message. This is the field that will be matched with the AlarmDefinition message when sending this event to the Event Server. 
                     Message = "OpenALPR Alarm",
@@ -815,7 +815,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     Description = descFromAlertList,
 
                     //The end time of the alarm, if it takes plate over a period of time.
-                    EndTime = Epoch2LocalDateTime(plateInfo.Epoch_start).AddSeconds(EpochEndSecondsAfter),
+                    EndTime = Epoch2LocalDateTime(plateInfo.Epoch_start).AddSeconds(-EpochStartSecondsBefore),
 
                     //  ExtensionData = 
 
