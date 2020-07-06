@@ -59,7 +59,6 @@ namespace OpenALPRPlugin.Forms
             if (selectedCamera != null)
             {
                 _stop = true;
-                //Thread thread = new Thread( new //new ThreadStart(ShowReplay));
                 Thread thread = new Thread(() => ShowReplay(selectedCamera, start, end));
                 thread.Start();
             }
@@ -80,16 +79,21 @@ namespace OpenALPRPlugin.Forms
             //TODO remove ---TEST source.Close();
 
             _stop = true;
+
             if (resultList != null)
             {
-                this.UIThread(() => label2.Text = $"Number of frames: {resultList.Count.ToString()}");
+                this.UIThread(() => label2.Text = $"Number of frames: {resultList.Count}");
                 if (resultList.Count > 0)
+                {
                     _stop = false;
+                    btnStart.Enabled = _stop;
+                    btnStop.Enabled = !_stop;
+                }
             }
 
             while (!_stop)
             {
-                int avgInterval = 3000 / resultList.Count;
+                int avgInterval = 12000 / resultList.Count;
                 foreach (JPEGData jpeg in resultList)
                 {
                     MemoryStream ms = new MemoryStream(jpeg.Bytes);
@@ -106,8 +110,6 @@ namespace OpenALPRPlugin.Forms
             source.Close();     //TODO
         }
 
-
-        //private delegate void SetImageDelegate(Bitmap bitmap);
         private void SetImage(Bitmap bitmap)
         {
             this.UIThread(() =>
@@ -132,6 +134,8 @@ namespace OpenALPRPlugin.Forms
         private void Stop_Click(object sender, EventArgs e)
         {
             _stop = true;
+            btnStart.Enabled = _stop;
+            btnStop.Enabled = !_stop;
         }
 
         public override void Close()

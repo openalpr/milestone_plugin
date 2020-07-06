@@ -55,7 +55,6 @@ namespace OpenALPRQueueConsumer
             #endregion
 
             currentPerson = new User(User.AutoExporterServiceName);
-            ProxySingleton.Port = Helper.ReadConfigKey("ServicePort");
             ProxySingleton.HostName = Dns.GetHostName();
             Chatting.Initialize(currentPerson);
             Chatting.UserEnter += ServerConnection_UserEnter;
@@ -128,17 +127,6 @@ namespace OpenALPRQueueConsumer
                 password = settings.MilestonePassword;
             #endregion
 
-            #region Use AppConfig
-            //if (string.IsNullOrEmpty(serverName))
-            //    serverName = Helper.ReadConfigKey(MilestoneServerNameString);
-
-            //if (string.IsNullOrEmpty(userName))
-            //    userName = Helper.ReadConfigKey("MilestoneUserName");
-
-            //if (string.IsNullOrEmpty(password))
-            //    password = Helper.ReadConfigKey("MilestonePassword");
-            #endregion
-
             if (string.IsNullOrEmpty(serverName))
                 serverName = "http://localhost:80/";
 
@@ -170,29 +158,6 @@ namespace OpenALPRQueueConsumer
                 Worker.EventExpireAfterDays = settings.EventExpireAfterDays;
                 Worker.EpochStartSecondsBefore = settings.EpochStartSecondsBefore;
                 Worker.EpochEndSecondsAfter = settings.EpochEndSecondsAfter;
-                #endregion
-
-                #region Use AppConfig
-                //string temp = Helper.ReadConfigKey(MilestoneServerNameString);
-                //if (temp != serverName)
-                //{
-                //    Helper.AddUpdateAppSettings(MilestoneServerNameString, serverName);
-                //}
-
-                //temp = Helper.ReadConfigKey(AddBookmarksString);
-                //bool.TryParse(temp, out Worker.AddBookmarks);
-
-                //temp = Helper.ReadConfigKey(AutoMappingString);
-                //bool.TryParse(temp, out Worker.AutoMapping);
-
-                //temp = Helper.ReadConfigKey(EventExpireAfterDaysString);
-                //int.TryParse(temp, out Worker.EventExpireAfterDays);
-
-                //temp = Helper.ReadConfigKey(EpochStartSecondsBeforeString);
-                //int.TryParse(temp, out Worker.EpochStartSecondsBefore);
-
-                //temp = Helper.ReadConfigKey(EpochEndSecondsAfterString);
-                //int.TryParse(temp, out Worker.EpochEndSecondsAfter);
                 #endregion
 
                 if (worker == null)

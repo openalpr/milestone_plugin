@@ -7,96 +7,6 @@
   ##[SecureString] $ServicePassword
 )
 
-##try {
-##    if(((Get-LocalGroupMember -Group 'Administrators' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
-##       Add-LocalGroupMember -Group 'Administrators' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
-##    }
-##}
-##catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
-##	#Write-Output "Error to add current user to Administrators role"
-##}
-##
-##try {
-##    if(((Get-LocalGroupMember -Group 'Администраторы' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
-##       Add-LocalGroupMember -Group 'Администраторы' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
-##    }
-##}
-##catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
-##	#Write-Output "Error to add current user to Administrators role"
-##}
-##
-##try {
-##    if(((Get-LocalGroupMember -Group 'Administrateurs' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
-##       Add-LocalGroupMember -Group 'Administrateurs' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
-##    }
-##}
-##catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
-##	#Write-Output "Error to add current user to Administrators role"
-##}
-##
-##try {
-##    if(((Get-LocalGroupMember -Group 'Administratrices' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
-##       Add-LocalGroupMember -Group 'Administratrices' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
-##    }
-##}
-##catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
-##	#Write-Output "Error to add current user to Administrators role"
-##}
-##
-##try {
-##    if(((Get-LocalGroupMember -Group 'Administratorer' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
-##       Add-LocalGroupMember -Group 'Administratorer' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
-##    }
-##}
-##catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
-##	#Write-Output "Error to add current user to Administrators role"
-##}
-##
-##try {
-##    if(((Get-LocalGroupMember -Group 'Administratorinnen' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
-##       Add-LocalGroupMember -Group 'Administratorinnen' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
-##    }
-##}
-##catch {#[Microsoft.PowerShell.Commands.GroupExistsException] { 
-##	#Write-Output "Error to add current user to Administrators role"
-##}
-##
-##try {
-##    if(((Get-LocalGroupMember -Group 'Administratoren' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
-##       Add-LocalGroupMember -Group 'Administratoren' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
-##    }
-##}
-##catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
-##	#Write-Output "Error to add current user to Administrators role"
-##}
-##
-##try {
-##    if(((Get-LocalGroupMember -Group 'Administradoras' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
-##       Add-LocalGroupMember -Group 'Administradoras' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
-##    }
-##}
-##catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
-##	#Write-Output "Error to add current user to Administrators role"
-##}
-##
-##try {
-##    if(((Get-LocalGroupMember -Group 'Administradores' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
-##       Add-LocalGroupMember -Group 'Administradores' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
-##    }
-##}
-##catch {#[Microsoft.PowerShell.Commands.MemberExistsException] { 
-##	#Write-Output "Error to add current user to Administrators role"
-##}
-##
-##try {
-##    if(((Get-LocalGroupMember -Group 'Administrators' -ErrorAction Ignore | select Name) -match [System.Security.Principal.WindowsIdentity]::GetCurrent()).Count -eq 0) {
-##       Add-LocalGroupMember -Group 'Administrators' -Member ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) –Verbose -ErrorAction SilentlyContinue
-##    }
-##}
-##catch {#{#[Microsoft.PowerShell.Commands.MemberExistsException] {
-##	#Write-Output "Error to add current user to Administrators role" 
-##}
-
 $ServiceAccount  = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 $Computer        = [System.Net.Dns]::GetHostName()
 $ServiceName     = "OpenALPRMilestone"
@@ -140,12 +50,16 @@ switch($ErrorControl.ErrorControl.ToString()){
     "Critical"  {$ErrorControl = 0x3}
 }
 
-##$BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($ServicePassword)
-##$Password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+$Xprotect = Get-Process Client -ErrorAction SilentlyContinue
+if ($Xprotect) {
+  $Xprotect.CloseMainWindow()
 
-##Stop-Service $ServiceName
+  if (!$Xprotect.HasExited) {
+    $Xprotect | Stop-Process -Force
+  }
+}
+Remove-Variable Xprotect
+
 $ServiceObject.stopservice() | out-null
-##$ServiceObject.Change($null,$null,$null,$null,$null,$null,$LoginName,$Password,$null,$null,$null)
 $ServiceObject.Change($null,$null,$null,$null,$null,$null,$LoginName,$ServicePassword,$null,$null,$null)
-##Start-Service $ServiceName
 $ServiceObject.startservice()

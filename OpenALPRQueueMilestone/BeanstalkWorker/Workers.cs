@@ -51,7 +51,6 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         {
             Settings settings = GetSettings();
 
-            //string openALPRServerUrl = Helper.ReadConfigKey("OpenALPRServerUrl");
             string openALPRServerUrl = settings.OpenALPRServerUrl;
             if (string.IsNullOrEmpty(openALPRServerUrl) || string.IsNullOrWhiteSpace(openALPRServerUrl))
                 openALPRServerUrl = "http://localhost:48125/";

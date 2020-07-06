@@ -1,7 +1,10 @@
-﻿using OpenALPR.SystemTrayApp.Utility;
+﻿using Database;
+using OpenALPR.SystemTrayApp.Utility;
 using OpenALPRQueueConsumer.Chatter;
 using OpenALPRQueueConsumer.Chatter.Proxy;
 using System;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.ServiceProcess;
 using System.Threading;
@@ -21,6 +24,7 @@ namespace SystemTrayApp
 
         public STAApplicationContext()
         {
+            Settings settings = new Settings();
             serviceManager = new ServiceManager();
             viewManager = new ViewManager(serviceManager);
 
@@ -28,7 +32,20 @@ namespace SystemTrayApp
             serviceManager.Initialize();
 
             CurrentUser = new User(User.SystemTrayIconName);
-            ProxySingleton.Port = Common.ReadConfigKey("ServicePort");
+            #region Use SQLite
+            using (DB db = new DB("OpenALPRQueueMilestone", 3))
+            {
+                db.CreateTable("Settings");
+                settings = db.GetSettings("Settings").LastOrDefault();
+                if (settings == null)
+                {
+                    settings = db.Defaults();
+                    db.SaveSettings("Settings", db.Defaults());
+                }
+            }
+
+            ProxySingleton.Port = settings.ServicePort.ToString();
+            #endregion
             ProxySingleton.HostName = Dns.GetHostName();
             CreateChat();
         }
