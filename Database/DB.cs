@@ -19,7 +19,17 @@ namespace Database
 
         public DB(string dbName, int version)
         {
-            _dbName = $"{DatabaseDefinition.applicationPath}\\{dbName}.db";
+            const string PlugName = "OpenALPR";
+
+            string mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Database");
+
+            if (!Directory.Exists(mappingPath))
+            {
+                Directory.CreateDirectory(mappingPath);
+                Helper.SetDirectoryNetworkServiceAccessControl(mappingPath);
+            }
+
+            _dbName = $"{mappingPath}\\{dbName}.db";
             _version = version;
             Connect(_dbName);
         }

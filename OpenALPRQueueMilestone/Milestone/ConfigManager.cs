@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Threading;
 using VideoOS.Platform;
 using VideoOS.Platform.Messaging;
@@ -189,5 +190,6 @@ namespace OpenALPRQueueConsumer.Milestone
         public bool SaveSearches { get; set; } = EnvironmentManager.Instance.SystemLicense.IsFeatureEnabled(MipFeatures.SaveSearches.ToString()); 
         public bool AdaptiveStreaming { get; set; } = EnvironmentManager.Instance.SystemLicense.IsFeatureEnabled(MipFeatures.AdaptiveStreaming.ToString());
         public bool SmartWall { get; set; } = EnvironmentManager.Instance.SystemLicense.IsFeatureEnabled(MipFeatures.SmartWall.ToString());
+        public bool Connection { get; set; } = false;
     }
 }

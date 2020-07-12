@@ -201,9 +201,10 @@ namespace OpenALPRQueueConsumer.Milestone
                 try
                 {
                     string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-                    File.WriteAllText($"{path}\\Milestone.json",
-                        JsonHelper.FromClass(
-                        new MilestoneVersion()));
+                    MilestoneVersion milestoneVersion = new MilestoneVersion();
+                    milestoneVersion.Connection = connectedToMilestone;
+
+                    File.WriteAllText($"{path}\\Milestone.json",JsonHelper.FromClass(milestoneVersion));
 
                 }
                 catch (Exception ex)

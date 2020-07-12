@@ -72,11 +72,20 @@ namespace OpenALPRPlugin.Client
             try
             {
                 string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-                MilestoneVersion milestoneVersion = JsonConvert.DeserializeObject<MilestoneVersion>(
-                    File.ReadAllText($"{path}\\Service\\Milestone.json"));
-                lblMilestone.Text = $"License type: { milestoneVersion.Name }, Bookmarking: { (milestoneVersion.Bookmarking ? "enabled" : "disabled") }";
-                if (!milestoneVersion.Bookmarking || EnvironmentManager.Instance.MasterSite.ServerId.ServerType == ServerId.EnterpriseServerType)
+                MilestoneVersion milestoneVersion = null;
+                try
+                {
+                    milestoneVersion = JsonConvert.DeserializeObject<MilestoneVersion>(
+                        File.ReadAllText($"{path}\\Service\\Milestone.json"));
+                    lblMilestone.Text = $"License type: { milestoneVersion.Name }, Bookmarking: { (milestoneVersion.Bookmarking ? "enabled" : "disabled") }";
+                    if (!milestoneVersion.Bookmarking || EnvironmentManager.Instance.MasterSite.ServerId.ServerType == ServerId.EnterpriseServerType)
+                        lblMilestone.ForeColor = Color.Red;
+                }
+                catch
+                {
+                    lblMilestone.Text = "Status: Doesn't logged in.";
                     lblMilestone.ForeColor = Color.Red;
+                }
             }
             catch (Exception ex)
             {

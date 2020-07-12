@@ -69,6 +69,7 @@ namespace OpenALPRPlugin.Utility
         public bool SaveSearches { get; set; }
         public bool AdaptiveStreaming { get; set; }
         public bool SmartWall { get; set; }
+        public bool Connection { get; set; }
     }
 
 }

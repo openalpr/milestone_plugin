@@ -54,6 +54,18 @@
 
 ;--------------------------------
 ; The stuff to install
+
+;--------------------------------
+Section "Check XProtect Smart Client"
+	FindWindow $0 "" "Milestone XProtect Smart Client"
+	StrCmp $0 0 notRunning
+		KillProcWMI::KillProc "Client.exe"
+		;MessageBox MB_OK|MB_ICONEXCLAMATION "XProtect Smart Client is running. Please close it first" /SD IDOK
+		;Abort
+	notRunning:
+SectionEnd
+;--------------------------------
+
 Section "Files (required)"
 
   SectionIn RO
