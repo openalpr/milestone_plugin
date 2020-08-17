@@ -47,7 +47,6 @@ namespace OpenALPRPlugin.Forms
             this.txtTimestamp = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.txtSiteName = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // BtnCancel
@@ -74,31 +73,31 @@ namespace OpenALPRPlugin.Forms
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 27);
+            this.label1.Location = new System.Drawing.Point(21, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 15);
+            this.label1.Size = new System.Drawing.Size(55, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Begin time";
+            this.label1.Text = "Start Time";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(34, 65);
+            this.label2.Location = new System.Drawing.Point(21, 65);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 15);
+            this.label2.Size = new System.Drawing.Size(52, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "End time";
+            this.label2.Text = "End Time";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(42, 101);
+            this.label4.Location = new System.Drawing.Point(21, 101);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(48, 15);
+            this.label4.Size = new System.Drawing.Size(31, 13);
             this.label4.TabIndex = 6;
-            this.label4.Text = "Header";
+            this.label4.Text = "Plate";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtHeader
@@ -114,9 +113,9 @@ namespace OpenALPRPlugin.Forms
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(21, 141);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(69, 15);
+            this.label5.Size = new System.Drawing.Size(72, 13);
             this.label5.TabIndex = 8;
-            this.label5.Text = "Description";
+            this.label5.Text = "Vehicle Make";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtDescription
@@ -148,11 +147,11 @@ namespace OpenALPRPlugin.Forms
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(55, 182);
+            this.label3.Location = new System.Drawing.Point(21, 182);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 15);
+            this.label3.Size = new System.Drawing.Size(69, 13);
             this.label3.TabIndex = 12;
-            this.label3.Text = "Plate";
+            this.label3.Text = "Vehicle Body";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtPlate
@@ -166,11 +165,11 @@ namespace OpenALPRPlugin.Forms
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(43, 221);
+            this.label6.Location = new System.Drawing.Point(21, 221);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(47, 15);
+            this.label6.Size = new System.Drawing.Size(69, 13);
             this.label6.TabIndex = 14;
-            this.label6.Text = "Vehicle";
+            this.label6.Text = "Vehicle Color";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtVehicle
@@ -195,9 +194,9 @@ namespace OpenALPRPlugin.Forms
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(21, 261);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(69, 15);
+            this.label7.Size = new System.Drawing.Size(75, 13);
             this.label7.TabIndex = 16;
-            this.label7.Text = "Timestamp";
+            this.label7.Text = "Plate Location";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtSiteName
@@ -208,24 +207,12 @@ namespace OpenALPRPlugin.Forms
             this.txtSiteName.TabIndex = 19;
             this.txtSiteName.TabStop = false;
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(27, 301);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(63, 15);
-            this.label8.TabIndex = 18;
-            this.label8.Text = "Site name";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // EditBookmark
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.BtnCancel;
             this.ClientSize = new System.Drawing.Size(427, 404);
-            this.Controls.Add(this.txtSiteName);
-            this.Controls.Add(this.label8);
             this.Controls.Add(this.txtTimestamp);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.txtVehicle);
@@ -275,6 +262,6 @@ namespace OpenALPRPlugin.Forms
         private System.Windows.Forms.TextBox txtTimestamp;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtSiteName;
-        private System.Windows.Forms.Label label8;
+        //private System.Windows.Forms.Label label8;
     }
 }

@@ -72,6 +72,9 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="OpenALPR.WpfFormLibrary">
       <HintPath>..\WpfFormLibrary\bin\Debug\OpenALPR.WpfFormLibrary.dll</HintPath>
     </Reference>
@@ -93,6 +96,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="unvell.ReoGrid, Version=2.2.0.0, Culture=neutral, PublicKeyToken=62aee4135ec43195, processorArchitecture=MSIL">
+      <HintPath>..\packages\unvell.ReoGrid.dll.2.2.0\lib\net20\unvell.ReoGrid.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>

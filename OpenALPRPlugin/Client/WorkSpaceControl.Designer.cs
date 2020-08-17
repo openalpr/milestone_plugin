@@ -40,12 +40,14 @@ namespace OpenALPRPlugin.Client
             this.hdrNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.hdrTimeBegin = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.hdrTimeEnd = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.hdrPlate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.hdrVehicleMake = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.hdrVehicleBody = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.hdrVehicleColor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.hdrSiteName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.hdrHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.hdrDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.hdrPlate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.hdrVehicle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.hdrTimestamp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.hdrSiteName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.datStartTime = new System.Windows.Forms.DateTimePicker();
             this.lblMessage = new System.Windows.Forms.Label();
             this.txtCameraName = new System.Windows.Forms.TextBox();
@@ -65,6 +67,7 @@ namespace OpenALPRPlugin.Client
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lblVersion = new System.Windows.Forms.Label();
             this.lblMilestone = new System.Windows.Forms.Label();
+            this.allCamerasCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).BeginInit();
             this.SuspendLayout();
             // 
@@ -90,7 +93,7 @@ namespace OpenALPRPlugin.Client
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 107);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(117, 15);
+            this.label1.Size = new System.Drawing.Size(101, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Start searching from";
             // 
@@ -100,11 +103,10 @@ namespace OpenALPRPlugin.Client
             this.hdrNumber,
             this.hdrTimeBegin,
             this.hdrTimeEnd,
-            this.hdrHeader,
-            this.hdrDescription,
             this.hdrPlate,
-            this.hdrVehicle,
-            this.hdrTimestamp,
+            this.hdrVehicleMake,
+            this.hdrVehicleBody,
+            this.hdrVehicleColor,
             this.hdrSiteName});
             this.lsvBookmarks.FullRowSelect = true;
             this.lsvBookmarks.HideSelection = false;
@@ -123,43 +125,48 @@ namespace OpenALPRPlugin.Client
             // 
             // hdrTimeBegin
             // 
-            this.hdrTimeBegin.Text = "Time";
+            this.hdrTimeBegin.Text = "Time Start";
             this.hdrTimeBegin.Width = 135;
             // 
             // hdrTimeEnd
             // 
             this.hdrTimeEnd.Text = "Time End";
-            this.hdrTimeEnd.Width = 0;
-            // 
-            // hdrHeader
-            // 
-            this.hdrHeader.Text = "Header";
-            this.hdrHeader.Width = 135;
-            // 
-            // hdrDescription
-            // 
-            this.hdrDescription.Text = "Description";
-            this.hdrDescription.Width = 135;
+            this.hdrTimeEnd.Width = 135;
             // 
             // hdrPlate
             // 
             this.hdrPlate.Text = "Plate";
             this.hdrPlate.Width = 129;
             // 
-            // hdrVehicle
+            // hdrVehicleMake
             // 
-            this.hdrVehicle.Text = "Vehicle";
-            this.hdrVehicle.Width = 129;
+            this.hdrVehicleMake.Text = "Vehicle Make";
+            this.hdrVehicleMake.Width = 129;
             // 
-            // hdrTimestamp
+            // hdrVehicleBody
             // 
-            this.hdrTimestamp.Text = "Timestamp";
-            this.hdrTimestamp.Width = 129;
+            this.hdrVehicleBody.Text = "Vehicle Body";
+            this.hdrVehicleBody.Width = 129;
+            // 
+            // hdrVehicleColor
+            // 
+            this.hdrVehicleColor.Text = "Vehicle Color";
+            this.hdrVehicleColor.Width = 129;
             // 
             // hdrSiteName
             // 
-            this.hdrSiteName.Text = "Site name";
+            this.hdrSiteName.Text = "Plate Location";
             this.hdrSiteName.Width = 129;
+            // 
+            // hdrHeader
+            // 
+            this.hdrHeader.Text = "Header";
+            this.hdrHeader.Width = 0;
+            // 
+            // hdrDescription
+            // 
+            this.hdrDescription.Text = "Description";
+            this.hdrDescription.Width = 0;
             // 
             // datStartTime
             // 
@@ -181,7 +188,7 @@ namespace OpenALPRPlugin.Client
             this.txtCameraName.Location = new System.Drawing.Point(524, 104);
             this.txtCameraName.Name = "txtCameraName";
             this.txtCameraName.ReadOnly = true;
-            this.txtCameraName.Size = new System.Drawing.Size(422, 20);
+            this.txtCameraName.Size = new System.Drawing.Size(309, 20);
             this.txtCameraName.TabIndex = 5;
             this.txtCameraName.TabStop = false;
             // 
@@ -200,7 +207,7 @@ namespace OpenALPRPlugin.Client
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(13, 135);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(89, 15);
+            this.label2.Size = new System.Drawing.Size(78, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Search up until";
             // 
@@ -234,7 +241,7 @@ namespace OpenALPRPlugin.Client
             this.chkMyBookmarksOnly.AutoSize = true;
             this.chkMyBookmarksOnly.Location = new System.Drawing.Point(397, 131);
             this.chkMyBookmarksOnly.Name = "chkMyBookmarksOnly";
-            this.chkMyBookmarksOnly.Size = new System.Drawing.Size(135, 19);
+            this.chkMyBookmarksOnly.Size = new System.Drawing.Size(118, 17);
             this.chkMyBookmarksOnly.TabIndex = 6;
             this.chkMyBookmarksOnly.Text = "My Bookmarks only";
             this.chkMyBookmarksOnly.UseVisualStyleBackColor = true;
@@ -324,9 +331,20 @@ namespace OpenALPRPlugin.Client
             this.lblMilestone.AutoSize = true;
             this.lblMilestone.Location = new System.Drawing.Point(13, 160);
             this.lblMilestone.Name = "lblMilestone";
-            this.lblMilestone.Size = new System.Drawing.Size(107, 15);
+            this.lblMilestone.Size = new System.Drawing.Size(92, 13);
             this.lblMilestone.TabIndex = 20;
             this.lblMilestone.Text = "Milestone License";
+            // 
+            // allCamerasCheckBox
+            // 
+            this.allCamerasCheckBox.AutoSize = true;
+            this.allCamerasCheckBox.Location = new System.Drawing.Point(849, 106);
+            this.allCamerasCheckBox.Name = "allCamerasCheckBox";
+            this.allCamerasCheckBox.Size = new System.Drawing.Size(81, 17);
+            this.allCamerasCheckBox.TabIndex = 21;
+            this.allCamerasCheckBox.Text = "All Cameras";
+            this.allCamerasCheckBox.UseVisualStyleBackColor = true;
+            this.allCamerasCheckBox.CheckedChanged += new System.EventHandler(this.allCamerasCheckBox_CheckedChanged);
             // 
             // WorkSpaceControl
             // 
@@ -337,6 +355,7 @@ namespace OpenALPRPlugin.Client
             this.AutoScrollMinSize = new System.Drawing.Size(956, 844);
             this.BackColor = System.Drawing.SystemColors.Window;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.allCamerasCheckBox);
             this.Controls.Add(this.lblMilestone);
             this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.lblMainMessage);
@@ -360,7 +379,7 @@ namespace OpenALPRPlugin.Client
             this.Controls.Add(this.btnSearch);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Name = "WorkSpaceControl";
-            this.Size = new System.Drawing.Size(807, 689);
+            this.Size = new System.Drawing.Size(790, 672);
             this.Load += new System.EventHandler(this.BookmarkViewItemManager_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picOpenALPR)).EndInit();
             this.ResumeLayout(false);
@@ -397,9 +416,12 @@ namespace OpenALPRPlugin.Client
         private Panel panel1;
         private Label lblVersion;
         private ColumnHeader hdrPlate;
-        private ColumnHeader hdrVehicle;
+        private ColumnHeader hdrVehicleMake;
+        private ColumnHeader hdrVehicleBody;
+        private ColumnHeader hdrVehicleColor;
         private ColumnHeader hdrTimestamp;
         private ColumnHeader hdrSiteName;
         private Label lblMilestone;
+        private CheckBox allCamerasCheckBox;
     }
 }

@@ -266,7 +266,7 @@ namespace OpenALPRPlugin.Client
                 DateTime endTime = datEndTime.Value.ToUniversalTime();
                 endTime = DateTime.SpecifyKind(endTime, DateTimeKind.Utc);
 
-                await Search(startTime, endTime, chkMyBookmarksOnly.Checked, searchString);
+                await Search(startTime, endTime, chkMyBookmarksOnly.Checked, allCamerasCheckBox.Checked, searchString);
             }
             catch (Exception ex)
             {
@@ -274,7 +274,7 @@ namespace OpenALPRPlugin.Client
             }
         }
 
-        private async Task Search(DateTime startLocalTime, DateTime endLocalTime, bool myOwnBookmarksOnly, string searchString)
+        private async Task Search(DateTime startLocalTime, DateTime endLocalTime, bool myOwnBookmarksOnly, bool allCamerasChecked, string searchString)
         {
             lsvBookmarks.Items.Clear();
             lblMessage.Text = $"Total Bookmarks found:";
@@ -283,7 +283,8 @@ namespace OpenALPRPlugin.Client
             Guid[] kinds = new Guid[] { Kind.Camera, Kind.Microphone, Kind.Speaker };
 
             BookmarksFinder searcher = new BookmarksFinder(items, kinds, myOwnBookmarksOnly, searchString);
-            Bookmark[] bookmarks = await searcher.Search(startLocalTime, endLocalTime, bookmarksCount);
+
+            Bookmark[] bookmarks = await searcher.Search(startLocalTime, endLocalTime, allCamerasChecked, bookmarksCount);
 
             bookmarks = bookmarks.OrderByDescending(b => b.TimeTrigged).ToArray();
 
@@ -302,6 +303,8 @@ namespace OpenALPRPlugin.Client
                     Bookmark bookmark = bookmarks[i];
                     BookmarkDescription bookmarkDescription = Helper.ParseBookmarkDescription(bookmark.Description);
 
+                    //keary
+                    /*
                     string[] row = new string[]
                                         {
                                         (i+1).ToString(),
@@ -314,6 +317,20 @@ namespace OpenALPRPlugin.Client
                                         bookmarkDescription.Timestamp.ToString(),
                                         bookmarkDescription.BestRegion
                                         };
+                    */
+                    string[] row = new string[]
+                                        {
+                                        (i+1).ToString(),
+                                        bookmark.TimeBegin.ToLocalTime().ToString(),
+                                        bookmark.TimeEnd.ToLocalTime().ToString (),
+                                        bookmarkDescription.PlateNumber,
+                                        bookmarkDescription.Make,
+                                        bookmarkDescription.BodyType,
+                                        bookmarkDescription.Color,
+                                        bookmarkDescription.BestRegion
+                                        };
+
+
                     ListViewItem listViewItem = new ListViewItem(row)
                     {
                         Tag = bookmark.BookmarkFQID
@@ -433,7 +450,7 @@ namespace OpenALPRPlugin.Client
                         edit.Plate = item.SubItems[5].Text;
                         edit.Vehicle = item.SubItems[6].Text;
                         edit.Timestamp = item.SubItems[7].Text;
-                        edit.SiteName = item.SubItems[8].Text;
+                        //edit.SiteName = item.SubItems[8].Text;
 
                         edit.ShowDialog(this);
                         if (edit.saved)
@@ -445,7 +462,7 @@ namespace OpenALPRPlugin.Client
                                 item.SubItems[5].Text = edit.Plate;
                                 item.SubItems[6].Text = edit.Vehicle;
                                 item.SubItems[7].Text = edit.Timestamp;
-                                item.SubItems[8].Text = edit.SiteName;
+                                //item.SubItems[8].Text = edit.SiteName;
                             }
                         }
                     }
@@ -669,6 +686,11 @@ namespace OpenALPRPlugin.Client
             {
                 alertList.ShowDialog();
             }
+        }
+
+        private void allCamerasCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

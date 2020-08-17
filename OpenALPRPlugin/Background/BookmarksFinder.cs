@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using unvell.ReoGrid.Data;
 using VideoOS.Platform;
 using VideoOS.Platform.Data;
 
@@ -28,8 +29,9 @@ namespace OpenALPRPlugin.Background
 
         internal BookmarksFinder(Item[] items, Guid[] Kinds, bool myOwnBookmarks, string optSearchStr)
         {
-            if (items == null || items.Length == 0 || items[0] == null)
-                throw new ArgumentNullException(nameof(items), "items cannot be null or empty.");
+            // keary
+            //if (items == null || items.Length == 0 || items[0] == null)
+            //    throw new ArgumentNullException(nameof(items), "items cannot be null or empty.");
 
             this.items = items;
             this.kinds = Kinds;
@@ -38,12 +40,12 @@ namespace OpenALPRPlugin.Background
             optUsers = myOwnBookmarks ? new string[] { $@"{Environment.MachineName}\{Environment.UserName}" } : null;
         }
 
-        internal async Task<Bookmark[]> Search(DateTime startTime, DateTime endTime, int bookmarksCount)
+        internal async Task<Bookmark[]> Search(DateTime startTime, DateTime endTime, bool allCamerasChecked, int bookmarksCount)
         {
             if (startTime <= endTime)
             {
                 long timeLimitUSec = (endTime.Ticks - startTime.Ticks) / 10;
-                return await BookmarkSearch(startTime, timeLimitUSec, bookmarksCount);
+                return await BookmarkSearch(startTime, timeLimitUSec, allCamerasChecked, bookmarksCount);
             }
 
             return new Bookmark[0];
@@ -52,7 +54,7 @@ namespace OpenALPRPlugin.Background
         //BookmarkSearchTime searches for bookmarks within a specific time interval
         //Search for bookmarks in a time interval. The call is synchronous, so it may take some time to return. 
         //Returns:    Array of Bookmarks found. Null indicates an error 
-        public async Task<Bookmark[]> BookmarkSearch(DateTime startTime, long period, int bookmarksCount)
+        public async Task<Bookmark[]> BookmarkSearch(DateTime startTime, long period, bool allCamerasChecked, int bookmarksCount)
         {
             string searchStr = optSearchStr;
             List<Bookmark> bookmarks = new List<Bookmark>();
@@ -63,15 +65,22 @@ namespace OpenALPRPlugin.Background
             try
             {
                 Logger.Log.Info("*********Search bookmark queries*********");
+
                 foreach (string query in Helper.Queries(searchStr.Split(' ')))
                 {
+                    FQID[] fqids = null;
+                    if (allCamerasChecked == false)
+                    {
+                        fqids = new FQID[] { items.FirstOrDefault().FQID };
+                    }
+                 
                     List<Bookmark> bookmarksList = BookmarkService.Instance.BookmarkSearchTime(
                         items.FirstOrDefault().FQID.ServerId,
                         startTime,
                         period,
                         bookmarksCount + 1,
                         kinds,
-                        new FQID[] { items.FirstOrDefault().FQID },
+                        fqids,
                         optUsers,
                         query
                     ).ToList();
