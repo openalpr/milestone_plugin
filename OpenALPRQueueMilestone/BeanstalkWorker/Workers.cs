@@ -98,7 +98,7 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     if (json != null)
                     {
                         Program.Log.Info($"JSON: {json}");
-                        Console.WriteLine($"Recived request for {request.Url}");
+                        Console.WriteLine($"Received request for {request.Url}");
                         ProcessJob(json);
                     }
                     else

@@ -55,13 +55,19 @@ namespace OpenALPRPlugin.Forms
                 
 
             this.reoGridControl1.CurrentWorksheet.SetCols(2);
-            this.reoGridControl1.CurrentWorksheet.SetColumnsWidth(1, 1, 244);
+            this.reoGridControl1.CurrentWorksheet.SetColumnsWidth(1, 1, 248);
             // set text of column header
             this.reoGridControl1.CurrentWorksheet.ColumnHeaders[0].Text = "Plate";
+            //this.reoGridControl1.CurrentWorksheet.ColumnHeaders[0].TextColor = Color.White;
+            //this.reoGridControl1.CurrentWorksheet.ColumnHeaders[0].Style.TextColor = Color.White;
+            //this.reoGridControl1.CurrentWorksheet.ColumnHeaders[0].Style.BackColor = Color.DarkGray;
+
             this.reoGridControl1.CurrentWorksheet.ColumnHeaders[1].Text = "Description";
+            //this.reoGridControl1.CurrentWorksheet.ColumnHeaders[1].TextColor = Color.White;
+            //this.reoGridControl1.CurrentWorksheet.ColumnHeaders[1].Style.TextColor = Color.White;
+            //this.reoGridControl1.CurrentWorksheet.ColumnHeaders[1].Style.BackColor = Color.DarkGray;
 
-            //grid.ColumnHeaders(0).Style.BackColor = Graphics.SolidColor.LightGreen
-
+            this.reoGridControl1.SetSettings(unvell.ReoGrid.WorkbookSettings.View_ShowSheetTabControl, false);
 
             int rowNum = 0;
 

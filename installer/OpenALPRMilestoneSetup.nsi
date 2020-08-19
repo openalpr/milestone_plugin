@@ -247,6 +247,9 @@ Section "Files (required)"
   File "..\Solution build referenced files\BuildRequirements\recording_server.ps1"
   File "..\build\OpenALPRPlugin.dll"
   File "..\build\OpenALPRPlugin.dll.config"
+
+  File "..\build\unvell.ReoGrid.dll"
+
   
   File "..\build\OpenALPR.SystemTrayApp.exe"
   File "..\build\OpenALPR.SystemTrayApp.exe.config"

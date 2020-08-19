@@ -226,7 +226,6 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy /Y "C:\OpenALPR\milestone_plugin\build\OpenALPRPlugin.dll" "C:\Program Files\VideoOS\MIPPlugins\OpenALPR\OpenALPRPlugin.dll"</PostBuildEvent>
   </PropertyGroup>
 </Project>
