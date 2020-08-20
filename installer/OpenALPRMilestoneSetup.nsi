@@ -3,7 +3,7 @@
 ;Include Modern UI
 
 	!include "MUI2.nsh"
-	!include "DotNetChecker.nsh"
+	!include "plugins\DotNetChecker.nsh"
 ;--------------------------------
 ;General
 

@@ -29,7 +29,6 @@ namespace OpenALPRPlugin.Background
 
         internal BookmarksFinder(Item[] items, Guid[] Kinds, bool myOwnBookmarks, string optSearchStr)
         {
-            // keary
             //if (items == null || items.Length == 0 || items[0] == null)
             //    throw new ArgumentNullException(nameof(items), "items cannot be null or empty.");
 

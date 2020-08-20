@@ -303,7 +303,6 @@ namespace OpenALPRPlugin.Client
                     Bookmark bookmark = bookmarks[i];
                     BookmarkDescription bookmarkDescription = Helper.ParseBookmarkDescription(bookmark.Description);
 
-                    //keary
                     /*
                     string[] row = new string[]
                                         {

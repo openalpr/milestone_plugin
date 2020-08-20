@@ -72,8 +72,7 @@ namespace OpenALPRPlugin.Forms
             int rowNum = 0;
 
             foreach (string row in lines)
-            {
-                //keary
+            {           
                 //var sheet = this.reoGridControl1.CurrentWorksheet;
 
                 string sPlate = row.Split(',').FirstOrDefault();
