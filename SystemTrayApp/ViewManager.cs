@@ -291,7 +291,7 @@ namespace SystemTrayApp
             }
             catch //(Exception ex)
             {
-                //Logger.Log.Error(null, ex);
+                
             }
         }
 

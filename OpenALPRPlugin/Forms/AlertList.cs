@@ -27,6 +27,18 @@ namespace OpenALPRPlugin.Forms
 
             if (lines == null)
             {
+                if (!File.Exists(FilePath()))
+                {
+                    using (StreamWriter outputFile = new StreamWriter(FilePath(), false))
+                    {
+                        outputFile.WriteLine("# Edit this file to add alerts.");
+                        outputFile.WriteLine("# Each line represents one alert and a description separated by a comma.");
+                        outputFile.WriteLine("# For example (Do not use a \"#\" symbol for your alerts):");
+                        outputFile.WriteLine("# ABC123,Walter Smith's Truck");
+                        outputFile.WriteLine("Plate Number, Description\n");
+                    }
+                }
+
                 lines = File.ReadAllLines(FilePath()).ToList();
                 //lines.RemoveRange(0, 6);
 
@@ -132,7 +144,7 @@ namespace OpenALPRPlugin.Forms
         private void ParseControls()
         {
             //List<Control> controls = this.Controls.Find("Line", true).ToList();
-            string result = $"# Edit this file to add alerts.{Environment.NewLine}# Each line represents one alert and a description separated by a comma.{Environment.NewLine}# For example (Do not use a \"#\" symbol for your alerts):{Environment.NewLine}# ABC123,Walter Smith's Truck{Environment.NewLine}Plate Number, Description{Environment.NewLine}{Environment.NewLine}";
+            string result = $"# Edit this file to add alerts.{Environment.NewLine}# Each line represents one alert and a description separated by a comma.{Environment.NewLine}# For example (Do not use a \"#\" symbol for your alerts):{Environment.NewLine}# ABC123,Walter Jones's Truck{Environment.NewLine}Plate Number, Description{Environment.NewLine}{Environment.NewLine}";
 
             // save the alert list here
 
@@ -151,7 +163,7 @@ namespace OpenALPRPlugin.Forms
             */
 
 
-            for (int rowNum = 0; rowNum < this.reoGridControl1.CurrentWorksheet.MaxContentRow; ++rowNum)
+            for (int rowNum = 0; rowNum <=  this.reoGridControl1.CurrentWorksheet.MaxContentRow; ++rowNum)
             {
                 if (this.reoGridControl1.CurrentWorksheet.GetCell(rowNum, 0) == null)
                     continue;
@@ -159,11 +171,16 @@ namespace OpenALPRPlugin.Forms
                 if (this.reoGridControl1.CurrentWorksheet.GetCell(rowNum, 1) == null)
                     continue;
 
-                if (this.reoGridControl1.CurrentWorksheet[rowNum, 0] == null)
-                    continue;
+                string sPlate = "";
+                if (this.reoGridControl1.CurrentWorksheet[rowNum, 0] != null)
+                    sPlate = this.reoGridControl1.CurrentWorksheet[rowNum, 0].ToString();
 
-                string sPlate = this.reoGridControl1.CurrentWorksheet[rowNum, 0].ToString();
-                string sDescription = this.reoGridControl1.CurrentWorksheet[rowNum, 1].ToString();
+                string sDescription = "";
+                if (this.reoGridControl1.CurrentWorksheet[rowNum, 1] != null)
+                    sDescription = this.reoGridControl1.CurrentWorksheet[rowNum, 1].ToString();
+
+               // string sPlate = this.reoGridControl1.CurrentWorksheet[rowNum, 0].ToString();
+                //string sDescription = this.reoGridControl1.CurrentWorksheet[rowNum, 1].ToString();
 
                 if ((!string.IsNullOrEmpty(sPlate) || !string.IsNullOrWhiteSpace(sPlate)) &&
                         (!string.IsNullOrEmpty(sDescription) || !string.IsNullOrWhiteSpace(sDescription)))
