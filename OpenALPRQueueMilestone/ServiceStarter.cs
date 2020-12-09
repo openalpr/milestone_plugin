@@ -40,20 +40,25 @@ namespace OpenALPRQueueConsumer
 
         public ServiceStarter()
         {
+            Console.WriteLine("\nEnter ServiceStarter ctor\n");
             #region Use SQLite
             using (DB db = new DB("OpenALPRQueueMilestone", 3))
             {
+                Console.WriteLine("\nDB setup enter\n");
                 db.CreateTable("Settings");
+                Console.WriteLine("\nDB create table\n");
                 settings = db.GetSettings("Settings").LastOrDefault();
+                Console.WriteLine("\nDB got settings\n");
                 if (settings == null)
                 {
+                    Console.WriteLine("\nDB settings == null\n");
                     settings = db.Defaults();
                     db.SaveSettings("Settings", db.Defaults());
                 }
             }
+            Console.WriteLine("\nDB setup exit\n");
             ProxySingleton.Port = settings.ServicePort.ToString();
             #endregion
-
             currentPerson = new User(User.AutoExporterServiceName);
             ProxySingleton.HostName = Dns.GetHostName();
             Chatting.Initialize(currentPerson);
@@ -62,6 +67,7 @@ namespace OpenALPRQueueConsumer
             Chatting.InfoArrived += ServerConnection_MessageArrived;
             Task.Run(() => Chatting.MonitorClientToServerQueue());
             Chatting.WhisperGui(new Info { MsgId = MessageId.ConnectedToMilestoneServer, Bool = true });
+            Console.WriteLine("\nExit ServiceStarter ctor\n");
         }
 
         #region Start Service
@@ -70,11 +76,22 @@ namespace OpenALPRQueueConsumer
         {
             try
             {
+                Console.WriteLine("\nOnStartServiceAsync\n");
                 LocalStartService();
             }
             catch (Exception ex)
             {
                 Program.Log.Error(null, ex);
+
+                Console.WriteLine("\nMessage ---\n{0}", ex.Message);
+                Console.WriteLine(
+                    "\nHelpLink ---\n{0}", ex.HelpLink);
+                Console.WriteLine("\nSource ---\n{0}", ex.Source);
+                Console.WriteLine(
+                    "\nStackTrace ---\n{0}", ex.StackTrace);
+                Console.WriteLine(
+                    "\nTargetSite ---\n{0}", ex.TargetSite);
+
                 OpenALPRQueueMilestone.ServiceInstance.Stop();
                 Environment.Exit(1);
             }
@@ -83,6 +100,7 @@ namespace OpenALPRQueueConsumer
         private void LocalStartService()
         {
             Program.Log.Info("Start the service");
+            Console.WriteLine("\nStart the service\n");
 
             AppDomain.CurrentDomain.SetPrincipalPolicy(PrincipalPolicy.WindowsPrincipal);
             WindowsPrincipal appprincipal = Thread.CurrentPrincipal as WindowsPrincipal;
@@ -100,12 +118,21 @@ namespace OpenALPRQueueConsumer
                     SDKEnvironment.Initialize();// General initialize. Always required
                     SDKEnvironment.RemoveAllServers();
                     TryConnectingToMilestoneServer();
-                }
-                catch (Exception ex)
-                {
-                    Program.Log.Error(null, ex);
-                    Program.Log.Info($"Windows identity: {WindowsIdentity.GetCurrent().Name}"); //Windows identity: NT AUTHORITY\NETWORK SERVICE
-                }
+            }
+            catch (Exception ex)
+            {
+                Program.Log.Error(null, ex);
+                Program.Log.Info($"Windows identity: {WindowsIdentity.GetCurrent().Name}"); //Windows identity: NT AUTHORITY\NETWORK SERVICE
+
+                Console.WriteLine("\nMessage ---\n{0}", ex.Message);
+                Console.WriteLine(
+                    "\nHelpLink ---\n{0}", ex.HelpLink);
+                Console.WriteLine("\nSource ---\n{0}", ex.Source);
+                Console.WriteLine(
+                    "\nStackTrace ---\n{0}", ex.StackTrace);
+                Console.WriteLine(
+                    "\nTargetSite ---\n{0}", ex.TargetSite);
+            }
 #if !DEBUG
             }
 #endif

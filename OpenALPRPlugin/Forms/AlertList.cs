@@ -162,6 +162,10 @@ namespace OpenALPRPlugin.Forms
             }
             */
 
+            if(this.reoGridControl1.CurrentWorksheet.IsEditing)
+            {
+                this.reoGridControl1.CurrentWorksheet.EndEdit(0);
+            }
 
             for (int rowNum = 0; rowNum <=  this.reoGridControl1.CurrentWorksheet.MaxContentRow; ++rowNum)
             {

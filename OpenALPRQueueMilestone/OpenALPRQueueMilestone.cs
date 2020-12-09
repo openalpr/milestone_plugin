@@ -31,6 +31,7 @@ namespace OpenALPRQueueConsumer
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         protected override void OnStart(string[] args)
         {
+            Console.WriteLine("\nOnStart\n");
             ServiceStartInstance = new ServiceStarter();
             Task.Run(() => ServiceStartInstance.OnStartServiceAsync());
         }

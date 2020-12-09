@@ -42,7 +42,7 @@ namespace OpenALPRQueueConsumer
 
                 if (Environment.UserInteractive)// Run Service as a Console Application.(for Debugging)
                 {
-                    Console.WriteLine("Press any key to stop program");
+                    Console.WriteLine("Press any key to stop program (debugging)");
                     servicesToRun.StartConsole(args);
                     Console.Read();
                     servicesToRun.StopConsole();

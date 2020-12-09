@@ -1,5 +1,6 @@
 ﻿using log4net;
 using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
@@ -81,15 +82,20 @@ namespace Database
 
             SQLiteCommand command = new SQLiteCommand(sql, _db);
             SQLiteDataReader reader = command.ExecuteReader();
+
             List<Settings> settings = new List<Settings>();
             while (reader.Read())
             {
                 try
                 {
+                    DateTime d = DateTime.Now;
+                    String s = Convert.ToString(reader["Created"]);
+                    DateTime.TryParseExact(s, "yyyy-MM-dd HH.mm.ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out d);
+
                     settings.Add(new Settings()
                     {
                         Id = Convert.ToInt32(reader["Id"]),
-                        Created = Convert.ToDateTime(reader["Created"]),
+                        Created = d, //Convert.ToDateTime(reader["Created"]),
                         AddBookmarks = Convert.ToBoolean(reader["AddBookmarks"]),
                         AutoMapping = Convert.ToBoolean(reader["AddBookmarks"]),
                         EpochEndSecondsAfter = Convert.ToInt32(reader["EpochEndSecondsAfter"]),
@@ -106,6 +112,15 @@ namespace Database
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine("\nMessage ---\n{0}", ex.Message);
+                    Console.WriteLine(
+                        "\nHelpLink ---\n{0}", ex.HelpLink);
+                    Console.WriteLine("\nSource ---\n{0}", ex.Source);
+                    Console.WriteLine(
+                        "\nStackTrace ---\n{0}", ex.StackTrace);
+                    Console.WriteLine(
+                        "\nTargetSite ---\n{0}", ex.TargetSite);
+
                     throw new Exception(ex.Message);
                 }
             }
