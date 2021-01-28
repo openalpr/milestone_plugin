@@ -404,15 +404,9 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         {
             Settings settings = new Settings();
 
-            using (DB db = new DB("OpenALPRQueueMilestone", 3))
+            using (DB db = new DB("OpenALPRQueueMilestone", true))
             {
-                db.CreateTable("Settings");
-                settings = db.GetSettings("Settings").LastOrDefault();
-                if (settings == null)
-                {
-                    settings = db.Defaults();
-                    db.SaveSettings("Settings", db.Defaults());
-                }
+                settings = db.GetSettings();
             }
 
             return settings;

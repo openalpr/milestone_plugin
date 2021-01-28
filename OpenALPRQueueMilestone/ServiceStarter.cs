@@ -42,20 +42,12 @@ namespace OpenALPRQueueConsumer
         {
             Console.WriteLine("\nEnter ServiceStarter ctor\n");
             #region Use SQLite
-            using (DB db = new DB("OpenALPRQueueMilestone", 3))
+
+            using (DB db = new DB("OpenALPRQueueMilestone", true))
             {
-                Console.WriteLine("\nDB setup enter\n");
-                db.CreateTable("Settings");
-                Console.WriteLine("\nDB create table\n");
-                settings = db.GetSettings("Settings").LastOrDefault();
-                Console.WriteLine("\nDB got settings\n");
-                if (settings == null)
-                {
-                    Console.WriteLine("\nDB settings == null\n");
-                    settings = db.Defaults();
-                    db.SaveSettings("Settings", db.Defaults());
-                }
+                settings = db.GetSettings();
             }
+
             Console.WriteLine("\nDB setup exit\n");
             ProxySingleton.Port = settings.ServicePort.ToString();
             #endregion
@@ -173,11 +165,13 @@ namespace OpenALPRQueueConsumer
                 string temp = settings.MilestoneServerName;
                 if (temp != serverName)
                 {
-                    using (DB db = new DB("OpenALPRQueueMilestone", 3))
+
+                    using (DB db = new DB("OpenALPRQueueMilestone", false))
                     {
                         settings.MilestoneServerName = serverName;
-                        db.UpdateSettings("Settings", settings);
+                        db.SaveSettings(settings);
                     }
+
                 }
 
                 Worker.AddBookmarks = settings.AddBookmarks;

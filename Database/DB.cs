@@ -1,27 +1,34 @@
 ﻿using log4net;
 using System;
 using System.Globalization;
-using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Database
 {
     public class DB : IDisposable
     {
         internal static ILog Log { get; private set; }
+        private const string SETTINGS_ID = "1";
+        private const string SETTINGS_TABLE = "Settings";
         bool disposed = false;
         private SQLiteConnection _db;
+        private bool _readOnly;
         private string _dbName;
-        private int _version;
+        private const int _version = 3;
+        int _nConnections;
 
-        public DB(string dbName, int version)
+        public DB(string dbName, bool readOnly = false)
+        {
+
+            _dbName = GetDbPath(dbName);
+            _nConnections = 0;
+            _readOnly = readOnly;
+        }
+
+        public static string GetDbPath(string dbName)
         {
             const string PlugName = "OpenALPR";
-
             string mappingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), PlugName, "Database");
 
             if (!Directory.Exists(mappingPath))
@@ -30,69 +37,53 @@ namespace Database
                 Helper.SetDirectoryNetworkServiceAccessControl(mappingPath);
             }
 
-            _dbName = $"{mappingPath}\\{dbName}.db";
-            _version = version;
-            Connect(_dbName);
+            return $"{mappingPath}\\{dbName}.db";
         }
 
-        public void Connect(string file)
+        public void Connect(string file, bool readOnly = false)
         {
-            string connnectionString = $"Data Source={file};Version={_version};";
-            _db = new SQLiteConnection(connnectionString, true);
-            _db.Open();
-        }
-
-        public void CreateTable(string table)
-        {
-            if (Check(table) == 0)
-                CreateSettingsTable(table, @"'Created'	TEXT,
-                                            'OpenALPRServerUrl'	TEXT,
-	                                        'MilestoneServerName'	TEXT,
-	                                        'MilestoneUserName'	TEXT,
-	                                        'MilestonePassword'	TEXT,
-	                                        'EventExpireAfterDays'	INTEGER,
-	                                        'EpochStartSecondsBefore'	INTEGER,
-	                                        'EpochEndSecondsAfter'	INTEGER,
-	                                        'AddBookmarks'	INTEGER,
-	                                        'AutoMapping'	INTEGER,
-	                                        'ServicePort'	INTEGER,
-	                                        'ClientSettingsProviderServiceUri'	TEXT,
-                                            'UseUTC'	INTEGER");
-        }
-
-        private int Check(string table)
-        {
-            string sql = $"SELECT count(name) as Count FROM sqlite_master WHERE type='table' AND name='{table}'";
-            int count = 0;
-            SQLiteCommand command = new SQLiteCommand(sql, _db);
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            if (_nConnections > 0)
             {
-                count = Convert.ToInt32(reader["Count"]);
-                return count;
+                _nConnections -= 1;
             }
 
-            return count;
+            string connectionString = $"Data Source={file};Version={_version};";
+            if (readOnly)
+                connectionString += "mode=ReadOnly";
+            _db = new SQLiteConnection(connectionString, true);
+            ++_nConnections;
+            _db.Open();
+
+            if (!readOnly)
+            {
+                CreateSettingsTable();
+            }
         }
 
-        public List<Settings> GetSettings(string table)
+
+
+
+        public Settings GetSettings()
         {
-            string sql = $"SELECT * FROM [{table}]";
 
-            SQLiteCommand command = new SQLiteCommand(sql, _db);
-            SQLiteDataReader reader = command.ExecuteReader();
+            Settings settings = null;
 
-            List<Settings> settings = new List<Settings>();
-            while (reader.Read())
+            try
             {
-                try
+                Connect(_dbName, _readOnly);
+
+                string sql = $"SELECT * FROM [{SETTINGS_TABLE}] WHERE Id=1";
+
+                SQLiteCommand command = new SQLiteCommand(sql, _db);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
                 {
                     DateTime d = DateTime.Now;
                     String s = Convert.ToString(reader["Created"]);
                     DateTime.TryParseExact(s, "yyyy-MM-dd HH.mm.ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out d);
 
-                    settings.Add(new Settings()
+                    settings = new Settings()
                     {
                         Id = Convert.ToInt32(reader["Id"]),
                         Created = d, //Convert.ToDateTime(reader["Created"]),
@@ -108,29 +99,53 @@ namespace Database
                         MilestoneUserName = Convert.ToString(reader["MilestoneUserName"]),
                         OpenALPRServerUrl = Convert.ToString(reader["OpenALPRServerUrl"]),
                         UseUTC = Convert.ToBoolean(reader["UseUTC"])
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("\nMessage ---\n{0}", ex.Message);
-                    Console.WriteLine(
-                        "\nHelpLink ---\n{0}", ex.HelpLink);
-                    Console.WriteLine("\nSource ---\n{0}", ex.Source);
-                    Console.WriteLine(
-                        "\nStackTrace ---\n{0}", ex.StackTrace);
-                    Console.WriteLine(
-                        "\nTargetSite ---\n{0}", ex.TargetSite);
-
-                    throw new Exception(ex.Message);
+                    };
                 }
             }
+            catch (Exception ex)
+            {
+                /*
+                Console.WriteLine("\nMessage ---\n{0}", ex.Message);
+                Console.WriteLine(
+                    "\nHelpLink ---\n{0}", ex.HelpLink);
+                Console.WriteLine("\nSource ---\n{0}", ex.Source);
+                Console.WriteLine(
+                    "\nStackTrace ---\n{0}", ex.StackTrace);
+                Console.WriteLine(
+                    "\nTargetSite ---\n{0}", ex.TargetSite);
+
+                throw new Exception(ex.Message);
+                */
+            }
+            finally
+            {
+                Disconnect();
+            }
+
+
+            if (settings == null)
+                settings = Defaults();
 
             return settings;
         }
 
-        private void CreateSettingsTable(string table, string sql)
+        private void CreateSettingsTable()
         {
-            string query = $"CREATE TABLE '{table}' (" + $"'Id'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, {sql});";
+            string sql = @"'Created'	TEXT,
+                                        'OpenALPRServerUrl'	TEXT,
+	                                    'MilestoneServerName'	TEXT,
+	                                    'MilestoneUserName'	TEXT,
+	                                    'MilestonePassword'	TEXT,
+	                                    'EventExpireAfterDays'	INTEGER,
+	                                    'EpochStartSecondsBefore'	INTEGER,
+	                                    'EpochEndSecondsAfter'	INTEGER,
+	                                    'AddBookmarks'	INTEGER,
+	                                    'AutoMapping'	INTEGER,
+	                                    'ServicePort'	INTEGER,
+	                                    'ClientSettingsProviderServiceUri'	TEXT,
+                                        'UseUTC'	INTEGER";
+
+            string query = $"CREATE TABLE  IF NOT EXISTS '{SETTINGS_TABLE}' (" + $"'Id'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, {sql});";
             SQLiteCommand insertSQL = new SQLiteCommand(query, _db);
             try
             {
@@ -142,35 +157,41 @@ namespace Database
             }
         }
 
-        public void SaveSettings(string table, Settings settings)
+        public bool SaveSettings(Settings settings)
         {
-            string query = $"INSERT INTO {table} (Created, OpenALPRServerUrl, MilestoneServerName, MilestoneUserName, MilestonePassword, EventExpireAfterDays, EpochStartSecondsBefore, EpochEndSecondsAfter, AddBookmarks, AutoMapping, ServicePort, ClientSettingsProviderServiceUri, UseUTC) VALUES ('{settings.Created}', '{settings.OpenALPRServerUrl}', '{settings.MilestoneServerName}', '{settings.MilestoneUserName}', '{settings.MilestonePassword}', {settings.EventExpireAfterDays}, {settings.EpochStartSecondsBefore}, {settings.EpochEndSecondsAfter}, {Convert.ToInt32(settings.AddBookmarks)}, {Convert.ToInt32(settings.AutoMapping)}, {settings.ServicePort}, '{settings.ClientSettingsProviderServiceUri}', {Convert.ToInt32(settings.UseUTC)});";
-            SQLiteCommand insertSQL = new SQLiteCommand(query, _db);
+            if (_readOnly)
+            {
+                Console.WriteLine("Attempting to write to a read only database");
+                return false;
+            }
+
+            Connect(_dbName, _readOnly);
+
+            // Use UPSERT to ensure that only one item is saved at any time:
+            // https://www.sqlite.org/draft/lang_UPSERT.html
+
+            string insert_query = $"INSERT INTO {SETTINGS_TABLE} (Id, Created, OpenALPRServerUrl, MilestoneServerName, MilestoneUserName, MilestonePassword, EventExpireAfterDays, EpochStartSecondsBefore, EpochEndSecondsAfter, AddBookmarks, AutoMapping, ServicePort, ClientSettingsProviderServiceUri, UseUTC) VALUES ('{SETTINGS_ID}', '{settings.Created}', '{settings.OpenALPRServerUrl}', '{settings.MilestoneServerName}', '{settings.MilestoneUserName}', '{settings.MilestonePassword}', {settings.EventExpireAfterDays}, {settings.EpochStartSecondsBefore}, {settings.EpochEndSecondsAfter}, {Convert.ToInt32(settings.AddBookmarks)}, {Convert.ToInt32(settings.AutoMapping)}, {settings.ServicePort}, '{settings.ClientSettingsProviderServiceUri}', {Convert.ToInt32(settings.UseUTC)})";
+            string update_query = $"UPDATE SET OpenALPRServerUrl = '{ settings.OpenALPRServerUrl }', MilestoneServerName = '{ settings.MilestoneServerName }', MilestoneUserName = '{ settings.MilestoneUserName }', MilestonePassword = '{ settings.MilestonePassword }', EventExpireAfterDays = { settings.EventExpireAfterDays }, EpochStartSecondsBefore = { settings.EpochStartSecondsBefore }, EpochEndSecondsAfter = { settings.EpochEndSecondsAfter }, AddBookmarks = { Convert.ToInt32(settings.AddBookmarks) }, AutoMapping = { Convert.ToInt32(settings.AutoMapping) }, ServicePort = { settings.ServicePort }, ClientSettingsProviderServiceUri = '{ settings.ClientSettingsProviderServiceUri }', UseUTC = { Convert.ToInt32(settings.UseUTC) } WHERE Id = { SETTINGS_ID } ";
+
+            string upsert_query = $"{insert_query} on conflict(Id) do {update_query}";
+            SQLiteCommand insertSQL = new SQLiteCommand(upsert_query, _db);
             try
             {
                 insertSQL.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return false;
             }
+            finally
+            {
+                Disconnect();
+            }
+
+            return true;
         }
 
-        public void UpdateSettings(string table, Settings settings)
-        {
-            string query = $"UPDATE {table} SET OpenALPRServerUrl = '{ settings.OpenALPRServerUrl }', MilestoneServerName = '{ settings.MilestoneServerName }', MilestoneUserName = '{ settings.MilestoneUserName }', MilestonePassword = '{ settings.MilestonePassword }', EventExpireAfterDays = { settings.EventExpireAfterDays }, EpochStartSecondsBefore = { settings.EpochStartSecondsBefore }, EpochEndSecondsAfter = { settings.EpochEndSecondsAfter }, AddBookmarks = { Convert.ToInt32(settings.AddBookmarks) }, AutoMapping = { Convert.ToInt32(settings.AutoMapping) }, ServicePort = { settings.ServicePort }, ClientSettingsProviderServiceUri = '{ settings.ClientSettingsProviderServiceUri }', UseUTC = { Convert.ToInt32(settings.UseUTC) } WHERE Id = { settings.Id } ";
-            SQLiteCommand updateSQL = new SQLiteCommand(query, _db);
-            try
-            {
-                updateSQL.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public Settings Defaults()
+        private Settings Defaults()
         {
             Settings settings = new Settings() {
                 OpenALPRServerUrl = "http://localhost:48125/",
@@ -186,11 +207,22 @@ namespace Database
             return settings;
         }
 
-        public void Dispose()
+        private void Disconnect()
         {
             _db.Close();
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            --_nConnections;
+            
+        }
+
+        public void Dispose()
+        {
+            while (_nConnections > 0)
+                Disconnect();
+
+            // Fix for hacky Sqlite behavior described here:
+            // https://stackoverflow.com/questions/8511901/system-data-sqlite-close-not-releasing-database-file
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
         protected virtual void Dispose(bool disposing)
@@ -207,7 +239,7 @@ namespace Database
 
         ~DB()
         {
-            Dispose(false);
+            Dispose();
         }
     }
 }

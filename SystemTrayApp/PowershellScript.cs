@@ -39,9 +39,9 @@ namespace SystemTrayApp
                 manager.RunPowershellScrip((chkNetworkService.Checked) ? "Network Service" : txtLogin.Text, txtPassword.Text);
                 Thread.Sleep(3000);
                 #region Use SQLite
-                using (DB db = new DB("OpenALPRQueueMilestone", 3))
+                using (DB db = new DB("OpenALPRQueueMilestone"))
                 {
-                    db.SaveSettings("Settings", new Settings()
+                    db.SaveSettings(new Settings()
                     {
                         EventExpireAfterDays = Convert.ToInt32(nudEventExpireAfterDays.Value),
                         AddBookmarks = chkAddBookmarks.Checked,
@@ -110,15 +110,9 @@ namespace SystemTrayApp
         private void PowershellScript_Load(object sender, EventArgs e)
         {
             #region Use SQLite
-            using (DB db = new DB("OpenALPRQueueMilestone", 3))
+            using (DB db = new DB("OpenALPRQueueMilestone", true))
             {
-                db.CreateTable("Settings");
-                Settings settings = db.GetSettings("Settings").LastOrDefault();
-                if (settings == null)
-                {
-                    db.SaveSettings("Settings", db.Defaults());
-                    settings = db.GetSettings("Settings").LastOrDefault();
-                }
+                Settings settings = db.GetSettings();
 
                 tsslAlert.Text = $"Last saved settings: {settings.Created}";
                 txtLogin.Text = settings.MilestoneUserName;
