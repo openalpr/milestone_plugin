@@ -18,7 +18,7 @@ using System.IO;
 
 namespace OpenALPRQueueConsumer.Milestone
 {
-    internal class MilestoneServer
+    public class MilestoneServer
     {
         internal static string ServerName;
         internal static Guid ServerId;
@@ -66,10 +66,11 @@ namespace OpenALPRQueueConsumer.Milestone
             }
         }
 
-        internal static void LoginUsingCurrentCredentials(string serverName, string userName, string password)
+        public static void LoginUsingCurrentCredentials(string serverName, string userName, string password)
         {
-            try
-            {
+            // DON"T COMMIT THIS (MHILL)
+           // try
+           // {
                 bool firstTimeMessage = true;
                 while (!connectedToMilestone && !ServiceStarter.IsClosing)
                 {
@@ -85,12 +86,12 @@ namespace OpenALPRQueueConsumer.Milestone
 
                 if (connectedToMilestone)
                     Program.Log.Info("Connected to Milestone");
-            }
-            catch (Exception ex)
-            {
-                Program.Log.Error(null, ex);
-                Program.Log.Error(null, ex.InnerException);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Program.Log.Error(null, ex);
+            //    Program.Log.Error(null, ex.InnerException);
+           // }
         }
 
         private static void PrepareToLogin(string serverName, string userName, string password)

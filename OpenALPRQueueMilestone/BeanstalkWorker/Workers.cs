@@ -659,6 +659,19 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
                     Version = null
                 };
 
+          
+                AnalyticsEvent analyticsEvent = new AnalyticsEvent();
+                analyticsEvent.EventHeader = eventHeader;
+                analyticsEvent.Location = cameraName;
+                analyticsEvent.Description = "OpenALPR Alarm Event";
+                analyticsEvent.Vendor = new Vendor { CustomData = plateInfo.ToString() };
+                //analyticsEvent.Vendor.Name = "OpenAlpr";
+        
+
+                EnvironmentManager.Instance.SendMessage(
+                new VideoOS.Platform.Messaging.Message(MessageId.Server.NewEventCommand)
+                { Data = analyticsEvent });
+
                 Alarm alarm = new Alarm()
                 {
                     EventHeader = eventHeader,

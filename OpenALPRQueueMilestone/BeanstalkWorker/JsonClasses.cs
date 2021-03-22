@@ -157,7 +157,20 @@ namespace OpenALPRQueueConsumer.BeanstalkWorker
         public long Memory_last_update { get; set; }
         public long Daemon_uptime_seconds { get; set; }
         public long Memory_total_bytes { get; set; }
-        public long Disk_quota_earliest_result { get; set; }
+        private long m_Disk_quota_earliest_result;
+        public long Disk_quota_earliest_result //{ get; set; }
+        {
+            get 
+            { 
+                return m_Disk_quota_earliest_result; 
+            }
+            set 
+            {
+                if (value == -1) { value = 0; }
+                m_Disk_quota_earliest_result = value;
+            }
+        }
+        
         public string OS { get; set; }
         public long Processing_threads_configured { get; set; }
         public long System_uptime_seconds { get; set; }

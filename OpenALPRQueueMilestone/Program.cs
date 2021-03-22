@@ -12,7 +12,7 @@ namespace OpenALPRQueueConsumer
     {
         internal static string ProductName = "OpenALPRQueueMilestone";
         internal static string CompanyName = "OpenALPR";
-        internal static ILog Log { get; private set; }
+        public static ILog Log { get; set; }
         private static Logging Logger;
         /// <summary>
         /// The main entry point for the application.
