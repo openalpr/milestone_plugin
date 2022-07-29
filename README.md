@@ -49,8 +49,8 @@ The OpenALPR Milestone plug-in can also create Milestone alarms based on a list 
 
 ### Developer Instructions ###
 
-* Download Visual Studio 2017
-* Install .NET Framework 4.6.2 https://www.microsoft.com/net/download/visual-studio-sdks
+* Download Visual Studio 2019
+* Install .NET Framework 4.7.2 https://www.microsoft.com/net/download/visual-studio-sdks
 * Install NSIS (for packaging the installer)
 * Open the project, and switch to "Release" and "x64" mode (Build -> Configuration Manager) 
 * If you wish for every build to automatically copy the binaries to your local Milestone system:
@@ -59,6 +59,7 @@ The OpenALPR Milestone plug-in can also create Milestone alarms based on a list 
 ### Installer Packaging ###
 
 This plug-in uses the NSIS installer to create a Windows installer package.  The nsi file is included in this repo in the installer directory.
+The files in /installer/Plugins need to be added to your NSIS install C:\Program Files (x86)\NSIS\Plugins\x86-ansi
 
 ### Contribution guidelines ###
 
